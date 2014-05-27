@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿//written by: Jonathan Hunter
+using UnityEngine;
 using System.Collections;
 
 namespace Assets.Scripts
@@ -16,32 +17,32 @@ namespace Assets.Scripts
         public static bool Cancel = false;
         public static bool Pause = false;
 
-        private static string KeyBoardAttack;
-        private static string KeyBoardJump;
-        private static string KeyBoardDash;
-        private static string KeyBoardUp;
-        private static string KeyBoardDown;
-        private static string KeyBoardLeft;
-        private static string KeyBoardRight;
-        private static string KeyBoardAccept;
-        private static string KeyBoardCancel;
-        private static string KeyBoardStart;
+        private static KeyCode KeyBoardAttack;
+        private static KeyCode KeyBoardJump;
+        private static KeyCode KeyBoardDash;
+        private static KeyCode KeyBoardUp;
+        private static KeyCode KeyBoardDown;
+        private static KeyCode KeyBoardLeft;
+        private static KeyCode KeyBoardRight;
+        private static KeyCode KeyBoardAccept;
+        private static KeyCode KeyBoardCancel;
+        private static KeyCode KeyBoardPause;
 
-        private string KeyHash = "SlashKey";
+        private string KeyHash = "SlashKeys";
         void Start()
         {
             if (PlayerPrefs.HasKey(0 + KeyHash))
             {
-                KeyBoardAttack = PlayerPrefs.GetString(0 + KeyHash);
-                KeyBoardJump = PlayerPrefs.GetString(1 + KeyHash);
-                KeyBoardDash = PlayerPrefs.GetString(2 + KeyHash);
-                KeyBoardUp = PlayerPrefs.GetString(3 + KeyHash);
-                KeyBoardDown = PlayerPrefs.GetString(4 + KeyHash);
-                KeyBoardLeft = PlayerPrefs.GetString(5 + KeyHash);
-                KeyBoardRight = PlayerPrefs.GetString(6 + KeyHash);
-                KeyBoardAccept = PlayerPrefs.GetString(7 + KeyHash);
-                KeyBoardCancel = PlayerPrefs.GetString(8 + KeyHash);
-                KeyBoardStart = PlayerPrefs.GetString(9 + KeyHash);
+                KeyBoardAttack = (KeyCode)PlayerPrefs.GetInt(0 + KeyHash);
+                KeyBoardJump = (KeyCode)PlayerPrefs.GetInt(1 + KeyHash);
+                KeyBoardDash = (KeyCode)PlayerPrefs.GetInt(2 + KeyHash);
+                KeyBoardUp = (KeyCode)PlayerPrefs.GetInt(3 + KeyHash);
+                KeyBoardDown = (KeyCode)PlayerPrefs.GetInt(4 + KeyHash);
+                KeyBoardLeft = (KeyCode)PlayerPrefs.GetInt(5 + KeyHash);
+                KeyBoardRight = (KeyCode)PlayerPrefs.GetInt(6 + KeyHash);
+                KeyBoardAccept = (KeyCode)PlayerPrefs.GetInt(7 + KeyHash);
+                KeyBoardCancel = (KeyCode)PlayerPrefs.GetInt(8 + KeyHash);
+                KeyBoardPause = (KeyCode)PlayerPrefs.GetInt(9 + KeyHash);
             }
             else
                 Default();
@@ -63,26 +64,26 @@ namespace Assets.Scripts
             else
                 Dash = false;
 
-            if (Input.GetKeyDown(KeyBoardUp) || Input.GetAxis("Vertical") > 0)
+            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyBoardUp) || Input.GetAxis("Vertical") > 0)
                 Up = true;
             else
                 Up = false;
 
-            if (Input.GetKeyDown(KeyBoardDown) || Input.GetAxis("Vertical") < 0)
+            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey(KeyBoardDown) || Input.GetAxis("Vertical") < 0)
                 Down = true;
             else
                 Down = false;
 
-            if (Input.GetKeyDown(KeyBoardLeft) || Input.GetAxis("Horizontal") < 0)
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKey(KeyBoardLeft) || Input.GetAxis("Horizontal") < 0)
                 Left = true;
             else
                 Left = false;
 
-            if (Input.GetKeyDown(KeyBoardRight) || Input.GetAxis("Horizontal") > 0)
+            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKey(KeyBoardRight) || Input.GetAxis("Horizontal") > 0)
                 Right = true;
             else
                 Right = false;
-            if (Input.GetKeyDown(KeyBoardAccept) || Input.GetButtonDown("A"))
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKey(KeyBoardAccept) || Input.GetButtonDown("A"))
                 Accept = true;
             else
                 Accept = false;
@@ -93,116 +94,116 @@ namespace Assets.Scripts
         }
         public void Default()
         {
-            KeyBoardAttack = "k";
-            PlayerPrefs.SetString(0 + KeyHash, "k");
-            KeyBoardJump = "j";
-            PlayerPrefs.SetString(1 + KeyHash, "j");
-            KeyBoardDash = "l";
-            PlayerPrefs.SetString(2 + KeyHash, "l");
-            KeyBoardUp = "w";
-            PlayerPrefs.SetString(3 + KeyHash, "w");
-            KeyBoardDown = "s";
-            PlayerPrefs.SetString(4 + KeyHash, "s");
-            KeyBoardLeft = "a";
-            PlayerPrefs.SetString(5 + KeyHash, "a");
-            KeyBoardRight = "d";
-            PlayerPrefs.SetString(6 + KeyHash, "d");
-            KeyBoardAccept = "k";
-            PlayerPrefs.SetString(7 + KeyHash, "k");
-            KeyBoardCancel = "j";
-            PlayerPrefs.SetString(8 + KeyHash, "j");
-            KeyBoardStart = "Space";
-            PlayerPrefs.SetString(9 + KeyHash, "Space");
+            KeyBoardAttack = KeyCode.K;
+            PlayerPrefs.SetString(0 + KeyHash, KeyCode.K + "");
+            KeyBoardJump = KeyCode.J;
+            PlayerPrefs.SetString(1 + KeyHash, KeyCode.J + "");
+            KeyBoardDash = KeyCode.L;
+            PlayerPrefs.SetString(2 + KeyHash, KeyCode.L + "");
+            KeyBoardUp = KeyCode.W;
+            PlayerPrefs.SetString(3 + KeyHash, KeyCode.W + "");
+            KeyBoardDown = KeyCode.S;
+            PlayerPrefs.SetString(4 + KeyHash, KeyCode.S + "");
+            KeyBoardLeft = KeyCode.A;
+            PlayerPrefs.SetString(5 + KeyHash, KeyCode.A + "");
+            KeyBoardRight = KeyCode.D;
+            PlayerPrefs.SetString(6 + KeyHash, KeyCode.D + "");
+            KeyBoardAccept = KeyCode.K;
+            PlayerPrefs.SetString(7 + KeyHash, KeyCode.K + "");
+            KeyBoardCancel = KeyCode.J;
+            PlayerPrefs.SetString(8 + KeyHash, KeyCode.J + "");
+            KeyBoardPause = KeyCode.Space;
+            PlayerPrefs.SetString(9 + KeyHash, KeyCode.Space + "");
         }
-        public void setKeyBoardAttack(string n)
+        public void setKeyBoardAttack(KeyCode n)
         {
             KeyBoardAttack = n;
-            PlayerPrefs.SetString(0 + KeyHash, n);
+            PlayerPrefs.SetInt(0 + KeyHash, (int)n);
         }
-        public void setKeyBoardJump(string n)
+        public void setKeyBoardJump(KeyCode n)
         {
             KeyBoardJump = n;
-            PlayerPrefs.SetString(1 + KeyHash, n);
+            PlayerPrefs.SetInt(1 + KeyHash, (int)n);
         }
-        public void setKeyBoardDash(string n)
+        public void setKeyBoardDash(KeyCode n)
         {
             KeyBoardDash = n;
-            PlayerPrefs.SetString(2 + KeyHash, n);
+            PlayerPrefs.SetInt(2 + KeyHash, (int)n);
         }
-        public void setKeyBoardUp(string n)
+        public void setKeyBoardUp(KeyCode n)
         {
             KeyBoardUp = n;
-            PlayerPrefs.SetString(3 + KeyHash, n);
+            PlayerPrefs.SetInt(3 + KeyHash, (int)n);
         }
-        public void setKeyBoardDown(string n)
+        public void setKeyBoardDown(KeyCode n)
         {
             KeyBoardDown = n;
-            PlayerPrefs.SetString(4 + KeyHash, n);
+            PlayerPrefs.SetInt(4 + KeyHash, (int)n);
         }
-        public void setKeyBoardLeft(string n)
+        public void setKeyBoardLeft(KeyCode n)
         {
             KeyBoardLeft = n;
-            PlayerPrefs.SetString(5 + KeyHash, n);
+            PlayerPrefs.SetInt(5 + KeyHash, (int)n);
         }
-        public void setKeyBoardRight(string n)
+        public void setKeyBoardRight(KeyCode n)
         {
             KeyBoardRight = n;
-            PlayerPrefs.SetString(6 + KeyHash, n);
+            PlayerPrefs.SetInt(6 + KeyHash, (int)n);
         }
-        public void setKeyBoardAccept(string n)
+        public void setKeyBoardAccept(KeyCode n)
         {
             KeyBoardAccept = n;
-            PlayerPrefs.SetString(7 + KeyHash, n);
+            PlayerPrefs.SetInt(7 + KeyHash, (int)n);
         }
-        public void setKeyBoardCancel(string n)
+        public void setKeyBoardCancel(KeyCode n)
         {
             KeyBoardCancel = n;
-            PlayerPrefs.SetString(8 + KeyHash, n);
+            PlayerPrefs.SetInt(8 + KeyHash, (int)n);
         }
-        public void setKeyBoardStart(string n)
+        public void setKeyBoardPause(KeyCode n)
         {
-            KeyBoardStart = n;
-            PlayerPrefs.SetString(9 + KeyHash, n);
+            KeyBoardPause = n;
+            PlayerPrefs.SetInt(9 + KeyHash, (int) n);
         }
-        public string getKeyBoardAttack()
+        public KeyCode getKeyBoardAttack()
         {
             return KeyBoardAttack;
         }
-        public string getKeyBoardJump()
+        public KeyCode getKeyBoardJump()
         {
             return KeyBoardJump;
         }
-        public string getKeyBoardDash()
+        public KeyCode getKeyBoardDash()
         {
             return KeyBoardDash;
         }
-        public string getKeyBoardUp()
+        public KeyCode getKeyBoardUp()
         {
             return KeyBoardUp;
         }
-        public string getKeyBoardDown()
+        public KeyCode getKeyBoardDown()
         {
             return KeyBoardDown;
         }
-        public string getKeyBoardLeft()
+        public KeyCode getKeyBoardLeft()
         {
             return KeyBoardLeft;
         }
-        public string getKeyBoardRight()
+        public KeyCode getKeyBoardRight()
         {
             return KeyBoardRight;
         }
-        public string getKeyBoardAccept()
+        public KeyCode getKeyBoardAccept()
         {
             return KeyBoardAccept;
         }
-        public string getKeyBoardCancel()
+        public KeyCode getKeyBoardCancel()
         {
             return KeyBoardCancel;
         }
-        public string getKeyBoardStart()
+        public KeyCode getKeyBoardPause()
         {
-            return KeyBoardStart;
+            return KeyBoardPause;
         }
     }
 }

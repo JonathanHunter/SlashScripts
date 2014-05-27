@@ -51,6 +51,9 @@ namespace Assets.Scripts
         {
             Screen.SetResolution(Screen.resolutions[resIndex].width, Screen.resolutions[resIndex].height, fullscreen);
             QualitySettings.SetQualityLevel(quality);
+            PlayerPrefs.SetInt(VideoKey + 0, resIndex);
+            PlayerPrefs.SetInt(VideoKey + 1, fullscreen ? 1 : 0);
+            PlayerPrefs.SetInt(VideoKey + 2, quality);
             Destroy(this.gameObject);
         }
         void OnGUI()//values based off of 19x12 grid

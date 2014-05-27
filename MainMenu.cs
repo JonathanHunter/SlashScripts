@@ -18,6 +18,7 @@ namespace Assets.Scripts
             cursor = (int)State.LevelSelect;
             currState = State.Main;
             nextState = State.Main;
+            //add video and audio initialization
         }
 
         void Update()
@@ -72,7 +73,7 @@ namespace Assets.Scripts
                     else
                         cursor--;
                 }
-                if ((cursor == (int)State.Exit && CustomInput.Accept)||CustomInput.Cancel)
+                if ((cursor == (int)State.Exit && CustomInput.Accept) || CustomInput.Cancel)
                     nextState = State.Main;
                 if (cursor == (int)State.Video && CustomInput.Accept)
                 {
@@ -125,9 +126,15 @@ namespace Assets.Scripts
                 GUI.DrawTexture(new Rect(Screen.width * (7f / 19f), Screen.height * ((5f / 12f) + ((cursor - (int)State.LevelSelect / 12) * 2)), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
                 //menu buttons
                 if (GUI.Button(new Rect(Screen.width * (8f / 19f), Screen.height * (5f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Play", ButtonStyle))
+                {
+                    Instantiate(LevelSelect);
                     nextState = State.LevelSelect;
+                }
                 if (GUI.Button(new Rect(Screen.width * (8f / 19f), Screen.height * (7f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Options", ButtonStyle))
+                {
                     nextState = State.Options;
+                    cursor = (int)State.Video;
+                }
                 if (GUI.Button(new Rect(Screen.width * (8f / 19f), Screen.height * (9f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Credits", ButtonStyle))
                     nextState = State.Credits;
             }
@@ -145,11 +152,20 @@ namespace Assets.Scripts
                     GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * ((6f / 12f) + ((cursor - (int)State.Video / 12))), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
                 //menu buttons
                 if (GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (6f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Video", ButtonStyle))
+                {
+                    Instantiate(Video);
                     nextState = State.Video;
+                }
                 if (GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (7f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Audio", ButtonStyle))
+                {
+                    Instantiate(Audio);
                     nextState = State.Audio;
+                }
                 if (GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (8f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Controls", ButtonStyle))
+                {
+                    Instantiate(Controls);
                     nextState = State.Controls;
+                }
                 if (GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (10f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Exit", ButtonStyle))
                     nextState = State.Main;
 

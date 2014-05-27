@@ -1,9 +1,9 @@
-﻿//written by: Jonathan Hunter
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
+
 namespace Assets.Scripts
 {
-    class LevelSelect:MonoBehaviour
+    class GamepadControls : MonoBehaviour
     {
         public GUIStyle style;
         void Start()
@@ -17,7 +17,7 @@ namespace Assets.Scripts
         }
         void OnGUI()
         {
-            GUI.Box(new Rect(Screen.width / 3f, Screen.height / 3, Screen.width / 2, Screen.height / 2), "Level Select", style);
+            GUI.Box(new Rect(Screen.width / 3f, Screen.height / 3, Screen.width / 2, Screen.height / 2), "Gamepad", style);
         }
     }
 }
