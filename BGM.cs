@@ -11,7 +11,7 @@ namespace Assets.Scripts
         }
         void Update()
         {
-
+            //will play all songs a specified volume
         }
     }
 }

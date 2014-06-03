@@ -19,16 +19,16 @@ namespace Assets.Scripts
         }
         void Update()
         {
-            if (CustomInput.Cancel || (cursor == (int)State.Exit && CustomInput.Accept))
+            if (CustomInput.CancelUp || (cursor == (int)State.Exit && CustomInput.AcceptUp))
                 Exit();
-            if (CustomInput.Down)
+            if (CustomInput.DownUp)
             {
                 if (cursor == (int)State.Exit)
                     cursor = (int)State.Music;
                 else
                     cursor++;
             }
-            if (CustomInput.Up)
+            if (CustomInput.UpUp)
             {
                 if (cursor == (int)State.Music)
                     cursor = (int)State.Exit;
@@ -37,25 +37,25 @@ namespace Assets.Scripts
             }
             if (cursor == (int)State.Music && CustomInput.Left)
             {
-                musicVol--;
+                musicVol-=.2f;
                 if (musicVol < 0)
                     musicVol = 0;
             }
             if (cursor == (int)State.Music && CustomInput.Right)
             {
-                musicVol++;
+                musicVol+=.2f;
                 if (musicVol > 10)
                     musicVol = 10;
             }
             if (cursor == (int)State.SFX && CustomInput.Left)
             {
-                sfxVol--;
+                sfxVol-=.2f;
                 if (sfxVol < 0)
                     sfxVol = 0;
             }
             if (cursor == (int)State.SFX && CustomInput.Right)
             {
-                sfxVol++;
+                sfxVol+=.2f;
                 if (sfxVol > 10)
                     sfxVol = 10;
             }
@@ -70,7 +70,7 @@ namespace Assets.Scripts
             Destroy(this.gameObject);
         }
 
-        void OnGUI()
+        void OnGUI()//values based off of 19x12 grid
         {
             //left, top, width, height
             //title pic

@@ -17,7 +17,7 @@ namespace Assets.Scripts
         }
         void OnGUI()
         {
-            GUI.Box(new Rect(Screen.width / 3f, Screen.height / 3, Screen.width / 2, Screen.height / 2), "Gamepad", style);
+            GUI.Box(new Rect(Screen.width / 3f, Screen.height / 3, Screen.width / 2, Screen.height / 2), "Gamepad not implemented", style);
         }
     }
 }
