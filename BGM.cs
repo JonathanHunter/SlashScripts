@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿//written by: Jonathan Hunter
+using UnityEngine;
 using System.Collections;
 
 namespace Assets.Scripts

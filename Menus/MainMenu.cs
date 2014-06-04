@@ -1,7 +1,7 @@
 ﻿//written by: Jonathan Hunter
 using UnityEngine;
 using System.Collections;
-namespace Assets.Scripts
+namespace Assets.Scripts.Menus
 {
     public class MainMenu : MonoBehaviour
     {
