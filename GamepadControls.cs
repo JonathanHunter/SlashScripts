@@ -12,12 +12,15 @@ namespace Assets.Scripts
         }
         void Update()
         {
-            if (CustomInput.Cancel)
+            if (CustomInput.CancelUp)
                 Destroy(this.gameObject);
         }
         void OnGUI()
         {
-            GUI.Box(new Rect(Screen.width / 3f, Screen.height / 3, Screen.width / 2, Screen.height / 2), "Gamepad not implemented", style);
+            GUI.Box(new Rect(
+                Screen.width / 3f, Screen.height / 3f, 
+                Screen.width / 2f, Screen.height / 2f), 
+                "Gamepad not implemented", style);
         }
     }
 }

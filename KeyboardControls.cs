@@ -7,7 +7,11 @@ namespace Assets.Scripts
     {
         public Texture Title, CursorPic;
         public GUIStyle LabelStyle;
-        private enum State { Attack = 0, Jump, Dash, Pause, Accept, Cancel, Up, Down, Left, Right, Default, Exit, GettingKey };
+        private enum State
+        {
+            Attack = 0, Jump, Dash, Pause, Accept,
+            Cancel, Up, Down, Left, Right, Default, Exit, GettingKey
+        };
         private int cursor, oldCursor;
         private KeyCode temp = 0;
         private bool wait = false, updateSkip = false;
@@ -22,7 +26,9 @@ namespace Assets.Scripts
                 updateSkip = false;
                 return;
             }
-            if (cursor != (int)State.GettingKey && (CustomInput.CancelUp || (cursor == (int)State.Exit && CustomInput.AcceptUp)))
+            if (cursor != (int)State.GettingKey &&
+                (CustomInput.CancelUp || (cursor == (int)State.Exit &&
+                CustomInput.AcceptUp)))
                 Destroy(this.gameObject);
             else if (cursor == (int)State.Default && CustomInput.AcceptUp)
                 CustomInput.Default();
@@ -54,7 +60,11 @@ namespace Assets.Scripts
             if (!wait && !Input.GetKey(KeyCode.Escape))
             {
                 temp = Event.current.keyCode;
-                GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (6f / 12f), Screen.width * (6f / 19f), Screen.height * (3f / 12f)), "Press the new key you want to use, Escape fo cancel.", LabelStyle);
+                GUI.Label(new Rect(Screen.width * (7f / 19f),
+                    Screen.height * (6f / 12f), Screen.width * (6f / 19f),
+                    Screen.height * (3f / 12f)),
+                    "Press the new key you want to use, Escape fo cancel."
+                    , LabelStyle);
                 if (temp != 0)
                 {
                     if (oldCursor == (int)State.Attack)
@@ -94,9 +104,13 @@ namespace Assets.Scripts
         }
         void OnGUI()//values based off of 19x12 grid
         {
-            //left, top, width, height
+            //left, top, 
+            //width, height
             //title pic
-            GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (1f / 12f), Screen.width * (7f / 19f), Screen.height * (2f / 12f)), Title);
+            GUI.DrawTexture(new Rect(
+                Screen.width * (6f / 19f), Screen.height * (1f / 12f),
+                Screen.width * (7f / 19f), Screen.height * (2f / 12f)),
+                Title);
             drawButtons();
             drawLabels();
             drawCursor();
@@ -105,106 +119,234 @@ namespace Assets.Scripts
         }
         private void drawButtons()
         {
-            //left, top, width, height
-            if (GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardAttack.ToString(), LabelStyle))
+            //left, top,
+            //width, height
+            //label
+            //state, style
+            makeButton(new Rect(
+                Screen.width * (7f / 19f), Screen.height * (4f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                CustomInput.KeyBoardAttack.ToString(),
+                State.Attack, LabelStyle);
+            makeButton(new Rect(
+                Screen.width * (7f / 19f), Screen.height * (5f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                CustomInput.KeyBoardJump.ToString(),
+                State.Jump, LabelStyle);
+            makeButton(new Rect(
+                Screen.width * (7f / 19f), Screen.height * (6f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                CustomInput.KeyBoardDash.ToString(),
+                State.Dash, LabelStyle);
+            makeButton(new Rect(
+                Screen.width * (7f / 19f), Screen.height * (7f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                CustomInput.KeyBoardPause.ToString(),
+                State.Pause, LabelStyle);
+            makeButton(new Rect(
+                Screen.width * (7f / 19f), Screen.height * (8f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                CustomInput.KeyBoardAccept + "/Enter",
+                State.Accept, LabelStyle);
+            makeButton(new Rect(
+                Screen.width * (7f / 19f), Screen.height * (9f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                CustomInput.KeyBoardCancel + "/Escape",
+                State.Cancel, LabelStyle);
+            makeButton(new Rect(
+                Screen.width * (12f / 19f), Screen.height * (4f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                CustomInput.KeyBoardUp + "/Up arrow",
+                State.Up, LabelStyle);
+            makeButton(new Rect(
+                Screen.width * (12f / 19f), Screen.height * (5f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                CustomInput.KeyBoardDown + "/Down arrow",
+                State.Down, LabelStyle);
+            makeButton(new Rect(
+                Screen.width * (12f / 19f), Screen.height * (6f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                CustomInput.KeyBoardLeft + "/Left arrow",
+                State.Left, LabelStyle);
+            makeButton(new Rect(
+                Screen.width * (12f / 19f), Screen.height * (7f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                CustomInput.KeyBoardRight + "/Right arrow",
+                State.Right, LabelStyle);
+            makeButton(new Rect(
+               Screen.width * (9f / 19f), Screen.height * (10f / 12f),
+               Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+               "Defaults",
+               State.Default, LabelStyle);
+            makeButton(new Rect(
+                Screen.width * (12f / 19f), Screen.height * (10f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                "Exit",
+                State.Exit, LabelStyle);
+        }
+        private void makeButton(Rect position, string label,
+            State cursorStateToReturnTo, GUIStyle style)
+        {
+            if (cursorStateToReturnTo == State.Default)
             {
-                oldCursor = (int)State.Attack;
-                cursor = (int)State.GettingKey;
+                if (GUI.Button(position, label, style))
+                {
+                    CustomInput.Default();
+                    cursor = (int)State.Default;
+                }
             }
-            if (GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (5f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardJump.ToString(), LabelStyle))
+            else if (cursorStateToReturnTo == State.Exit)
             {
-                oldCursor = (int)State.Jump;
-                cursor = (int)State.GettingKey;
+                if (GUI.Button(position, label, style))
+                    Destroy(this.gameObject);
             }
-            if (GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (6f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardDash.ToString(), LabelStyle))
+            else
             {
-                oldCursor = (int)State.Dash;
-                cursor = (int)State.GettingKey;
+                if (GUI.Button(position, label, style))
+                {
+                    oldCursor = (int)cursorStateToReturnTo;
+                    cursor = (int)State.GettingKey;
+                }
             }
-            if (GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (7f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardPause.ToString(), LabelStyle))
-            {
-                oldCursor = (int)State.Pause;
-                cursor = (int)State.GettingKey;
-            }
-            if (GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (8f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardAccept + "/Enter", LabelStyle))
-            {
-                oldCursor = (int)State.Accept;
-                cursor = (int)State.GettingKey;
-            }
-            if (GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (9f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardCancel + "/Escape", LabelStyle))
-            {
-                oldCursor = (int)State.Cancel;
-                cursor = (int)State.GettingKey;
-            }
-            if (GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardUp + "/Up arrow", LabelStyle))
-            {
-                oldCursor = (int)State.Up;
-                cursor = (int)State.GettingKey;
-            }
-            if (GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (5f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardDown + "/Down arrow", LabelStyle))
-            {
-                oldCursor = (int)State.Down;
-                cursor = (int)State.GettingKey;
-            }
-            if (GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (6f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardLeft + "/Left arrow", LabelStyle))
-            {
-                oldCursor = (int)State.Left;
-                cursor = (int)State.GettingKey;
-            }
-            if (GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (7f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardRight + "/Right arrow", LabelStyle))
-            {
-                oldCursor = (int)State.Right;
-                cursor = (int)State.GettingKey;
-            }
-            if (GUI.Button(new Rect(Screen.width * (9f / 19f), Screen.height * (10f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Defaults", LabelStyle))
-                CustomInput.Default();
-            if (GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (10f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Exit", LabelStyle))
-                Destroy(this.gameObject);
         }
         private void drawLabels()
         {
-            //left, top, width, height
+            //left, top, 
+            //width, height
             //menu title
-            GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (3f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Keyboard", LabelStyle);
+            GUI.Label(new Rect(
+                Screen.width * (7f / 19f), Screen.height * (3f / 12f),
+                Screen.width * (4f / 19f), Screen.height * (1f / 12f)),
+                "Keyboard", LabelStyle);
             //keys
-            GUI.Label(new Rect(Screen.width * (4f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Attack", LabelStyle);
-            GUI.Label(new Rect(Screen.width * (4f / 19f), Screen.height * (5f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Jump", LabelStyle);
-            GUI.Label(new Rect(Screen.width * (4f / 19f), Screen.height * (6f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Dash", LabelStyle);
-            GUI.Label(new Rect(Screen.width * (4f / 19f), Screen.height * (7f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Pause", LabelStyle);
-            GUI.Label(new Rect(Screen.width * (4f / 19f), Screen.height * (8f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Accept", LabelStyle);
-            GUI.Label(new Rect(Screen.width * (4f / 19f), Screen.height * (9f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Cancel", LabelStyle);
-            GUI.Label(new Rect(Screen.width * (9f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Up", LabelStyle);
-            GUI.Label(new Rect(Screen.width * (9f / 19f), Screen.height * (5f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Down", LabelStyle);
-            GUI.Label(new Rect(Screen.width * (9f / 19f), Screen.height * (6f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Left", LabelStyle);
-            GUI.Label(new Rect(Screen.width * (9f / 19f), Screen.height * (7f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Right", LabelStyle);
+            GUI.Label(new Rect(
+                Screen.width * (4f / 19f), Screen.height * (4f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                "Attack", LabelStyle);
+            GUI.Label(new Rect(
+                Screen.width * (4f / 19f), Screen.height * (5f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                "Jump", LabelStyle);
+            GUI.Label(new Rect(
+                Screen.width * (4f / 19f), Screen.height * (6f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                "Dash", LabelStyle);
+            GUI.Label(new Rect(
+                Screen.width * (4f / 19f), Screen.height * (7f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                "Pause", LabelStyle);
+            GUI.Label(new Rect(
+                Screen.width * (4f / 19f), Screen.height * (8f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                "Accept", LabelStyle);
+            GUI.Label(new Rect(
+                Screen.width * (4f / 19f), Screen.height * (9f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                "Cancel", LabelStyle);
+            GUI.Label(new Rect(
+                Screen.width * (9f / 19f), Screen.height * (4f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                "Up", LabelStyle);
+            GUI.Label(new Rect(
+                Screen.width * (9f / 19f), Screen.height * (5f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                "Down", LabelStyle);
+            GUI.Label(new Rect(
+                Screen.width * (9f / 19f), Screen.height * (6f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                "Left", LabelStyle);
+            GUI.Label(new Rect(
+                Screen.width * (9f / 19f), Screen.height * (7f / 12f),
+                Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                "Right", LabelStyle);
         }
         private void drawCursor()
         {
             //left, top, width, height
             if (cursor == (int)State.Attack)
-                GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (4f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (6f / 19f), Screen.height * (4f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
             else if (cursor == (int)State.Jump)
-                GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (5f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (6f / 19f), Screen.height * (5f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
             else if (cursor == (int)State.Dash)
-                GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (6f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (6f / 19f), Screen.height * (6f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
             else if (cursor == (int)State.Up)
-                GUI.DrawTexture(new Rect(Screen.width * (11f / 19f), Screen.height * (4f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (11f / 19f), Screen.height * (4f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
             else if (cursor == (int)State.Down)
-                GUI.DrawTexture(new Rect(Screen.width * (11f / 19f), Screen.height * (5f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (11f / 19f), Screen.height * (5f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
             else if (cursor == (int)State.Left)
-                GUI.DrawTexture(new Rect(Screen.width * (11f / 19f), Screen.height * (6f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (11f / 19f), Screen.height * (6f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
             else if (cursor == (int)State.Right)
-                GUI.DrawTexture(new Rect(Screen.width * (11f / 19f), Screen.height * (7f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (11f / 19f), Screen.height * (7f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
             else if (cursor == (int)State.Accept)
-                GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (8f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (6f / 19f), Screen.height * (8f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
             else if (cursor == (int)State.Cancel)
-                GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (9f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (6f / 19f), Screen.height * (9f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
             else if (cursor == (int)State.Pause)
-                GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (7f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (6f / 19f), Screen.height * (7f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
             else if (cursor == (int)State.Default)
-                GUI.DrawTexture(new Rect(Screen.width * (8f / 19f), Screen.height * (10f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (8f / 19f), Screen.height * (10f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
             else if (cursor == (int)State.Exit)
-                GUI.DrawTexture(new Rect(Screen.width * (11f / 19f), Screen.height * (10f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (11f / 19f), Screen.height * (10f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
         }
     }
 }

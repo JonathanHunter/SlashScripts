@@ -17,7 +17,8 @@ namespace Assets.Scripts
         public static bool Accept = false;
         public static bool Cancel = false;
         public static bool Pause = false;
-        //true for one frame after button is held
+
+        //true for one frame after button is let go.
         public static bool AttackUp = false;
         public static bool JumpUp = false;
         public static bool DashUp = false;
@@ -192,12 +193,14 @@ namespace Assets.Scripts
             else
                 DashUp = false;
 
-            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(keyBoardUp))
+            if (Input.GetKeyDown(KeyCode.UpArrow) || 
+                Input.GetKeyDown(keyBoardUp))
             {
                 Up = true;
                 UpUp = false;
             }
-            else if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(keyBoardUp))
+            else if (Input.GetKeyUp(KeyCode.UpArrow) || 
+                Input.GetKeyUp(keyBoardUp))
             {
                 Up = false;
                 UpUp = true;
@@ -205,12 +208,14 @@ namespace Assets.Scripts
             else
                 UpUp = false;
 
-            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(keyBoardDown))
+            if (Input.GetKeyDown(KeyCode.DownArrow) || 
+                Input.GetKeyDown(keyBoardDown))
             {
                 Down = true;
                 DownUp = false;
             }
-            else if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(keyBoardDown))
+            else if (Input.GetKeyUp(KeyCode.DownArrow) || 
+                Input.GetKeyUp(keyBoardDown))
             {
                 Down = false;
                 DownUp = true;
@@ -218,12 +223,14 @@ namespace Assets.Scripts
             else
                 DownUp = false;
 
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(keyBoardLeft))
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || 
+                Input.GetKeyDown(keyBoardLeft))
             {
                 Left = true;
                 LeftUp = false;
             }
-            else if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(keyBoardLeft))
+            else if (Input.GetKeyUp(KeyCode.LeftArrow) || 
+                Input.GetKeyUp(keyBoardLeft))
             {
                 Left = false;
                 LeftUp = true;
@@ -231,12 +238,14 @@ namespace Assets.Scripts
             else
                 LeftUp = false;
 
-            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(keyBoardRight))
+            if (Input.GetKeyDown(KeyCode.RightArrow) || 
+                Input.GetKeyDown(keyBoardRight))
             {
                 Right = true;
                 RightUp = false;
             }
-            else if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(keyBoardRight))
+            else if (Input.GetKeyUp(KeyCode.RightArrow) || 
+                Input.GetKeyUp(keyBoardRight))
             {
                 Right = false;
                 RightUp = true;
@@ -244,12 +253,14 @@ namespace Assets.Scripts
             else
                 RightUp = false;
 
-            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(keyBoardAccept))
+            if (Input.GetKeyDown(KeyCode.Return) || 
+                Input.GetKeyDown(keyBoardAccept))
             {
                 Accept = true;
                 AcceptUp = false;
             }
-            else if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(keyBoardAccept))
+            else if (Input.GetKeyUp(KeyCode.Return) || 
+                Input.GetKeyUp(keyBoardAccept))
             {
                 Accept = false;
                 AcceptUp = true;
@@ -257,12 +268,14 @@ namespace Assets.Scripts
             else
                 AcceptUp = false;
 
-            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(keyBoardCancel))
+            if (Input.GetKeyDown(KeyCode.Escape) || 
+                Input.GetKeyDown(keyBoardCancel))
             {
                 Cancel = true;
                 CancelUp = false;
             }
-            else if (Input.GetKeyUp(KeyCode.Escape) || Input.GetKeyUp(keyBoardCancel))
+            else if (Input.GetKeyUp(KeyCode.Escape) || 
+                Input.GetKeyUp(keyBoardCancel))
             {
                 Cancel = false;
                 CancelUp = true;

@@ -21,7 +21,8 @@ namespace Assets.Scripts
         {
             if (currState==State.Controls)
             {
-                if (CustomInput.CancelUp || (cursor == (int)State.Back && CustomInput.AcceptUp))
+                if (CustomInput.CancelUp || 
+                    (cursor == (int)State.Back && CustomInput.AcceptUp))
                     Destroy(this.gameObject);
                 if (CustomInput.DownUp)
                 {
@@ -64,9 +65,13 @@ namespace Assets.Scripts
         {
             if (currState==State.Controls)
             {
-                //left, top, width, height
+                //left, top, 
+                //width, height,
                 //title pic
-                GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (1f / 12f), Screen.width * (7f / 19f), Screen.height * (2f / 12f)), Title);
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (6f / 19f), Screen.height * (1f / 12f), 
+                    Screen.width * (7f / 19f), Screen.height * (2f / 12f)), 
+                    Title);
                 drawButtons();
                 drawLabels();
                 drawCursor();
@@ -74,34 +79,62 @@ namespace Assets.Scripts
         }
         private void drawButtons()
         {
-            //left, top, width, height
-            if (GUI.Button(new Rect(Screen.width * (6f / 19f), Screen.height * (5f / 12f), Screen.width * (5f / 19f), Screen.height * (1f / 12f)), "Keyboard", LabelStyle))
+            //left, top, 
+            //width, height
+            if (GUI.Button(new Rect(
+                Screen.width * (6f / 19f), Screen.height * (5f / 12f), 
+                Screen.width * (5f / 19f), Screen.height * (1f / 12f)),
+                "Keyboard", LabelStyle))
             {
                 Instantiate(Keyboard);
                 nextState = State.Keyboard;
             }
-            if (GUI.Button(new Rect(Screen.width * (6f / 19f), Screen.height * (7f / 12f), Screen.width * (5f / 19f), Screen.height * (1f / 12f)), "Gamepad", LabelStyle))
+            if (GUI.Button(new Rect(
+                Screen.width * (6f / 19f), Screen.height * (7f / 12f), 
+                Screen.width * (5f / 19f), Screen.height * (1f / 12f)),
+                "Gamepad", LabelStyle))
             {
                 Instantiate(Gamepad);
                 nextState = State.Gamepad;
             }
-            if (GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (9f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Back", LabelStyle))
+            if (GUI.Button(new Rect(
+                Screen.width * (7f / 19f), Screen.height * (9f / 12f), 
+                Screen.width * (4f / 19f), Screen.height * (1f / 12f)),
+                "Back", LabelStyle))
                 Destroy(this.gameObject); 
         }
         private void drawLabels()
         {
             //left, top, width, height
-            GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (3f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Controls", LabelStyle);
+            GUI.Label(new Rect(
+                Screen.width * (7f / 19f), Screen.height * (3f / 12f), 
+                Screen.width * (4f / 19f), Screen.height * (1f / 12f)), 
+                "Controls", LabelStyle);
         }
         private void drawCursor()
         {
             //left, top, width, height
             if (cursor == (int)State.Keyboard)
-                GUI.DrawTexture(new Rect(Screen.width * (5f / 19f), Screen.height * (5f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (5f / 19f), Screen.height * (5f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
             else if (cursor == (int)State.Gamepad)
-                GUI.DrawTexture(new Rect(Screen.width * (5f / 19f), Screen.height * (7f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (5f / 19f), Screen.height * (7f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
             else
-                GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (9f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+            {
+                GUI.DrawTexture(new Rect(
+                    Screen.width * (6f / 19f), Screen.height * (9f / 12f),
+                    Screen.width * (1f / 19f), Screen.height * (1f / 12f)),
+                    CursorPic);
+            }
         }
     }
 }
