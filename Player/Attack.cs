@@ -6,7 +6,9 @@ namespace Assets.Scripts.Player
     class Attack : MonoBehaviour
     {
         public GameObject[] colliders;
+
         private int frame;
+        private Transform reference;
 
         void Start()
         {
@@ -25,11 +27,12 @@ namespace Assets.Scripts.Player
                 colliders[frame].SetActive(true);
             }
             frame++;
+            this.gameObject.transform.position = reference.position;
         }
 
-        public void setPosition(Vector3 pos)
+        public void setReference(Transform pos)
         {
-            this.gameObject.transform.position = pos;
+            reference = pos;
         }
     }
 }

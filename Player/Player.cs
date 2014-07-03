@@ -27,7 +27,7 @@ namespace Assets.Scripts.Player
 
         private static Rigidbody2D rgb2D;
         private static bool doOnce;
-        private static Vector3 pos;
+        private static Transform pos;
 
         void Start()
         {
@@ -36,6 +36,7 @@ namespace Assets.Scripts.Player
             machine = new PlayerStateMachine();
             rgb2D = this.gameObject.GetComponent<Rigidbody2D>();
             anim = this.gameObject.GetComponent<Animator>();
+            pos = this.gameObject.transform;
             doState = new state[] { Idle, 
             Attacking, MovingAttack, InAirAttack, MoveLeft, 
             MoveRight, Dashing, Jumping, InAirNow };
@@ -43,7 +44,6 @@ namespace Assets.Scripts.Player
 
         void Update()
         {
-            pos = this.gameObject.transform.position;
             bool inAir = rgb2D.velocity.y == 0;
             int state = (int)machine.update(inAir, anim);
             if (doOnce && (state != 1 || state != 2 || state != 3 || state != 7))
@@ -59,7 +59,7 @@ namespace Assets.Scripts.Player
         {
             if (!doOnce)
             {
-                ((GameObject)Instantiate(standingAttackPrefab)).GetComponent<Attack>().setPosition(pos);
+                ((GameObject)Instantiate(standingAttackPrefab)).GetComponent<Attack>().setReference(pos);
                 doOnce = true;
             }
         }
@@ -68,7 +68,7 @@ namespace Assets.Scripts.Player
         {
             if (!doOnce)
             {
-                ((GameObject)Instantiate(movingAttackPrefab)).GetComponent<Attack>().setPosition(pos);
+                ((GameObject)Instantiate(movingAttackPrefab)).GetComponent<Attack>().setReference(pos);
                 doOnce = true;
             }
         }
@@ -77,7 +77,7 @@ namespace Assets.Scripts.Player
         {
             if (!doOnce)
             {
-                ((GameObject)Instantiate(inAirAttackPrefab)).GetComponent<Attack>().setPosition(pos);
+                ((GameObject)Instantiate(inAirAttackPrefab)).GetComponent<Attack>().setReference(pos);
                 doOnce = true;
             }
         }
