@@ -10,24 +10,24 @@ namespace Assets.Scripts.Player
         public enum State
         {
             Idle = 0, Attack, MovingAttack, InAirAttack,
-            MoveLeft, MoveRight, Dash, Jump, InAir, NumOfStates
+            Move, Dash, Jump, InAir, NumOfStates
         }
         private delegate State machine(bool inAir);
         private machine[] getNextState;
         private static int[] frameCounts;
         private int[][] animationArray;
         private State currState;
-        private static int frame;
+        private static double frame;
 
         public PlayerStateMachine()
         {
-            frame = 0;
+            frame = 0.0;
             currState = State.Idle;
-            frameCounts = new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3 };
+            frameCounts = new int[] { 1, 4, 5, 4, 6, 6, 2, 1 };
             generateAnimationArray();
             getNextState = new machine[] { Idle, 
-            Attacking, MovingAttack, InAirAttack, MoveLeft, 
-            MoveRight, Dashing, Jumping, InAirNow };
+            Attacking, MovingAttack, InAirAttack, Move,
+            Dashing, Jumping, InAirNow };
         }
 
         private void generateAnimationArray()
@@ -54,23 +54,26 @@ namespace Assets.Scripts.Player
 
         private void checkFrameOverFlow()
         {
-            if (frame > frameCounts[((int)currState)])
+            if (frame >= frameCounts[((int)currState)])
                 frame = 0;
         }
 
         private void incrementFrame()
         {
-            frame++;
+            frame += UnityEngine.Time.deltaTime * 9;
         }
 
         private void runMachine(bool inAir)
         {
+            State prev = currState;
             currState = getNextState[((int)currState)](inAir);
+            if (prev != currState)
+                frame = 0;
         }
 
         private void setAnimationFrame(UnityEngine.Animator anim)
         {
-            anim.SetInteger(0, animationArray[((int)currState)][frame]);
+            anim.SetInteger("frame", animationArray[((int)currState)][(int)frame]);
         }
 
         private static bool isDone(State state)
@@ -89,10 +92,8 @@ namespace Assets.Scripts.Player
                 return State.Jump;
             if (CustomInput.Dash)
                 return State.Dash;
-            if (CustomInput.Left)
-                return State.MoveLeft;
-            if (CustomInput.Right)
-                return State.MoveRight;
+            if (CustomInput.Left || CustomInput.Right)
+                return State.Move;
             return State.Idle;
         }
         private static State Attacking(bool inAir)
@@ -107,10 +108,8 @@ namespace Assets.Scripts.Player
             {
                 if (CustomInput.Attack)
                     return State.Attack;
-                if (CustomInput.Left)
-                    return State.MoveLeft;
-                if (CustomInput.Right)
-                    return State.MoveRight;
+                if (CustomInput.Left || CustomInput.Right)
+                    return State.Move;
                 if (CustomInput.Jump)
                     return State.Jump;
                 if (CustomInput.Dash)
@@ -127,9 +126,9 @@ namespace Assets.Scripts.Player
                 return State.Attack;
             return State.InAirAttack;
         }
-        private static State MoveLeft(bool inAir)
+        private static State Move(bool inAir)
         {
-            if (CustomInput.Left)
+            if (CustomInput.Left || CustomInput.Right)
             {
                 if (CustomInput.Attack)
                     return State.MovingAttack;
@@ -137,26 +136,8 @@ namespace Assets.Scripts.Player
                     return State.Dash;
                 if (CustomInput.Jump)
                     return State.Jump;
-                return State.MoveLeft;
+                return State.Move;
             }
-            if (CustomInput.Right)
-                return State.MoveRight;
-            return State.Idle;
-        }
-        private static State MoveRight(bool inAir)
-        {
-            if (CustomInput.Right)
-            {
-                if (CustomInput.Attack)
-                    return State.MovingAttack;
-                if (CustomInput.Dash)
-                    return State.Dash;
-                if (CustomInput.Jump)
-                    return State.Jump;
-                return State.MoveRight;
-            }
-            if (CustomInput.Left)
-                return State.MoveLeft;
             return State.Idle;
         }
         private static State Dashing(bool inAir)
@@ -165,24 +146,18 @@ namespace Assets.Scripts.Player
             {
                 if (inAir)
                     return State.InAir;
-                if (CustomInput.Left)
-                    return State.MoveLeft;
-                if (CustomInput.Right)
-                    return State.MoveRight;
+                if (CustomInput.Left || CustomInput.Right)
+                    return State.Move;
                 return State.Idle;
             }
             if (CustomInput.Attack)
             {
-                frame = 0;
                 if (inAir)
                     return State.InAirAttack;
-                return State.Attack;
+                return State.MovingAttack;
             }
             if (CustomInput.Jump && !inAir)
-            {
-                frame = 0;
                 return State.Jump;
-            }
             return State.Dash;
         }
         private static State Jumping(bool inAir)
@@ -190,10 +165,7 @@ namespace Assets.Scripts.Player
             if (isDone(State.Jump))
             {
                 if (CustomInput.Attack)
-                {
-                    frame = 0;
                     return State.InAirAttack;
-                }
                 return State.InAir;
             }
             return State.Jump;
@@ -206,10 +178,8 @@ namespace Assets.Scripts.Player
             {
                 if (CustomInput.Jump)
                     return State.Jump;
-                if (CustomInput.Left)
-                    return State.MoveLeft;
-                if (CustomInput.Right)
-                    return State.MoveRight;
+                if (CustomInput.Left || CustomInput.Right)
+                    return State.Move;
                 if (CustomInput.Attack)
                     return State.Attack;
                 return State.Idle;

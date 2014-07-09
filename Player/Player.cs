@@ -6,12 +6,19 @@ namespace Assets.Scripts.Player
 {
     class Player : MonoBehaviour
     {
-        public static GameObject standingAttackPrefab;
-        public static GameObject movingAttackPrefab;
-        public static GameObject inAirAttackPrefab;
+        public GameObject standingAttackPrefab;
+        public GameObject movingAttackPrefab;
+        public GameObject inAirAttackPrefab;
+        public Transform feet;
+        private static GameObject standingAttack;
+        private static GameObject movingAttack;
+        private static GameObject inAirAttack;
+        private static float xVel = 0;
+        private static float yVel = 0;
+        private static bool left = false;
 
         public const int MAX_HEALTH = 100;
-        public const int MOVE_SPEED = 2;
+        public const int MOVE_SPEED = 3;
 
         public int Health
         {
@@ -25,7 +32,6 @@ namespace Assets.Scripts.Player
         private delegate void state();
         private state[] doState;
 
-        private static Rigidbody2D rgb2D;
         private static bool doOnce;
         private static Transform pos;
 
@@ -34,32 +40,59 @@ namespace Assets.Scripts.Player
             doOnce = false;
             health = MAX_HEALTH;
             machine = new PlayerStateMachine();
-            rgb2D = this.gameObject.GetComponent<Rigidbody2D>();
             anim = this.gameObject.GetComponent<Animator>();
             pos = this.gameObject.transform;
             doState = new state[] { Idle, 
-            Attacking, MovingAttack, InAirAttack, MoveLeft, 
-            MoveRight, Dashing, Jumping, InAirNow };
+            Attacking, MovingAttack, InAirAttack, Move, 
+            Dashing, Jumping, InAirNow };
+            standingAttack = standingAttackPrefab;
+            movingAttack = movingAttackPrefab;
+            inAirAttack = inAirAttackPrefab;
         }
+        
 
         void Update()
         {
-            bool inAir = rgb2D.velocity.y == 0;
+            bool inAir = !Physics2D.Raycast(feet.position, -Vector2.up, 0.1f);
             int state = (int)machine.update(inAir, anim);
-            if (doOnce && (state != 1 || state != 2 || state != 3 || state != 7))
+            if (doOnce)
                 doOnce = false;
             doState[state]();
+            this.transform.position = new Vector3(this.transform.position.x + xVel, this.transform.position.y + yVel);
+            yVel = 0;
+            leftRight();
+        }
+
+        private void leftRight()
+        {
+            if (CustomInput.Left)
+            {
+                left = true;
+                transform.localScale = new UnityEngine.Vector3(-3f, 3f, 1f);
+            }
+            else if (CustomInput.Right)
+            {
+                left = false;
+                transform.localScale = new UnityEngine.Vector3(3f, 3f, 1f);
+            }
+        }
+
+        void OnCollisionEnter2D(Collision2D coll)
+        {
+            yVel = 0;
         }
 
         private static void Idle()
         {
+            xVel = 0;
         }
 
         private static void Attacking()
         {
             if (!doOnce)
             {
-                ((GameObject)Instantiate(standingAttackPrefab)).GetComponent<Attack>().setReference(pos);
+                xVel = 0;
+                ((GameObject)Instantiate(standingAttack)).GetComponent<Attack>().setReference(pos);
                 doOnce = true;
             }
         }
@@ -68,7 +101,7 @@ namespace Assets.Scripts.Player
         {
             if (!doOnce)
             {
-                ((GameObject)Instantiate(movingAttackPrefab)).GetComponent<Attack>().setReference(pos);
+                ((GameObject)Instantiate(movingAttack)).GetComponent<Attack>().setReference(pos);
                 doOnce = true;
             }
         }
@@ -77,47 +110,34 @@ namespace Assets.Scripts.Player
         {
             if (!doOnce)
             {
-                ((GameObject)Instantiate(inAirAttackPrefab)).GetComponent<Attack>().setReference(pos);
+                ((GameObject)Instantiate(inAirAttack)).GetComponent<Attack>().setReference(pos);
                 doOnce = true;
             }
         }
 
-        private static void MoveLeft()
+        private static void Move()
         {
-            rgb2D.velocity = new Vector2(-MOVE_SPEED * Time.deltaTime, rgb2D.velocity.y);
-        }
-
-        private static void MoveRight()
-        {
-            rgb2D.velocity = new Vector2(MOVE_SPEED * Time.deltaTime, rgb2D.velocity.y);
+            if (left)
+                xVel = -Time.deltaTime * MOVE_SPEED;
+            else
+                xVel = Time.deltaTime * MOVE_SPEED;
         }
 
         private static void Dashing()
         {
-            if (rgb2D.velocity.x > 0)
-                rgb2D.velocity = new Vector2(MOVE_SPEED * 2 * Time.deltaTime, rgb2D.velocity.y);
+            if (left)
+                xVel = -MOVE_SPEED * 2 * Time.deltaTime;
             else
-                rgb2D.velocity = new Vector2(-MOVE_SPEED * 2 * Time.deltaTime, rgb2D.velocity.y);
+                xVel = MOVE_SPEED * 2 * Time.deltaTime;
         }
 
         private static void Jumping()
         {
-            if (!doOnce)
-            {
-                rgb2D.velocity = new Vector2(rgb2D.velocity.x, MOVE_SPEED * Time.deltaTime);
-            }
+            yVel += MOVE_SPEED * 3 * Time.deltaTime;
         }
 
         private static void InAirNow()
         {
-            if (CustomInput.Left)
-            {
-                rgb2D.velocity = new Vector2(rgb2D.velocity.x + ((MOVE_SPEED / 2) * Time.deltaTime), rgb2D.velocity.y);
-            }
-            if (CustomInput.Right)
-            {
-                rgb2D.velocity = new Vector2(rgb2D.velocity.x - ((MOVE_SPEED / 2) * Time.deltaTime), rgb2D.velocity.y);
-            }
         }
     }
 }

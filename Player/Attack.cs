@@ -17,9 +17,9 @@ namespace Assets.Scripts.Player
 
         void Update()
         {
-            if (frame >= colliders.Length)
+            //if (frame >= colliders.Length)
                 Destroy(this.gameObject);
-            if (frame == 0)
+            /*if (frame == 0)
                 colliders[0].SetActive(true);
             else
             {
@@ -27,7 +27,7 @@ namespace Assets.Scripts.Player
                 colliders[frame].SetActive(true);
             }
             frame++;
-            this.gameObject.transform.position = reference.position;
+            this.gameObject.transform.position = reference.position;*/
         }
 
         public void setReference(Transform pos)
