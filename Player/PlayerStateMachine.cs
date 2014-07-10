@@ -130,6 +130,8 @@ namespace Assets.Scripts.Player
         {
             if (CustomInput.Left || CustomInput.Right)
             {
+                if (inAir)
+                    return State.InAir;
                 if (CustomInput.Attack)
                     return State.MovingAttack;
                 if (CustomInput.Dash)

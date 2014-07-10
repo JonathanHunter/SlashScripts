@@ -10,12 +10,17 @@ namespace Assets.Scripts.Player
         public GameObject movingAttackPrefab;
         public GameObject inAirAttackPrefab;
         public Transform feet;
+        public Transform head;
+        public Transform right;
+
         private static GameObject standingAttack;
         private static GameObject movingAttack;
         private static GameObject inAirAttack;
         private static float xVel = 0;
         private static float yVel = 0;
-        private static bool left = false;
+        private static bool FacingLeft = false;
+        private static bool doOnce;
+        private static Transform pos;
 
         public const int MAX_HEALTH = 100;
         public const int MOVE_SPEED = 3;
@@ -32,8 +37,6 @@ namespace Assets.Scripts.Player
         private delegate void state();
         private state[] doState;
 
-        private static bool doOnce;
-        private static Transform pos;
 
         void Start()
         {
@@ -49,30 +52,43 @@ namespace Assets.Scripts.Player
             movingAttack = movingAttackPrefab;
             inAirAttack = inAirAttackPrefab;
         }
-        
+
 
         void Update()
         {
             bool inAir = !Physics2D.Raycast(feet.position, -Vector2.up, 0.1f);
-            int state = (int)machine.update(inAir, anim);
             if (doOnce)
                 doOnce = false;
-            doState[state]();
+            doState[(int)machine.update(inAir, anim)]();
+            IsSomethingInTheWay(inAir);
             this.transform.position = new Vector3(this.transform.position.x + xVel, this.transform.position.y + yVel);
             yVel = 0;
-            leftRight();
+            LeftRight();
         }
 
-        private void leftRight()
+        private void IsSomethingInTheWay(bool inAir)
+        {
+            if (!inAir)
+            {
+                if (FacingLeft && Physics2D.Raycast(right.position, -Vector2.right, 0.1f))
+                    xVel = 0;
+                else if (Physics2D.Raycast(right.position, Vector2.right, 0.1f))
+                    xVel = 0;
+                if (Physics2D.Raycast(head.position, Vector2.up, 0.1f))
+                    yVel = 0;
+            }
+        }
+
+        private void LeftRight()
         {
             if (CustomInput.Left)
             {
-                left = true;
+                FacingLeft = true;
                 transform.localScale = new UnityEngine.Vector3(-3f, 3f, 1f);
             }
             else if (CustomInput.Right)
             {
-                left = false;
+                FacingLeft = false;
                 transform.localScale = new UnityEngine.Vector3(3f, 3f, 1f);
             }
         }
@@ -117,7 +133,7 @@ namespace Assets.Scripts.Player
 
         private static void Move()
         {
-            if (left)
+            if (FacingLeft)
                 xVel = -Time.deltaTime * MOVE_SPEED;
             else
                 xVel = Time.deltaTime * MOVE_SPEED;
@@ -125,7 +141,7 @@ namespace Assets.Scripts.Player
 
         private static void Dashing()
         {
-            if (left)
+            if (FacingLeft)
                 xVel = -MOVE_SPEED * 2 * Time.deltaTime;
             else
                 xVel = MOVE_SPEED * 2 * Time.deltaTime;
@@ -133,11 +149,13 @@ namespace Assets.Scripts.Player
 
         private static void Jumping()
         {
-            yVel += MOVE_SPEED * 3 * Time.deltaTime;
+            yVel += MOVE_SPEED * 5 * Time.deltaTime;
         }
 
         private static void InAirNow()
         {
+            if ((xVel > 0 && FacingLeft) || (xVel < 0 && !FacingLeft))
+                xVel = -xVel;
         }
     }
 }
