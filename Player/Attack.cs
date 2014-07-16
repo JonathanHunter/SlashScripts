@@ -17,19 +17,22 @@ namespace Assets.Scripts.Player
 
         void Update()
         {
-            if (frame >= colliders.Length)
-                Destroy(this.gameObject);
-            else
+            if (!Data.Paused)
             {
-                if (frame == 0)
-                    colliders[0].SetActive(true);
+                if (frame >= colliders.Length)
+                    Destroy(this.gameObject);
                 else
                 {
-                    colliders[frame - 1].SetActive(false);
-                    colliders[frame].SetActive(true);
+                    if (frame == 0)
+                        colliders[0].SetActive(true);
+                    else
+                    {
+                        colliders[frame - 1].SetActive(false);
+                        colliders[frame].SetActive(true);
+                    }
+                    frame++;
+                    this.gameObject.transform.position = reference.position;
                 }
-                frame++;
-                this.gameObject.transform.position = reference.position;
             }
         }
 

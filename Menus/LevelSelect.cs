@@ -12,15 +12,11 @@ namespace Assets.Scripts.Menus
         }
         void Update()
         {
-            if (CustomInput.CancelUp)
-                Destroy(this.gameObject);
+            Application.LoadLevel("Level 1");
         }
         void OnGUI()
         {
-            GUI.Box(new Rect(
-                Screen.width / 3f, Screen.height / 3f, 
-                Screen.width / 2f, Screen.height / 2f), 
-                "Level Select not implemented", style);
+            
         }
     }
 }

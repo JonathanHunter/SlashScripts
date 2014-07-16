@@ -57,22 +57,28 @@ namespace Assets.Scripts.Player
 
         void OnCollisionEnter2D(Collision2D coll)
         {
+            if (!Data.Paused)
+            {
+            }
         }
 
         void Update()
         {
-            if (alteredGravity)
+            if (!Data.Paused)
             {
-                rgb2D.gravityScale = 20;
-                alteredGravity = false;
+                if (alteredGravity)
+                {
+                    rgb2D.gravityScale = 20;
+                    alteredGravity = false;
+                }
+                bool inAir = !Physics2D.Raycast(feet.position, -Vector2.up, 0.1f);
+                int state = (int)machine.update(inAir, nextToClimableWall(), anim);
+                doState[state]();
+                IsSomethingInTheWay(inAir);
+                this.transform.position = new Vector3(this.transform.position.x + xVel, this.transform.position.y + yVel);
+                yVel = 0;
+                LeftRight();
             }
-            bool inAir = !Physics2D.Raycast(feet.position, -Vector2.up, 0.1f);
-            int state = (int)machine.update(inAir, nextToClimableWall(), anim);
-            doState[state]();
-            IsSomethingInTheWay(inAir);
-            this.transform.position = new Vector3(this.transform.position.x + xVel, this.transform.position.y + yVel);
-            yVel = 0;
-            LeftRight();
         }
         private bool nextToClimableWall()
         {
