@@ -19,8 +19,9 @@ namespace Assets.Scripts.Player
         private static float xVel = 0;
         private static float yVel = 0;
         private static bool FacingLeft = false;
-        private static bool doOnce;
+        private static bool alteredGravity = false;
         private static Transform pos;
+        private static Rigidbody2D rgb2D;
 
         public const int MAX_HEALTH = 100;
         public const int MOVE_SPEED = 3;
@@ -40,32 +41,51 @@ namespace Assets.Scripts.Player
 
         void Start()
         {
-            doOnce = false;
+            Physics2D.IgnoreLayerCollision(8, 9);
             health = MAX_HEALTH;
             machine = new PlayerStateMachine();
             anim = this.gameObject.GetComponent<Animator>();
             pos = this.gameObject.transform;
             doState = new state[] { Idle, 
             Attacking, MovingAttack, InAirAttack, Move, 
-            Dashing, Jumping, InAirNow };
+            Dashing, Jumping, InAirNow, OnWall, WallJump };
             standingAttack = standingAttackPrefab;
             movingAttack = movingAttackPrefab;
             inAirAttack = inAirAttackPrefab;
+            rgb2D = this.GetComponent<Rigidbody2D>();
         }
 
+        void OnCollisionEnter2D(Collision2D coll)
+        {
+        }
 
         void Update()
         {
+            if (alteredGravity)
+            {
+                rgb2D.gravityScale = 20;
+                alteredGravity = false;
+            }
             bool inAir = !Physics2D.Raycast(feet.position, -Vector2.up, 0.1f);
-            if (doOnce)
-                doOnce = false;
-            doState[(int)machine.update(inAir, anim)]();
+            int state = (int)machine.update(inAir, nextToClimableWall(), anim);
+            doState[state]();
             IsSomethingInTheWay(inAir);
             this.transform.position = new Vector3(this.transform.position.x + xVel, this.transform.position.y + yVel);
             yVel = 0;
             LeftRight();
         }
-
+        private bool nextToClimableWall()
+        {
+            RaycastHit2D a;
+            if (FacingLeft)
+                a = Physics2D.Raycast(right.position, -Vector2.right, 0.1f);
+            else
+                a = Physics2D.Raycast(right.position, Vector2.right, 0.1f);
+            if (a == null || a.collider == null)
+                return false;
+            else
+                return a.collider.tag.Equals("Ground");
+        }
         private void IsSomethingInTheWay(bool inAir)
         {
             if (!inAir)
@@ -93,11 +113,6 @@ namespace Assets.Scripts.Player
             }
         }
 
-        void OnCollisionEnter2D(Collision2D coll)
-        {
-            yVel = 0;
-        }
-
         private static void Idle()
         {
             xVel = 0;
@@ -105,30 +120,21 @@ namespace Assets.Scripts.Player
 
         private static void Attacking()
         {
-            if (!doOnce)
-            {
-                xVel = 0;
+            xVel = 0;
+            if (FindObjectOfType<Attack>() == null)
                 ((GameObject)Instantiate(standingAttack)).GetComponent<Attack>().setReference(pos);
-                doOnce = true;
-            }
         }
 
         private static void MovingAttack()
         {
-            if (!doOnce)
-            {
+            if (FindObjectOfType<Attack>() == null)
                 ((GameObject)Instantiate(movingAttack)).GetComponent<Attack>().setReference(pos);
-                doOnce = true;
-            }
         }
 
         private static void InAirAttack()
         {
-            if (!doOnce)
-            {
+            if (FindObjectOfType<Attack>() == null)
                 ((GameObject)Instantiate(inAirAttack)).GetComponent<Attack>().setReference(pos);
-                doOnce = true;
-            }
         }
 
         private static void Move()
@@ -156,6 +162,20 @@ namespace Assets.Scripts.Player
         {
             if ((xVel > 0 && FacingLeft) || (xVel < 0 && !FacingLeft))
                 xVel = -xVel;
+        }
+        private static void OnWall()
+        {
+            rgb2D.gravityScale = 10;
+            xVel = 0;
+            alteredGravity = true;
+        }
+        private static void WallJump()
+        {
+            yVel += MOVE_SPEED * 4 * Time.deltaTime;
+            if (FacingLeft)
+                xVel = MOVE_SPEED * 2 * Time.deltaTime;
+            else
+                xVel = -MOVE_SPEED * 2 * Time.deltaTime;
         }
     }
 }
