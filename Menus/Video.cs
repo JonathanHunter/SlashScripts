@@ -91,6 +91,7 @@ namespace Assets.Scripts.Menus
                 PlayerPrefs.SetInt(VideoKey + 0, resIndex);
                 PlayerPrefs.SetInt(VideoKey + 1, fullscreen ? 1 : 0);
                 PlayerPrefs.SetInt(VideoKey + 2, quality);
+                Accept = false;
             }
         }
         private void drawButtons()

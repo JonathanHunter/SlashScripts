@@ -154,135 +154,42 @@ namespace Assets.Scripts
         }
         void Update()
         {
-            if (Input.GetKeyDown(keyBoardAttack))
-            {
-                Attack = true;
-                AttackUp = false;
-            }
-            else if (Input.GetKeyUp(keyBoardAttack))
-            {
-                Attack = false;
-                AttackUp = true;
-            }
-            else
-                AttackUp = false;
-
-            if (Input.GetKeyDown(keyBoardJump))
-            {
-                Jump = true;
-                JumpUp = false;
-            }
-            else if (Input.GetKeyUp(keyBoardJump))
-            {
-                Jump = false;
-                JumpUp = true;
-            }
-            else
-                JumpUp = false;
-
-            if (Input.GetKeyDown(keyBoardDash))
-            {
-                Dash = true;
-                DashUp = false;
-            }
-            else if (Input.GetKeyUp(keyBoardDash))
-            {
-                Dash = false;
-                DashUp = true;
-            }
-            else
-                DashUp = false;
-
-            if (Input.GetKeyDown(KeyCode.UpArrow) || 
-                Input.GetKeyDown(keyBoardUp))
-            {
-                Up = true;
-                UpUp = false;
-            }
-            else if (Input.GetKeyUp(KeyCode.UpArrow) || 
-                Input.GetKeyUp(keyBoardUp))
-            {
-                Up = false;
-                UpUp = true;
-            }
-            else
-                UpUp = false;
-
-            if (Input.GetKeyDown(KeyCode.DownArrow) || 
-                Input.GetKeyDown(keyBoardDown))
-            {
-                Down = true;
-                DownUp = false;
-            }
-            else if (Input.GetKeyUp(KeyCode.DownArrow) || 
-                Input.GetKeyUp(keyBoardDown))
-            {
-                Down = false;
-                DownUp = true;
-            }
-            else
-                DownUp = false;
-
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || 
-                Input.GetKeyDown(keyBoardLeft))
-            {
-                Left = true;
-                LeftUp = false;
-            }
-            else if (Input.GetKeyUp(KeyCode.LeftArrow) || 
-                Input.GetKeyUp(keyBoardLeft))
-            {
-                Left = false;
-                LeftUp = true;
-            }
-            else
-                LeftUp = false;
-
-            if (Input.GetKeyDown(KeyCode.RightArrow) || 
-                Input.GetKeyDown(keyBoardRight))
-            {
-                Right = true;
-                RightUp = false;
-            }
-            else if (Input.GetKeyUp(KeyCode.RightArrow) || 
-                Input.GetKeyUp(keyBoardRight))
-            {
-                Right = false;
-                RightUp = true;
-            }
-            else
-                RightUp = false;
-
-            if (Input.GetKeyDown(KeyCode.Return) || 
-                Input.GetKeyDown(keyBoardAccept))
-            {
-                Accept = true;
-                AcceptUp = false;
-            }
-            else if (Input.GetKeyUp(KeyCode.Return) || 
-                Input.GetKeyUp(keyBoardAccept))
-            {
-                Accept = false;
-                AcceptUp = true;
-            }
-            else
-                AcceptUp = false;
-
-            if (Input.GetKeyDown(KeyCode.Escape) || 
-                Input.GetKeyDown(keyBoardCancel))
-            {
-                Cancel = true;
-                CancelUp = false;
-            }
-            else if (Input.GetKeyUp(KeyCode.Escape) || 
-                Input.GetKeyUp(keyBoardCancel))
-            {
-                Cancel = false;
-                CancelUp = true;
-            }
-            else
-                CancelUp = false;
+            updateKey(ref Attack, ref AttackUp, keyBoardAttack);
+            updateKey(ref Jump, ref JumpUp, keyBoardJump);
+            updateKey(ref Dash, ref DashUp, keyBoardDash);
+            updateKey(ref Up, ref UpUp, KeyCode.UpArrow, keyBoardUp);
+            updateKey(ref Down, ref DownUp, KeyCode.DownArrow, keyBoardDown);
+            updateKey(ref Left, ref LeftUp, KeyCode.LeftArrow, keyBoardLeft);
+            updateKey(ref Right, ref RightUp, KeyCode.RightArrow, keyBoardRight);
+            updateKey(ref Accept, ref AcceptUp, KeyCode.Return, keyBoardAccept);
+            updateKey(ref Cancel, ref CancelUp, KeyCode.Escape, keyBoardCancel);
+            updateKey(ref Pause, ref PauseUp, keyBoardPause);
         }
+        private void updateKey(ref bool button, ref bool buttonUp, params KeyCode[] keys)
+        {
+            bool key = false, keyUp = false;
+            foreach(KeyCode k in keys)
+            {
+                if (Input.GetKeyDown(k))
+                    key=true;
+                else if (Input.GetKeyUp(k))
+                    keyUp=true;
+            }
+
+            if (key)
+            {
+                button = true;
+                buttonUp = false;
+            }
+            else if (keyUp)
+            {
+                button = false;
+                buttonUp = true;
+            }
+            else
+                buttonUp = false;
+        }
+
         public static void Default()
         {
             keyBoardAttack = KeyCode.K;

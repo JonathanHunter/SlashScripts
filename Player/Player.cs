@@ -6,20 +6,18 @@ namespace Assets.Scripts.Player
 {
     class Player : MonoBehaviour
     {
-        public GameObject standingAttackPrefab;
-        public GameObject movingAttackPrefab;
-        public GameObject inAirAttackPrefab;
+        public GameObject AttackPrefab;
         public Transform feet;
         public Transform head;
         public Transform right;
 
-        private static GameObject standingAttack;
-        private static GameObject movingAttack;
-        private static GameObject inAirAttack;
+        private static GameObject attackPrefab;
+        private static GameObject attack;
         private static float xVel = 0;
         private static float yVel = 0;
         private static bool FacingLeft = false;
         private static bool alteredGravity = false;
+        private static bool held = false;
         private static Transform pos;
         private static Rigidbody2D rgb2D;
 
@@ -49,9 +47,7 @@ namespace Assets.Scripts.Player
             doState = new state[] { Idle, 
             Attacking, MovingAttack, InAirAttack, Move, 
             Dashing, Jumping, InAirNow, OnWall, WallJump };
-            standingAttack = standingAttackPrefab;
-            movingAttack = movingAttackPrefab;
-            inAirAttack = inAirAttackPrefab;
+            attackPrefab = AttackPrefab;
             rgb2D = this.GetComponent<Rigidbody2D>();
         }
 
@@ -68,7 +64,7 @@ namespace Assets.Scripts.Player
             {
                 if (alteredGravity)
                 {
-                    rgb2D.gravityScale = 20;
+                    rgb2D.gravityScale = 25;
                     alteredGravity = false;
                 }
                 bool inAir = !Physics2D.Raycast(feet.position, -Vector2.up, 0.1f);
@@ -78,6 +74,17 @@ namespace Assets.Scripts.Player
                 this.transform.position = new Vector3(this.transform.position.x + xVel, this.transform.position.y + yVel);
                 yVel = 0;
                 LeftRight();
+                if (attack != null && 
+                    ((state != (int)PlayerStateMachine.State.Attack && state != (int)PlayerStateMachine.State.MovingAttack) && 
+                    state != (int)PlayerStateMachine.State.InAirAttack))
+                {
+                    Destroy(attack);
+                }
+            }
+            else
+            {
+                rgb2D.gravityScale = 0;
+                alteredGravity = true;
             }
         }
         private bool nextToClimableWall()
@@ -127,20 +134,29 @@ namespace Assets.Scripts.Player
         private static void Attacking()
         {
             xVel = 0;
-            if (FindObjectOfType<Attack>() == null)
-                ((GameObject)Instantiate(standingAttack)).GetComponent<Attack>().setReference(pos);
+            if (attack == null)
+            {
+                attack = ((GameObject)Instantiate(attackPrefab));
+                attack.GetComponent<Attack>().setReference(pos);
+            }
         }
 
         private static void MovingAttack()
         {
-            if (FindObjectOfType<Attack>() == null)
-                ((GameObject)Instantiate(movingAttack)).GetComponent<Attack>().setReference(pos);
+            if (attack == null)
+            {
+                attack = ((GameObject)Instantiate(attackPrefab));
+                attack.GetComponent<Attack>().setReference(pos);
+            }
         }
 
         private static void InAirAttack()
         {
-            if (FindObjectOfType<Attack>() == null)
-                ((GameObject)Instantiate(inAirAttack)).GetComponent<Attack>().setReference(pos);
+            if (attack == null)
+            {
+                attack = ((GameObject)Instantiate(attackPrefab));
+                attack.GetComponent<Attack>().setReference(pos);
+            }
         }
 
         private static void Move()
@@ -162,6 +178,32 @@ namespace Assets.Scripts.Player
         private static void Jumping()
         {
             yVel += MOVE_SPEED * 5 * Time.deltaTime;
+            if (!held)
+            {
+                if (CustomInput.Left)
+                {
+                    xVel += -Time.deltaTime * MOVE_SPEED;
+                    held = true;
+                }
+                else if (CustomInput.Right)
+                {
+                    xVel += Time.deltaTime * MOVE_SPEED;
+                    held = true;
+                }
+            }
+            else 
+            {
+                if (CustomInput.LeftUp)
+                {
+                    xVel -= -Time.deltaTime * MOVE_SPEED;
+                    held = false;
+                }
+                else if (CustomInput.RightUp)
+                {
+                    xVel -= Time.deltaTime * MOVE_SPEED;
+                    held = false;
+                }
+            }
         }
 
         private static void InAirNow()

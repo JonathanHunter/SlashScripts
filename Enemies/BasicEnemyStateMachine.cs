@@ -9,22 +9,22 @@ namespace Assets.Scripts.Enemies
     {
         public enum State
         {
-            Idle = 0, Hit, NumOfStates
+            Idle = 0, Hit, Walk, Turn, NumOfStates
         }
-        private delegate State machine(bool beenHit);
+        private delegate State machine(bool beingHit, bool shouldTurn);
         private machine[] getNextState;
         private static int[] frameCounts;
         private int[][] animationArray;
         private State currState;
-        private static double frame;
+        private static double frame, hold;
 
         public BasicEnemyStateMachine()
         {
             frame = 0.0;
             currState = State.Idle;
-            frameCounts = new int[] { 1, 1 };
+            frameCounts = new int[] { 1, 1, 2, 1};
             generateAnimationArray();
-            getNextState = new machine[] { Idle, Hit };
+            getNextState = new machine[] { Idle, Hit, Walk, Turn };
         }
 
         private void generateAnimationArray()
@@ -39,9 +39,9 @@ namespace Assets.Scripts.Enemies
             }
         }
 
-        public State update(bool beenHit, UnityEngine.Animator anim)
+        public State update(bool beingHit, bool shouldTurn, UnityEngine.Animator anim)
         {
-            runMachine(beenHit);
+            runMachine(beingHit, shouldTurn);
             checkFrameOverFlow();
             setAnimationFrame(anim);
             incrementFrame();
@@ -59,10 +59,10 @@ namespace Assets.Scripts.Enemies
             frame += UnityEngine.Time.deltaTime * 9;
         }
 
-        private void runMachine(bool beenHit)
+        private void runMachine(bool beingHit, bool shouldTurn)
         {
             State prev = currState;
-            currState = getNextState[((int)currState)](beenHit);
+            currState = getNextState[((int)currState)](beingHit, shouldTurn);
             if (prev != currState)
                 frame = 0;
         }
@@ -72,22 +72,36 @@ namespace Assets.Scripts.Enemies
             anim.SetInteger("frame", animationArray[((int)currState)][(int)frame]);
         }
 
-        private static bool isDone(State state)
+        private static State Idle(bool beingHit, bool shouldTurn)
         {
-            return frame >= frameCounts[((int)state)];
-        }
-
-        private static State Idle(bool beenHit)
-        {
-            if (beenHit)
+            if (beingHit)
                 return State.Hit;
-            return State.Idle;
+            if (shouldTurn)
+                return State.Turn;
+            return State.Walk;
         }
-        private static State Hit(bool beenHit)
+        private static State Hit(bool beingHit, bool shouldTurn)
         {
-            if (isDone(State.Hit))
+            if (hold++ > 5)
+            {
+                hold = 0;
                 return State.Idle;
+            }
             return State.Hit;
+        }
+        private static State Walk(bool beingHit, bool shouldTurn)
+        {
+            if (beingHit)
+                return State.Hit;
+            if (shouldTurn)
+                return State.Turn;
+            return State.Walk;
+        }
+        private static State Turn(bool beingHit, bool shouldTurn)
+        {
+            if (beingHit)
+                return State.Hit;
+            return State.Walk;
         }
     }
 }
