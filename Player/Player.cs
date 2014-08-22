@@ -75,8 +75,9 @@ namespace Assets.Scripts.Player
                 yVel = 0;
                 LeftRight();
                 if (attack != null && 
-                    ((state != (int)PlayerStateMachine.State.Attack && state != (int)PlayerStateMachine.State.MovingAttack) && 
-                    state != (int)PlayerStateMachine.State.InAirAttack))
+                    state != (int)PlayerStateMachine.State.Attack && 
+                    state != (int)PlayerStateMachine.State.MovingAttack &&
+                    state != (int)PlayerStateMachine.State.InAirAttack)
                 {
                     Destroy(attack);
                 }
@@ -140,7 +141,6 @@ namespace Assets.Scripts.Player
                 attack.GetComponent<Attack>().setReference(pos);
             }
         }
-
         private static void MovingAttack()
         {
             if (attack == null)
@@ -149,7 +149,6 @@ namespace Assets.Scripts.Player
                 attack.GetComponent<Attack>().setReference(pos);
             }
         }
-
         private static void InAirAttack()
         {
             if (attack == null)
@@ -178,39 +177,30 @@ namespace Assets.Scripts.Player
         private static void Jumping()
         {
             yVel += MOVE_SPEED * 5 * Time.deltaTime;
-            if (!held)
-            {
-                if (CustomInput.Left)
-                {
-                    xVel += -Time.deltaTime * MOVE_SPEED;
-                    held = true;
-                }
-                else if (CustomInput.Right)
-                {
-                    xVel += Time.deltaTime * MOVE_SPEED;
-                    held = true;
-                }
-            }
-            else 
-            {
-                if (CustomInput.LeftUp)
-                {
-                    xVel -= -Time.deltaTime * MOVE_SPEED;
-                    held = false;
-                }
-                else if (CustomInput.RightUp)
-                {
-                    xVel -= Time.deltaTime * MOVE_SPEED;
-                    held = false;
-                }
-            }
+            AirMovement();
         }
-
         private static void InAirNow()
         {
+            AirMovement();
+        }
+        private static void AirMovement()
+        {
+            if (!held && (CustomInput.Left || CustomInput.Right))
+            {
+                xVel += Time.deltaTime * MOVE_SPEED;
+                held = true;
+            }
+            else if (held && !CustomInput.Left && !CustomInput.Right)
+            {
+                xVel -= Time.deltaTime * MOVE_SPEED;
+                if (Mathf.Abs(xVel) < .2)
+                    xVel = 0;
+                held = false;
+            }
             if ((xVel > 0 && FacingLeft) || (xVel < 0 && !FacingLeft))
                 xVel = -xVel;
         }
+
         private static void OnWall()
         {
             rgb2D.gravityScale = 10;
