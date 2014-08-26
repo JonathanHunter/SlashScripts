@@ -60,7 +60,7 @@ namespace Assets.Scripts.Player
 
         private void incrementFrame()
         {
-            frame += UnityEngine.Time.deltaTime * 9;
+            frame += UnityEngine.Time.deltaTime * 10;
         }
 
         private void runMachine(bool inAir, bool nextToWall)
@@ -168,7 +168,7 @@ namespace Assets.Scripts.Player
         }
         private static State Jumping(bool inAir, bool nextToWall)
         {
-            if (isDone(State.Jump))
+            if (isDone(State.Jump)||!CustomInput.Jump)
             {
                 if (nextToWall)
                     return State.OnWall;
