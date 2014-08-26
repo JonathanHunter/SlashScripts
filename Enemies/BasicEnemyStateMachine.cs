@@ -11,12 +11,10 @@ namespace Assets.Scripts.Enemies
         {
             Idle = 0, Hit, Walk, Turn, NumOfStates
         }
-        private delegate State machine(bool beingHit, bool shouldTurn);
-        private machine[] getNextState;
-        private static int[] frameCounts;
+        private int[] frameCounts;
         private int[][] animationArray;
         private State currState;
-        private static double frame, hold;
+        private double frame, hold;
 
         public BasicEnemyStateMachine()
         {
@@ -24,7 +22,6 @@ namespace Assets.Scripts.Enemies
             currState = State.Idle;
             frameCounts = new int[] { 1, 1, 2, 1};
             generateAnimationArray();
-            getNextState = new machine[] { Idle, Hit, Walk, Turn };
         }
 
         private void generateAnimationArray()
@@ -62,7 +59,13 @@ namespace Assets.Scripts.Enemies
         private void runMachine(bool beingHit, bool shouldTurn)
         {
             State prev = currState;
-            currState = getNextState[((int)currState)](beingHit, shouldTurn);
+            switch (currState)
+            {
+                case State.Idle: currState = Idle(beingHit, shouldTurn); break;
+                case State.Hit: currState = Hit(beingHit, shouldTurn); break;
+                case State.Walk: currState = Walk(beingHit, shouldTurn); break;
+                case State.Turn: currState = Turn(beingHit, shouldTurn); break;    
+            }
             if (prev != currState)
                 frame = 0;
         }
@@ -72,7 +75,7 @@ namespace Assets.Scripts.Enemies
             anim.SetInteger("frame", animationArray[((int)currState)][(int)frame]);
         }
 
-        private static State Idle(bool beingHit, bool shouldTurn)
+        private State Idle(bool beingHit, bool shouldTurn)
         {
             if (beingHit)
                 return State.Hit;
@@ -80,7 +83,7 @@ namespace Assets.Scripts.Enemies
                 return State.Turn;
             return State.Walk;
         }
-        private static State Hit(bool beingHit, bool shouldTurn)
+        private State Hit(bool beingHit, bool shouldTurn)
         {
             if (hold++ > 5)
             {
@@ -89,7 +92,7 @@ namespace Assets.Scripts.Enemies
             }
             return State.Hit;
         }
-        private static State Walk(bool beingHit, bool shouldTurn)
+        private State Walk(bool beingHit, bool shouldTurn)
         {
             if (beingHit)
                 return State.Hit;
@@ -97,7 +100,7 @@ namespace Assets.Scripts.Enemies
                 return State.Turn;
             return State.Walk;
         }
-        private static State Turn(bool beingHit, bool shouldTurn)
+        private State Turn(bool beingHit, bool shouldTurn)
         {
             if (beingHit)
                 return State.Hit;

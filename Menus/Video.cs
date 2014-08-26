@@ -16,8 +16,18 @@ namespace Assets.Scripts.Menus
         {
             cursor = (int)State.Resolution;
             resIndex = PlayerPrefs.GetInt(VideoKey + 0);
+            if (resIndex > Screen.resolutions.Length)
+            {
+                resIndex = 0;
+                PlayerPrefs.SetInt(VideoKey + 0, resIndex);
+            }
             fullscreen = Screen.fullScreen;
-            quality = QualitySettings.GetQualityLevel();
+            quality = PlayerPrefs.GetInt(VideoKey + 2);
+            if (quality > QualitySettings.names.Length)
+            {
+                quality = 0;
+                PlayerPrefs.SetInt(VideoKey + 2, quality);
+            }
             Debug.Log(Screen.resolutions.Length);
         }
         void Update()

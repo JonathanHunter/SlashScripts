@@ -22,7 +22,7 @@ namespace Assets.Scripts.Player
         private static Rigidbody2D rgb2D;
 
         public const int MAX_HEALTH = 100;
-        public const int MOVE_SPEED = 3;
+        public const int MOVE_SPEED = 4;
 
         public int Health
         {
@@ -64,7 +64,7 @@ namespace Assets.Scripts.Player
             {
                 if (alteredGravity)
                 {
-                    rgb2D.gravityScale = 25;
+                    rgb2D.gravityScale = 40;
                     alteredGravity = false;
                 }
                 bool inAir = !Physics2D.Raycast(feet.position, -Vector2.up, 0.1f);
@@ -72,7 +72,6 @@ namespace Assets.Scripts.Player
                 doState[state]();
                 IsSomethingInTheWay(inAir);
                 this.transform.position = new Vector3(this.transform.position.x + xVel, this.transform.position.y + yVel);
-                yVel = 0;
                 LeftRight();
                 if (attack != null && 
                     state != (int)PlayerStateMachine.State.Attack && 
@@ -151,6 +150,7 @@ namespace Assets.Scripts.Player
         }
         private static void InAirAttack()
         {
+            yVel = 0;
             if (attack == null)
             {
                 attack = ((GameObject)Instantiate(attackPrefab));
@@ -176,27 +176,28 @@ namespace Assets.Scripts.Player
 
         private static void Jumping()
         {
-            yVel += MOVE_SPEED * 5 * Time.deltaTime;
+            yVel += 3 * Time.deltaTime;
             AirMovement();
         }
         private static void InAirNow()
         {
+            yVel = 0;
             AirMovement();
         }
         private static void AirMovement()
         {
-            if (!held && (CustomInput.Left || CustomInput.Right))
-            {
-                xVel += Time.deltaTime * MOVE_SPEED;
-                held = true;
-            }
-            else if (held && !CustomInput.Left && !CustomInput.Right)
-            {
-                xVel -= Time.deltaTime * MOVE_SPEED;
-                if (Mathf.Abs(xVel) < .2)
-                    xVel = 0;
-                held = false;
-            }
+            //if (!held && (CustomInput.Left || CustomInput.Right))
+            //{
+            //    xVel += Time.deltaTime * MOVE_SPEED;
+            //    held = true;
+            //}
+            //else if (held && !CustomInput.Left && !CustomInput.Right)
+            //{
+            //    xVel -= Time.deltaTime * MOVE_SPEED;
+            //    if (Mathf.Abs(xVel) < .2)
+            //        xVel = 0;
+            //    held = false;
+            //}
             if ((xVel > 0 && FacingLeft) || (xVel < 0 && !FacingLeft))
                 xVel = -xVel;
         }
