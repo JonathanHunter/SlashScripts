@@ -66,7 +66,8 @@ namespace Assets.Scripts.Menus
         {
             PlayerPrefs.SetFloat(AudioKey + 0, musicVol);
             PlayerPrefs.SetFloat(AudioKey + 1, sfxVol);
-            //takes care of all sounds, need to adjust BGM sepperately
+            Data.MusicVol = musicVol;
+            Data.SfxVol = sfxVol;
             AudioListener.volume = sfxVol;
             Destroy(this.gameObject);
         }

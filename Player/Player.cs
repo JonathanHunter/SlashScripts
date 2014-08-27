@@ -6,6 +6,14 @@ namespace Assets.Scripts.Player
 {
     class Player : MonoBehaviour
     {
+        public const int MAX_HEALTH = 100;
+        public const int MOVE_SPEED = 4;
+        public const int JUMP_SPEED = 4;
+        public const float MAX_JUMP_SPEED = .1f;
+        public const float MAX_FALL_SPEED = -.2f;
+        public const float MAX_RUN_SPEED = .09f;
+        public const float GRAVITY = 2f;
+
         public GameObject AttackPrefab;
         public Transform feet;
         public Transform head;
@@ -19,10 +27,7 @@ namespace Assets.Scripts.Player
         private static bool alteredGravity = false;
         private static bool held = false;
         private static Transform pos;
-        private static Rigidbody2D rgb2D;
-
-        public const int MAX_HEALTH = 100;
-        public const int MOVE_SPEED = 4;
+        private static float fallspeed = MAX_FALL_SPEED;
 
         public int Health
         {
@@ -48,7 +53,6 @@ namespace Assets.Scripts.Player
             Attacking, MovingAttack, InAirAttack, Move, 
             Dashing, Jumping, InAirNow, OnWall, WallJump };
             attackPrefab = AttackPrefab;
-            rgb2D = this.GetComponent<Rigidbody2D>();
         }
 
         void OnCollisionEnter2D(Collision2D coll)
@@ -64,54 +68,71 @@ namespace Assets.Scripts.Player
             {
                 if (alteredGravity)
                 {
-                    rgb2D.gravityScale = 40;
+                    fallspeed = MAX_FALL_SPEED;
                     alteredGravity = false;
                 }
-                bool inAir = !Physics2D.Raycast(feet.position, -Vector2.up, 0.1f);
+                bool inAir = !Physics2D.Raycast(feet.position, -Vector2.up, 0.05f);
                 int state = (int)machine.update(inAir, nextToClimableWall(), anim);
                 doState[state]();
-                IsSomethingInTheWay(inAir);
-                this.transform.position = new Vector3(this.transform.position.x + xVel, this.transform.position.y + yVel);
+                if(!inAir)
+                    IsSomethingInTheWay();
+                MoveManually(inAir);
                 LeftRight();
-                if (attack != null && 
-                    state != (int)PlayerStateMachine.State.Attack && 
+                if (attack != null &&
+                    state != (int)PlayerStateMachine.State.Attack &&
                     state != (int)PlayerStateMachine.State.MovingAttack &&
                     state != (int)PlayerStateMachine.State.InAirAttack)
                 {
                     Destroy(attack);
                 }
             }
-            else
-            {
-                rgb2D.gravityScale = 0;
-                alteredGravity = true;
-            }
         }
         private bool nextToClimableWall()
         {
             RaycastHit2D a;
             if (FacingLeft)
-                a = Physics2D.Raycast(right.position, -Vector2.right, 0.1f);
+                a = Physics2D.Raycast(right.position, -Vector2.right, 0.05f);
             else
-                a = Physics2D.Raycast(right.position, Vector2.right, 0.1f);
+                a = Physics2D.Raycast(right.position, Vector2.right, 0.05f);
             if (a == null || a.collider == null)
                 return false;
             else
                 return a.collider.tag.Equals("Ground");
         }
-        private void IsSomethingInTheWay(bool inAir)
+        private void IsSomethingInTheWay()
         {
-            if (!inAir)
-            {
-                if (FacingLeft && Physics2D.Raycast(right.position, -Vector2.right, 0.1f))
-                    xVel = 0;
-                else if (Physics2D.Raycast(right.position, Vector2.right, 0.1f))
-                    xVel = 0;
-                if (Physics2D.Raycast(head.position, Vector2.up, 0.1f))
-                    yVel = 0;
-            }
+            if (FacingLeft && Physics2D.Raycast(right.position, -Vector2.right, 0.05f))
+                xVel = 0;
+            else if (Physics2D.Raycast(right.position, Vector2.right, 0.05f))
+                xVel = 0;
+            if (Physics2D.Raycast(head.position, Vector2.up, 0.05f))
+                yVel = 0;
         }
-
+        private void MoveManually(bool inAir)
+        {
+            if (Mathf.Abs(xVel) > MAX_RUN_SPEED)
+            {
+                if (xVel > 0)
+                    xVel = MAX_RUN_SPEED;
+                else
+                    xVel = -MAX_RUN_SPEED;
+            }
+            this.transform.position = new Vector3(
+                this.transform.position.x + xVel,
+                this.transform.position.y + yVel,
+                this.transform.position.z);
+            if (inAir)
+            {
+                if (yVel < fallspeed)
+                    yVel = fallspeed;
+                else if (yVel > MAX_JUMP_SPEED)
+                    yVel = MAX_JUMP_SPEED;
+                else
+                    yVel -= Time.deltaTime * GRAVITY;
+            }
+            else
+                yVel = 0;
+        }
         private void LeftRight()
         {
             if (CustomInput.Left)
@@ -125,6 +146,7 @@ namespace Assets.Scripts.Player
                 transform.localScale = new UnityEngine.Vector3(3f, 3f, 1f);
             }
         }
+
 
         private static void Idle()
         {
@@ -150,7 +172,6 @@ namespace Assets.Scripts.Player
         }
         private static void InAirAttack()
         {
-            yVel = 0;
             if (attack == null)
             {
                 attack = ((GameObject)Instantiate(attackPrefab));
@@ -176,45 +197,49 @@ namespace Assets.Scripts.Player
 
         private static void Jumping()
         {
-            yVel += 3 * Time.deltaTime;
+            yVel += JUMP_SPEED * Time.deltaTime;
             AirMovement();
         }
         private static void InAirNow()
         {
-            yVel = 0;
             AirMovement();
         }
         private static void AirMovement()
         {
-            //if (!held && (CustomInput.Left || CustomInput.Right))
-            //{
-            //    xVel += Time.deltaTime * MOVE_SPEED;
-            //    held = true;
-            //}
-            //else if (held && !CustomInput.Left && !CustomInput.Right)
-            //{
-            //    xVel -= Time.deltaTime * MOVE_SPEED;
-            //    if (Mathf.Abs(xVel) < .2)
-            //        xVel = 0;
-            //    held = false;
-            //}
+            if (!held && (CustomInput.Left || CustomInput.Right))
+            {
+                if (FacingLeft)
+                    xVel += Time.deltaTime * MOVE_SPEED * 4f;
+                else
+                    xVel -= Time.deltaTime * MOVE_SPEED * 4f;
+
+                held = true;
+            }
+            else if (held && !CustomInput.Left && !CustomInput.Right)
+            {
+                if (FacingLeft)
+                    xVel -= Time.deltaTime * MOVE_SPEED * 4f;
+                else
+                    xVel += Time.deltaTime * MOVE_SPEED * 4f;
+                held = false;
+            }
             if ((xVel > 0 && FacingLeft) || (xVel < 0 && !FacingLeft))
                 xVel = -xVel;
         }
 
         private static void OnWall()
         {
-            rgb2D.gravityScale = 10;
+            fallspeed = MAX_FALL_SPEED * .05f;
             xVel = 0;
             alteredGravity = true;
         }
         private static void WallJump()
         {
-            yVel += MOVE_SPEED * 4 * Time.deltaTime;
+            yVel += JUMP_SPEED * Time.deltaTime;
             if (FacingLeft)
-                xVel = MOVE_SPEED * 2 * Time.deltaTime;
+                xVel -= Time.deltaTime * MOVE_SPEED * 2f;
             else
-                xVel = -MOVE_SPEED * 2 * Time.deltaTime;
+                xVel += Time.deltaTime * MOVE_SPEED * 2f;
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Assets.Scripts.Enemies
     {
         public int MAX_HEALTH = 10;
         public float walkDistance;
+        public GameObject explosion;
 
         private bool doOnce = false, goingRight = true;
         private int damage = 0;
@@ -42,7 +43,7 @@ namespace Assets.Scripts.Enemies
         {
             if (!Data.Paused)
             {
-                bool turn = (goingRight && (this.transform.position.x - origin.x) > walkDistance) || 
+                bool turn = (goingRight && (this.transform.position.x - origin.x) > walkDistance) ||
                     (!goingRight && (this.transform.position.x - origin.x) < -walkDistance);
                 int state = (int)machine.update(beingHit, turn, anim);
                 if (state != prevState)
@@ -62,8 +63,11 @@ namespace Assets.Scripts.Enemies
                 health -= damage;
                 if (damage > 0)
                     damage = 0;
-                if (health <= 0)
+                if (health <= 0 && state != (int)BasicEnemyStateMachine.State.Hit)
+                {
+                    ((GameObject)Instantiate(explosion)).GetComponent<Explosion>().MoveToPosition(this.transform);
                     Destroy(this.gameObject);
+                }
             }
         }
         private void Idle(Transform transform)

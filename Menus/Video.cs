@@ -28,7 +28,6 @@ namespace Assets.Scripts.Menus
                 quality = 0;
                 PlayerPrefs.SetInt(VideoKey + 2, quality);
             }
-            Debug.Log(Screen.resolutions.Length);
         }
         void Update()
         {

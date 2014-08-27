@@ -5,15 +5,20 @@ namespace Assets.Scripts
 {
     class Data : MonoBehaviour
     {
-        private static int musicVol;
-        public static int MusicVol
+        void Start()
+        {
+            DontDestroyOnLoad(this.gameObject);
+        }
+
+        private static float musicVol;
+        public static float MusicVol
         {
             get { return musicVol; }
             set { musicVol = value; }
         }
 
-        private static int sfxVol;
-        public static int SfxVol
+        private static float sfxVol;
+        public static float SfxVol
         {
             get { return sfxVol; }
             set { sfxVol = value; }
