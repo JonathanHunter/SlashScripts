@@ -68,7 +68,7 @@ namespace Assets.Scripts.Menus
             PlayerPrefs.SetFloat(AudioKey + 1, sfxVol);
             Data.MusicVol = musicVol;
             Data.SfxVol = sfxVol;
-            AudioListener.volume = sfxVol;
+            FindObjectOfType<BGM>().SetVolume(musicVol);
             Destroy(this.gameObject);
         }
 
@@ -93,7 +93,7 @@ namespace Assets.Scripts.Menus
             musicVol = GUI.HorizontalSlider(new Rect(
                 Screen.width * (9.5f / 19f), Screen.height * (5f / 12f), 
                 Screen.width * (3f / 19f), Screen.height * (1f / 12f)), 
-                musicVol, 0, 10);
+                musicVol, 0, 1);
             //sfx slider
             GUI.Label(new Rect(
                 Screen.width * (6f / 19f), Screen.height * (7f / 12f), 
@@ -102,7 +102,7 @@ namespace Assets.Scripts.Menus
             sfxVol = GUI.HorizontalSlider(new Rect(
                 Screen.width * (9.5f / 19f), Screen.height * (7f / 12f), 
                 Screen.width * (3f / 19f), Screen.height * (1f / 12f)),
-                sfxVol, 0, 10);
+                sfxVol, 0, 1);
             //exit
             if (GUI.Button(new Rect(
                 Screen.width * (7f / 19f), Screen.height * (9f / 12f),

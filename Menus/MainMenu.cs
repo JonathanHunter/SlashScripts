@@ -21,8 +21,17 @@ namespace Assets.Scripts.Menus
             currState = State.Main;
             nextState = State.Main;
             Data.MusicVol = PlayerPrefs.GetFloat(AudioKey + 0);
+            if (Data.MusicVol == 0)
+            {
+                Data.MusicVol = 1f;
+                PlayerPrefs.SetFloat(AudioKey + 0, 1f);
+            }
             Data.SfxVol = PlayerPrefs.GetFloat(AudioKey + 1);
-            AudioListener.volume = Data.SfxVol;
+            if (Data.SfxVol == 0)
+            {
+                Data.SfxVol = 1f;
+                PlayerPrefs.SetFloat(AudioKey + 1, 1f);
+            }
 
             int resIndex = PlayerPrefs.GetInt(VideoKey + 0);
             if (resIndex > Screen.resolutions.Length)

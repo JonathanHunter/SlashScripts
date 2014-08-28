@@ -17,6 +17,7 @@ namespace Assets.Scripts
 
         public void PlaySong()
         {
+            audio.Stop();
             audio.volume = Data.MusicVol;
             audio.loop = true;
             audio.clip = song;
@@ -26,6 +27,11 @@ namespace Assets.Scripts
         public void Pause()
         {
             audio.Pause();
+        }
+
+        public void SetVolume(float vol)
+        {
+            audio.volume = vol;
         }
     }
 }
