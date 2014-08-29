@@ -20,7 +20,38 @@ namespace Assets.Scripts.Menus
             cursor = (int)State.LevelSelect;
             currState = State.Main;
             nextState = State.Main;
-            //add video and audio initialization
+            Data.MusicVol = PlayerPrefs.GetFloat(AudioKey + 0);
+            if (Data.MusicVol == 0)
+            {
+                Data.MusicVol = 1f;
+                PlayerPrefs.SetFloat(AudioKey + 0, 1f);
+            }
+            Data.SfxVol = PlayerPrefs.GetFloat(AudioKey + 1);
+            if (Data.SfxVol == 0)
+            {
+                Data.SfxVol = 1f;
+                PlayerPrefs.SetFloat(AudioKey + 1, 1f);
+            }
+
+            int resIndex = PlayerPrefs.GetInt(VideoKey + 0);
+            if (resIndex > Screen.resolutions.Length)
+            {
+                resIndex = 0;
+                PlayerPrefs.SetInt(VideoKey + 0, resIndex);
+            }
+            bool fullscreen = PlayerPrefs.GetInt(VideoKey + 1) == 1;
+            int quality = PlayerPrefs.GetInt(VideoKey + 2);
+            if (quality > QualitySettings.names.Length)
+            {
+                quality = 0;
+                PlayerPrefs.SetInt(VideoKey + 2, quality);
+            }
+            Screen.SetResolution(
+                    Screen.resolutions[resIndex].width,
+                    Screen.resolutions[resIndex].height,
+                    fullscreen);
+            QualitySettings.SetQualityLevel(quality);
+            FindObjectOfType<BGM>().PlaySong();
         }
         void Update()
         {

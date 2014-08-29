@@ -18,7 +18,7 @@ namespace Assets.Scripts
 
         void Update()
         {
-            float speed = Time.deltaTime * ((Mathf.Ceil(Mathf.Abs(this.transform.position.x - player.position.x))) + 2);
+            float speed = Time.deltaTime * ((Mathf.Ceil(Mathf.Abs(this.transform.position.x - player.position.x))) + 3);
             if (player.position.x > leftBound.transform.position.x && player.position.x < rightBound.position.x)
                 this.transform.position = Vector3.MoveTowards(this.transform.position,
                     new Vector3(player.position.x, this.transform.position.y, this.transform.position.z), speed);
