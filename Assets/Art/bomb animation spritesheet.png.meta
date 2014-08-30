@@ -1,0 +1,135 @@
+fileFormatVersion: 2
+guid: 9fb0cd80392546e4a936cea232dbb7c6
+TextureImporter:
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: bomb animation spritesheet_0
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 806
+        width: 81
+        height: 82
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: bomb animation spritesheet_1
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 787
+        width: 138
+        height: 123
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: bomb animation spritesheet_2
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 803
+        width: 78
+        height: 94
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: bomb animation spritesheet_3
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 503
+        width: 210
+        height: 184
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: bomb animation spritesheet_4
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 513
+        width: 215
+        height: 174
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: bomb animation spritesheet_5
+      rect:
+        serializedVersion: 2
+        x: 573
+        y: 517
+        width: 219
+        height: 166
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: bomb animation spritesheet_6
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 257
+        width: 227
+        height: 203
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: bomb animation spritesheet_7
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 248
+        width: 263
+        height: 229
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: bomb animation spritesheet_8
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 267
+        width: 261
+        height: 189
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: bomb animation spritesheet_9
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 47
+        width: 259
+        height: 157
+      alignment: 0
+      pivot: {x: .5, y: .5}
+  spritePackingTag: 
+  userData: 
