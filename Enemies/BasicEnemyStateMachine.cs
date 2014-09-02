@@ -10,50 +10,22 @@ namespace Assets.Scripts.Enemies
         public enum State
         {
             Idle = 0, Hit, Walk, Turn, NumOfStates
-        }
-        private int[] frameCounts;
-        private int[][] animationArray;
+        };
         private State currState;
-        private double frame, hold;
+        private AnimationHandler animHandler;
+        private double hold;
 
         public BasicEnemyStateMachine()
         {
-            frame = 0.0;
             currState = State.Idle;
-            frameCounts = new int[] { 1, 1, 2, 1};
-            generateAnimationArray();
-        }
-
-        private void generateAnimationArray()
-        {
-            animationArray = new int[((int)State.NumOfStates)][];
-            int flag = 0;
-            for (int i = 0; i < ((int)State.NumOfStates); i++)
-            {
-                animationArray[i] = new int[frameCounts[i]];
-                for (int j = 0; j < animationArray[i].Length; j++)
-                    animationArray[i][j] = flag++;
-            }
+            animHandler = new AnimationHandler(1, 1, 2, 1);
         }
 
         public State update(bool beingHit, bool shouldTurn, UnityEngine.Animator anim)
         {
             runMachine(beingHit, shouldTurn);
-            checkFrameOverFlow();
-            setAnimationFrame(anim);
-            incrementFrame();
+            animHandler.stepAnimation((int)currState, anim);
             return currState;
-        }
-
-        private void checkFrameOverFlow()
-        {
-            if (frame >= frameCounts[((int)currState)])
-                frame = 0;
-        }
-
-        private void incrementFrame()
-        {
-            frame += UnityEngine.Time.deltaTime * 9;
         }
 
         private void runMachine(bool beingHit, bool shouldTurn)
@@ -67,12 +39,7 @@ namespace Assets.Scripts.Enemies
                 case State.Turn: currState = Turn(beingHit, shouldTurn); break;    
             }
             if (prev != currState)
-                frame = 0;
-        }
-
-        private void setAnimationFrame(UnityEngine.Animator anim)
-        {
-            anim.SetInteger("frame", animationArray[((int)currState)][(int)frame]);
+                animHandler.resetFrame();
         }
 
         private State Idle(bool beingHit, bool shouldTurn)
