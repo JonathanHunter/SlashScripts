@@ -30,6 +30,30 @@ namespace Assets.Scripts
         public static bool CancelUp = false;
         public static bool PauseUp = false;
 
+        //true until the button is let go.
+        public static bool AttackHeld = false;
+        public static bool JumpHeld = false;
+        public static bool DashHeld = false;
+        public static bool UpHeld = false;
+        public static bool DownHeld = false;
+        public static bool LeftHeld = false;
+        public static bool RightHeld = false;
+        public static bool AcceptHeld = false;
+        public static bool CancelHeld = false;
+        public static bool PauseHeld = false;
+
+        //true as long as the button is held
+        public static bool AttackFreshPress = false;
+        public static bool JumpFreshPress = false;
+        public static bool DashFreshPress = false;
+        public static bool UpFreshPress = false;
+        public static bool DownFreshPress = false;
+        public static bool LeftFreshPress = false;
+        public static bool RightFreshPress = false;
+        public static bool AcceptFreshPress = false;
+        public static bool CancelFreshPress = false;
+        public static bool PauseFreshPress = false;
+
         private static KeyCode keyBoardAttack;
         private static KeyCode keyBoardJump;
         private static KeyCode keyBoardDash;
@@ -154,18 +178,18 @@ namespace Assets.Scripts
         }
         void Update()
         {
-            updateKey(ref Attack, ref AttackUp, keyBoardAttack);
-            updateKey(ref Jump, ref JumpUp, keyBoardJump);
-            updateKey(ref Dash, ref DashUp, keyBoardDash);
-            updateKey(ref Up, ref UpUp, KeyCode.UpArrow, keyBoardUp);
-            updateKey(ref Down, ref DownUp, KeyCode.DownArrow, keyBoardDown);
-            updateKey(ref Left, ref LeftUp, KeyCode.LeftArrow, keyBoardLeft);
-            updateKey(ref Right, ref RightUp, KeyCode.RightArrow, keyBoardRight);
-            updateKey(ref Accept, ref AcceptUp, KeyCode.Return, keyBoardAccept);
-            updateKey(ref Cancel, ref CancelUp, KeyCode.Escape, keyBoardCancel);
-            updateKey(ref Pause, ref PauseUp, keyBoardPause);
+            updateKey(ref Attack, ref AttackUp, ref AttackHeld, ref AttackFreshPress, keyBoardAttack);
+            updateKey(ref Jump, ref JumpUp, ref JumpHeld, ref JumpFreshPress, keyBoardJump);
+            updateKey(ref Dash, ref DashUp, ref DashHeld, ref DashFreshPress, keyBoardDash);
+            updateKey(ref Up, ref UpUp, ref Up, ref UpFreshPress, KeyCode.UpArrow, keyBoardUp);
+            updateKey(ref Down, ref DownUp, ref DownHeld, ref DownFreshPress, KeyCode.DownArrow, keyBoardDown);
+            updateKey(ref Left, ref LeftUp, ref LeftHeld, ref LeftFreshPress, KeyCode.LeftArrow, keyBoardLeft);
+            updateKey(ref Right, ref RightUp, ref RightHeld, ref RightFreshPress, KeyCode.RightArrow, keyBoardRight);
+            updateKey(ref Accept, ref AcceptUp, ref AcceptHeld, ref AcceptFreshPress, KeyCode.Return, keyBoardAccept);
+            updateKey(ref Cancel, ref CancelUp, ref CancelHeld, ref CancelFreshPress, KeyCode.Escape, keyBoardCancel);
+            updateKey(ref Pause, ref PauseUp, ref PauseHeld, ref PauseFreshPress, keyBoardPause);
         }
-        private void updateKey(ref bool button, ref bool buttonUp, params KeyCode[] keys)
+        private void updateKey(ref bool button, ref bool buttonUp, ref bool buttonHeld, ref bool buttonFreshPress, params KeyCode[] keys)
         {
             bool key = false, keyUp = false;
             foreach(KeyCode k in keys)
@@ -175,15 +199,20 @@ namespace Assets.Scripts
                 else if (Input.GetKeyUp(k))
                     keyUp=true;
             }
-
+            if (button)
+                buttonFreshPress = false;
+            else if (key)
+                buttonFreshPress = true;
             if (key)
             {
                 button = true;
+                buttonHeld = true;
                 buttonUp = false;
             }
             else if (keyUp)
             {
                 button = false;
+                buttonHeld = false;
                 buttonUp = true;
             }
             else
