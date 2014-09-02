@@ -9,9 +9,10 @@ namespace Assets.Scripts.Player
         public const int MAX_HEALTH = 100;
         public const int MOVE_SPEED = 4;
         public const int JUMP_SPEED = 4;
-        public const float MAX_JUMP_SPEED = .1f;
-        public const float MAX_FALL_SPEED = -.2f;
-        public const float MAX_RUN_SPEED = .09f;
+        public const float MAX_JUMP_SPEED = 4f;
+        public const float MAX_FALL_SPEED = -9f;
+        public const float MAX_RUN_SPEED = 5f;
+        public const float MAX_DASH_SPEED = 10f;
         public const float GRAVITY = 2f;
 
         public GameObject AttackPrefab;
@@ -27,7 +28,8 @@ namespace Assets.Scripts.Player
         private static bool alteredGravity = false;
         private static bool held = false;
         private static Transform pos;
-        private static float fallspeed = MAX_FALL_SPEED;
+        private static float fallSpeed = MAX_FALL_SPEED;
+        private static bool dashing = false;
 
         public int Health
         {
@@ -36,7 +38,6 @@ namespace Assets.Scripts.Player
 
         private int health;
         private Animator anim;
-
         private PlayerStateMachine machine;
         private delegate void state();
         private state[] doState;
@@ -68,7 +69,7 @@ namespace Assets.Scripts.Player
             {
                 if (alteredGravity)
                 {
-                    fallspeed = MAX_FALL_SPEED;
+                    fallSpeed = MAX_FALL_SPEED;
                     alteredGravity = false;
                 }
                 bool inAir = !Physics2D.Raycast(feet.position, -Vector2.up, 0.05f);
@@ -110,25 +111,38 @@ namespace Assets.Scripts.Player
         }
         private void MoveManually(bool inAir)
         {
-            if (Mathf.Abs(xVel) > MAX_RUN_SPEED)
+            if (dashing)
             {
-                if (xVel > 0)
-                    xVel = MAX_RUN_SPEED;
-                else
-                    xVel = -MAX_RUN_SPEED;
+                if (Mathf.Abs(xVel) > MAX_DASH_SPEED)
+                {
+                    if (xVel > 0)
+                        xVel = MAX_DASH_SPEED;
+                    else
+                        xVel = -MAX_DASH_SPEED;
+                }
+            }
+            else
+            {
+                if (Mathf.Abs(xVel) > MAX_RUN_SPEED)
+                {
+                    if (xVel > 0)
+                        xVel = MAX_RUN_SPEED;
+                    else
+                        xVel = -MAX_RUN_SPEED;
+                }
             }
             this.transform.position = new Vector3(
-                this.transform.position.x + xVel,
-                this.transform.position.y + yVel,
+                this.transform.position.x + xVel * Time.deltaTime,
+                this.transform.position.y + yVel * Time.deltaTime,
                 this.transform.position.z);
             if (inAir)
             {
-                if (yVel < fallspeed)
-                    yVel = fallspeed;
+                if (yVel < fallSpeed)
+                    yVel = fallSpeed;
                 else if (yVel > MAX_JUMP_SPEED)
                     yVel = MAX_JUMP_SPEED;
                 else
-                    yVel -= Time.deltaTime * GRAVITY;
+                    yVel -= GRAVITY;
             }
             else
                 yVel = 0;
@@ -151,6 +165,7 @@ namespace Assets.Scripts.Player
         private static void Idle()
         {
             xVel = 0;
+            dashing = false;
         }
 
         private static void Attacking()
@@ -181,23 +196,25 @@ namespace Assets.Scripts.Player
 
         private static void Move()
         {
+            dashing = false;
             if (FacingLeft)
-                xVel = -Time.deltaTime * MOVE_SPEED;
+                xVel = -MOVE_SPEED;
             else
-                xVel = Time.deltaTime * MOVE_SPEED;
+                xVel = MOVE_SPEED;
         }
 
         private static void Dashing()
         {
+            dashing = true;
             if (FacingLeft)
-                xVel = -MOVE_SPEED * 2 * Time.deltaTime;
+                xVel = -MOVE_SPEED * 2;
             else
-                xVel = MOVE_SPEED * 2 * Time.deltaTime;
+                xVel = MOVE_SPEED * 2;
         }
 
         private static void Jumping()
         {
-            yVel += JUMP_SPEED * Time.deltaTime;
+            yVel += JUMP_SPEED;
             AirMovement();
         }
         private static void InAirNow()
@@ -209,18 +226,18 @@ namespace Assets.Scripts.Player
             if (!held && (CustomInput.Left || CustomInput.Right))
             {
                 if (FacingLeft)
-                    xVel += Time.deltaTime * MOVE_SPEED * 4f;
+                    xVel += MOVE_SPEED * 4f;
                 else
-                    xVel -= Time.deltaTime * MOVE_SPEED * 4f;
+                    xVel -= MOVE_SPEED * 4f;
 
                 held = true;
             }
             else if (held && !CustomInput.Left && !CustomInput.Right)
             {
                 if (FacingLeft)
-                    xVel -= Time.deltaTime * MOVE_SPEED * 4f;
+                    xVel -= MOVE_SPEED * 4f;
                 else
-                    xVel += Time.deltaTime * MOVE_SPEED * 4f;
+                    xVel += MOVE_SPEED * 4f;
                 held = false;
             }
             if ((xVel > 0 && FacingLeft) || (xVel < 0 && !FacingLeft))
@@ -229,17 +246,17 @@ namespace Assets.Scripts.Player
 
         private static void OnWall()
         {
-            fallspeed = MAX_FALL_SPEED * .05f;
+            fallSpeed = MAX_FALL_SPEED * .05f;
             xVel = 0;
             alteredGravity = true;
         }
         private static void WallJump()
         {
-            yVel += JUMP_SPEED * Time.deltaTime;
+            yVel += JUMP_SPEED;
             if (FacingLeft)
-                xVel -= Time.deltaTime * MOVE_SPEED * 2f;
+                xVel -= MOVE_SPEED * 2f;
             else
-                xVel += Time.deltaTime * MOVE_SPEED * 2f;
+                xVel += MOVE_SPEED * 2f;
         }
     }
 }

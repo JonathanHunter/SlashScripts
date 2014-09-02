@@ -19,6 +19,7 @@ namespace Assets.Scripts.Enemies
         {
             currState = State.Idle;
             animHandler = new AnimationHandler(1, 1, 2, 1);
+            animHandler.frameRate = 9;
         }
 
         public State update(bool beingHit, bool shouldTurn, UnityEngine.Animator anim)

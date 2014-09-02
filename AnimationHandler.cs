@@ -59,5 +59,10 @@ namespace Assets.Scripts
         {
             return frame = 0;
         }
+
+        public bool isDone(int state)
+        {
+            return frame >= frameCounts[state];
+        }
     }
 }
