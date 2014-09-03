@@ -1,4 +1,4 @@
-//written by: Jonathan Hunter
+﻿//written by: Jonathan Hunter
 using UnityEngine;
 using System.Collections;
 
