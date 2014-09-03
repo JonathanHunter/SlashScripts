@@ -44,7 +44,7 @@ namespace Assets.Scripts.Enemies
 			incrementFrame();
 			return currState;
 		}
-		
+
 		private void checkFrameOverFlow()
 		{
 			if (frame >= frameCounts[((int)currState)])

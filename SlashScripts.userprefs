@@ -1,11 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Enemies\LevelOneEnemyStateMachine.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Enemies\LevelOneEnemy.cs">
     <Files>
+      <File FileName="Assets\Scripts\Enemies\LevelOneEnemy.cs" Line="43" Column="4" />
       <File FileName="Assets\Scripts\Enemies\BasicEnemy.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Enemies\Explosion.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Enemies\LevelOneEnemy.cs" Line="13" Column="20" />
-      <File FileName="Assets\Scripts\Enemies\LevelOneEnemyStateMachine.cs" Line="19" Column="37" />
+      <File FileName="Assets\Scripts\Enemies\LevelOneEnemyStateMachine.cs" Line="112" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
