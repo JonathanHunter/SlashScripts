@@ -56,6 +56,8 @@
      <Compile Include="Assets\Scripts\Enemies\Explosion.cs" />
      <Compile Include="Assets\Scripts\Enemies\LevelOneEnemy.cs" />
      <Compile Include="Assets\Scripts\Enemies\LevelOneEnemyStateMachine.cs" />
+     <Compile Include="Assets\Scripts\Enemies\LevelTwoEnemy.cs" />
+     <Compile Include="Assets\Scripts\Enemies\LevelTwoEnemyStateMachine.cs" />
      <Compile Include="Assets\Scripts\Exit.cs" />
      <Compile Include="Assets\Scripts\Menus\Audio.cs" />
      <Compile Include="Assets\Scripts\Menus\Controls.cs" />
