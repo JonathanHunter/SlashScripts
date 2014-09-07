@@ -9,7 +9,7 @@ namespace Assets.Scripts.Enemies
     {
         public enum State
         {
-            Idle = 0, Hit, Walk, Turn, NumOfStates
+            Idle = 0, Hit, Walk, Turn
         };
         private State currState;
         private AnimationHandler animHandler;

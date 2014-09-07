@@ -13,7 +13,7 @@ namespace Assets.Scripts
 
         void Start()
         {
-
+            camera.ResetAspect();
         }
 
         void Update()

@@ -187,7 +187,9 @@ namespace Assets.Scripts.Player
         private static State WallJump(bool inAir, bool nextToWall)
         {
             if (isDone(State.WallJump) || !CustomInput.Jump)
-            {
+                {
+                if (nextToWall)
+                    return State.OnWall;
                 if (CustomInput.AttackFreshPress)
                     return State.InAirAttack;
                 return State.InAir;
