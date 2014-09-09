@@ -9,14 +9,15 @@ namespace Assets.Scripts.Player
         public const int MAX_HEALTH = 100;
         public const int MOVE_SPEED = 4;
         public const int JUMP_SPEED = 4;
-        public const float MAX_JUMP_SPEED = 4f;
+        public const float MAX_JUMP_SPEED = 5f;
         public const float MAX_FALL_SPEED = -9f;
         public const float MAX_RUN_SPEED = 5f;
         public const float MAX_DASH_SPEED = 10f;
         public const float GRAVITY = 2f;
 
         public GameObject AttackPrefab;
-        public Transform feet;
+        public Transform backFoot;
+        public Transform frontFoot;
         public Transform head;
         public Transform right;
 
@@ -27,9 +28,10 @@ namespace Assets.Scripts.Player
         private static bool FacingLeft = false;
         private static bool alteredGravity = false;
         private static bool held = false;
+        private static bool dashing = false;
+        private static bool WallOnleft = false;
         private static Transform pos;
         private static float fallSpeed = MAX_FALL_SPEED;
-        private static bool dashing = false;
 
         public int Health
         {
@@ -72,7 +74,7 @@ namespace Assets.Scripts.Player
                     fallSpeed = MAX_FALL_SPEED;
                     alteredGravity = false;
                 }
-                bool inAir = !Physics2D.Raycast(feet.position, -Vector2.up, 0.05f);
+                bool inAir = !(Physics2D.Raycast(backFoot.position, -Vector2.up, 0.05f) || Physics2D.Raycast(frontFoot.position, -Vector2.up, 0.05f));
                 int state = (int)machine.update(inAir, nextToClimableWall(), anim);
                 doState[state]();
                 if(!inAir)
@@ -98,7 +100,10 @@ namespace Assets.Scripts.Player
             if (a == null || a.collider == null)
                 return false;
             else
+            {
+                WallOnleft = a.collider.gameObject.transform.position.x < this.gameObject.transform.position.x;
                 return a.collider.tag.Equals("Ground");
+            }
         }
         private void IsSomethingInTheWay()
         {
@@ -253,10 +258,10 @@ namespace Assets.Scripts.Player
         private static void WallJump()
         {
             yVel += JUMP_SPEED;
-            if (FacingLeft)
-                xVel -= MOVE_SPEED * 2f;
+            if (WallOnleft)
+                xVel += MOVE_SPEED * .15f;
             else
-                xVel += MOVE_SPEED * 2f;
+                xVel -= MOVE_SPEED * .15f;
         }
     }
 }

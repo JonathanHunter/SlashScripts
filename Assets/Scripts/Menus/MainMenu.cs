@@ -34,23 +34,23 @@ namespace Assets.Scripts.Menus
             }
 
             int resIndex = PlayerPrefs.GetInt(VideoKey + 0);
+            bool fullscreen = PlayerPrefs.GetInt(VideoKey + 1) == 1;
             if (resIndex > Screen.resolutions.Length)
             {
                 resIndex = 0;
                 PlayerPrefs.SetInt(VideoKey + 0, resIndex);
+                Screen.SetResolution(
+                        Screen.resolutions[resIndex].width,
+                        Screen.resolutions[resIndex].height,
+                        fullscreen);
             }
-            bool fullscreen = PlayerPrefs.GetInt(VideoKey + 1) == 1;
             int quality = PlayerPrefs.GetInt(VideoKey + 2);
             if (quality > QualitySettings.names.Length)
             {
                 quality = 0;
                 PlayerPrefs.SetInt(VideoKey + 2, quality);
+                QualitySettings.SetQualityLevel(quality);
             }
-            Screen.SetResolution(
-                    Screen.resolutions[resIndex].width,
-                    Screen.resolutions[resIndex].height,
-                    fullscreen);
-            QualitySettings.SetQualityLevel(quality);
             FindObjectOfType<BGM>().PlaySong();
         }
         void Update()

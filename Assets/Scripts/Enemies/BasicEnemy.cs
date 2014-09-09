@@ -5,7 +5,7 @@ namespace Assets.Scripts.Enemies
 {
     class BasicEnemy : MonoBehaviour
     {
-        public int MAX_HEALTH = 10;
+        public int MAX_HEALTH = 2;
         public float walkDistance;
         public GameObject explosion;
 

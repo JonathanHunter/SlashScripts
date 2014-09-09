@@ -96,6 +96,7 @@ namespace Assets.Scripts.Menus
                     Screen.resolutions[resIndex].width, 
                     Screen.resolutions[resIndex].height, 
                     fullscreen);
+                FindObjectOfType<Camera>().ResetAspect();
                 QualitySettings.SetQualityLevel(quality);
                 PlayerPrefs.SetInt(VideoKey + 0, resIndex);
                 PlayerPrefs.SetInt(VideoKey + 1, fullscreen ? 1 : 0);
