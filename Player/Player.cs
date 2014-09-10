@@ -136,10 +136,11 @@ namespace Assets.Scripts.Player
                         xVel = -MAX_RUN_SPEED;
                 }
             }
-            this.transform.position = new Vector3(
-                this.transform.position.x + xVel * Time.deltaTime,
-                this.transform.position.y + yVel * Time.deltaTime,
-                this.transform.position.z);
+            //this.transform.position = new Vector3(
+            //    this.transform.position.x + xVel * Time.deltaTime,
+            //    this.transform.position.y + yVel * Time.deltaTime,
+            //    this.transform.position.z);
+            transform.Translate(new Vector3(xVel * Time.deltaTime, yVel * Time.deltaTime, 0));
             if (inAir)
             {
                 if (yVel < fallSpeed)

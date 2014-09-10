@@ -6,6 +6,25 @@ namespace Assets.Scripts
 {
     public class CustomInput : MonoBehaviour
     {
+        private const string LEFT_ANALOG_X = "LeftAnalogX";
+        private const string LEFT_ANALOG_Y = "LeftAnalogY";
+        private const string RIGHT_ANALOG_X = "RightAnalogX";
+        private const string RIGHT_ANALOG_Y = "RightAnalogY";
+        private const string DPAD_X = "DpadX";
+        private const string DPAD_Y = "DpadY";
+        private const string LEFT_TRIGGER = "LeftTrigger";
+        private const string RIGHT_TRIGGER = "RightTrigger";
+        private const string A = "A";
+        private const string B = "B";
+        private const string X = "X";
+        private const string Y = "Y";
+        private const string LB = "LB";
+        private const string RB = "RB";
+        private const string BACK = "Back";
+        private const string START = "Start";
+        private const string LEFT_STICK = "LeftStick";
+        private const string RIGHT_STICK = "RightStick";
+
         //true as long as the button is held
         public static bool Attack = false;
         public static bool Jump = false;
@@ -65,7 +84,20 @@ namespace Assets.Scripts
         private static KeyCode keyBoardCancel;
         private static KeyCode keyBoardPause;
 
+        private static string gamePadAttack;
+        private static string gamePadJump;
+        private static string gamePadDash;
+        private static string gamePadUp;
+        private static string gamePadDown;
+        private static string gamePadLeft;
+        private static string gamePadRight;
+        private static string gamePadAccept;
+        private static string gamePadCancel;
+        private static string gamePadPause;
+
         private static string KeyHash = "SlashKeys";
+
+        private static bool usePad = false;
 
         public static KeyCode KeyBoardAttack
         {
@@ -172,33 +204,146 @@ namespace Assets.Scripts
                 keyBoardAccept = (KeyCode)PlayerPrefs.GetInt(7 + KeyHash);
                 keyBoardCancel = (KeyCode)PlayerPrefs.GetInt(8 + KeyHash);
                 keyBoardPause = (KeyCode)PlayerPrefs.GetInt(9 + KeyHash);
+
+                gamePadAttack = PlayerPrefs.GetString(10 + KeyHash);
+                gamePadJump = PlayerPrefs.GetString(11 + KeyHash);
+                gamePadDash = PlayerPrefs.GetString(12 + KeyHash);
+                gamePadUp = PlayerPrefs.GetString(13 + KeyHash);
+                gamePadDown = PlayerPrefs.GetString(14 + KeyHash);
+                gamePadLeft = PlayerPrefs.GetString(15 + KeyHash);
+                gamePadRight = PlayerPrefs.GetString(16 + KeyHash);
+                gamePadAccept = PlayerPrefs.GetString(17 + KeyHash);
+                gamePadCancel = PlayerPrefs.GetString(18 + KeyHash);
+                gamePadPause = PlayerPrefs.GetString(19 + KeyHash);
             }
             else
                 Default();
         }
         void Update()
         {
-            updateKey(ref Attack, ref AttackUp, ref AttackHeld, ref AttackFreshPress, keyBoardAttack);
-            updateKey(ref Jump, ref JumpUp, ref JumpHeld, ref JumpFreshPress, keyBoardJump);
-            updateKey(ref Dash, ref DashUp, ref DashHeld, ref DashFreshPress, keyBoardDash);
-            updateKey(ref Up, ref UpUp, ref Up, ref UpFreshPress, KeyCode.UpArrow, keyBoardUp);
-            updateKey(ref Down, ref DownUp, ref DownHeld, ref DownFreshPress, KeyCode.DownArrow, keyBoardDown);
-            updateKey(ref Left, ref LeftUp, ref LeftHeld, ref LeftFreshPress, KeyCode.LeftArrow, keyBoardLeft);
-            updateKey(ref Right, ref RightUp, ref RightHeld, ref RightFreshPress, KeyCode.RightArrow, keyBoardRight);
-            updateKey(ref Accept, ref AcceptUp, ref AcceptHeld, ref AcceptFreshPress, KeyCode.Return, keyBoardAccept);
-            updateKey(ref Cancel, ref CancelUp, ref CancelHeld, ref CancelFreshPress, KeyCode.Escape, keyBoardCancel);
-            updateKey(ref Pause, ref PauseUp, ref PauseHeld, ref PauseFreshPress, keyBoardPause);
+            if (Input.anyKey)
+                usePad = false;
+            if (Input.GetAxis(START) > 0)
+                usePad = true;
+
+            if (!usePad)
+            {
+                updateKey(ref Attack, ref AttackUp, ref AttackHeld, ref AttackFreshPress, keyBoardAttack);
+                updateKey(ref Jump, ref JumpUp, ref JumpHeld, ref JumpFreshPress, keyBoardJump);
+                updateKey(ref Dash, ref DashUp, ref DashHeld, ref DashFreshPress, keyBoardDash);
+                updateKey(ref Up, ref UpUp, ref Up, ref UpFreshPress, KeyCode.UpArrow, keyBoardUp);
+                updateKey(ref Down, ref DownUp, ref DownHeld, ref DownFreshPress, KeyCode.DownArrow, keyBoardDown);
+                updateKey(ref Left, ref LeftUp, ref LeftHeld, ref LeftFreshPress, KeyCode.LeftArrow, keyBoardLeft);
+                updateKey(ref Right, ref RightUp, ref RightHeld, ref RightFreshPress, KeyCode.RightArrow, keyBoardRight);
+                updateKey(ref Accept, ref AcceptUp, ref AcceptHeld, ref AcceptFreshPress, KeyCode.Return, keyBoardAccept);
+                updateKey(ref Cancel, ref CancelUp, ref CancelHeld, ref CancelFreshPress, KeyCode.Escape, keyBoardCancel);
+                updateKey(ref Pause, ref PauseUp, ref PauseHeld, ref PauseFreshPress, keyBoardPause);
+            }
+            else
+            {
+                updatePadButtons(ref Attack, ref AttackUp, ref AttackHeld, ref AttackFreshPress, gamePadAttack);
+                updatePadButtons(ref Jump, ref JumpUp, ref JumpHeld, ref JumpFreshPress, gamePadJump);
+                updatePadButtons(ref Dash, ref DashUp, ref DashHeld, ref DashFreshPress, gamePadDash);
+                updatePadMovementUpRight(ref Up, ref UpUp, ref Up, ref UpFreshPress, gamePadUp);
+                updatePadMovementDownLeft(ref Down, ref DownUp, ref DownHeld, ref DownFreshPress, gamePadDown);
+                updatePadMovementDownLeft(ref Left, ref LeftUp, ref LeftHeld, ref LeftFreshPress, gamePadLeft);
+                updatePadMovementUpRight(ref Right, ref RightUp, ref RightHeld, ref RightFreshPress, gamePadRight);
+                updatePadButtons(ref Accept, ref AcceptUp, ref AcceptHeld, ref AcceptFreshPress, gamePadAccept);
+                updatePadButtons(ref Cancel, ref CancelUp, ref CancelHeld, ref CancelFreshPress, gamePadCancel);
+                updatePadButtons(ref Pause, ref PauseUp, ref PauseHeld, ref PauseFreshPress, gamePadPause);
+            }
         }
         private void updateKey(ref bool button, ref bool buttonUp, ref bool buttonHeld, ref bool buttonFreshPress, params KeyCode[] keys)
         {
             bool key = false, keyUp = false;
-            foreach(KeyCode k in keys)
+            foreach (KeyCode k in keys)
             {
                 if (Input.GetKeyDown(k))
-                    key=true;
+                    key = true;
                 else if (Input.GetKeyUp(k))
-                    keyUp=true;
+                    keyUp = true;
             }
+            if (button)
+                buttonFreshPress = false;
+            else if (key)
+                buttonFreshPress = true;
+            if (key)
+            {
+                button = true;
+                buttonHeld = true;
+                buttonUp = false;
+            }
+            else if (keyUp)
+            {
+                button = false;
+                buttonHeld = false;
+                buttonUp = true;
+            }
+            else
+                buttonUp = false;
+        }
+        private void updatePadButtons(ref bool button, ref bool buttonUp, ref bool buttonHeld, ref bool buttonFreshPress, string axes)
+        {
+            float input = Input.GetAxis(axes);
+            bool key = false, keyUp = false;
+            if (input > 1000f)
+                key = true;
+            else if (button)
+                keyUp = true;
+            if (button)
+                buttonFreshPress = false;
+            else if (key)
+                buttonFreshPress = true;
+            if (key)
+            {
+                button = true;
+                buttonHeld = true;
+                buttonUp = false;
+            }
+            else if (keyUp)
+            {
+                button = false;
+                buttonHeld = false;
+                buttonUp = true;
+            }
+            else
+                buttonUp = false;
+        }
+        private void updatePadMovementUpRight(ref bool button, ref bool buttonUp, ref bool buttonHeld, ref bool buttonFreshPress, string axes)
+        {
+            float input = Input.GetAxis(axes);
+            bool key = false, keyUp = false;
+            if (input > 1f)
+                key = true;
+            else if (button)
+                keyUp = true;
+            if (button)
+                buttonFreshPress = false;
+            else if (key)
+                buttonFreshPress = true;
+            if (key)
+            {
+                button = true;
+                buttonHeld = true;
+                buttonUp = false;
+            }
+            else if (keyUp)
+            {
+                button = false;
+                buttonHeld = false;
+                buttonUp = true;
+            }
+            else
+                buttonUp = false;
+        }
+        private void updatePadMovementDownLeft(ref bool button, ref bool buttonUp, ref bool buttonHeld, ref bool buttonFreshPress, string axes)
+        {
+            float input = Input.GetAxis(axes);
+            bool key = false, keyUp = false;
+            if (input < 1f)
+                key = true;
+            else if (button)
+                keyUp = true;
             if (button)
                 buttonFreshPress = false;
             else if (key)
@@ -221,6 +366,12 @@ namespace Assets.Scripts
 
         public static void Default()
         {
+            DefaultKey();
+            DefaultPad();
+        }
+
+        public static void DefaultKey()
+        {
             keyBoardAttack = KeyCode.K;
             PlayerPrefs.SetInt(0 + KeyHash, (int)KeyCode.K);
             keyBoardJump = KeyCode.J;
@@ -241,6 +392,35 @@ namespace Assets.Scripts
             PlayerPrefs.SetInt(8 + KeyHash, (int)KeyCode.J);
             keyBoardPause = KeyCode.Space;
             PlayerPrefs.SetInt(9 + KeyHash, (int)KeyCode.Space);
+        }
+
+        public static void DefaultPad()
+        {
+            gamePadAttack = B;
+            PlayerPrefs.SetString(10 + KeyHash, B);
+            gamePadJump = A;
+            PlayerPrefs.SetString(11 + KeyHash, A);
+            gamePadDash = X;
+            PlayerPrefs.SetString(12 + KeyHash, X);
+            gamePadUp = LEFT_ANALOG_Y;
+            PlayerPrefs.SetString(13 + KeyHash, LEFT_ANALOG_Y);
+            gamePadDown = LEFT_ANALOG_Y;
+            PlayerPrefs.SetString(14 + KeyHash, LEFT_ANALOG_Y);
+            gamePadLeft = LEFT_ANALOG_X;
+            PlayerPrefs.SetString(15 + KeyHash, LEFT_ANALOG_X);
+            gamePadRight = LEFT_ANALOG_X;
+            PlayerPrefs.SetString(16 + KeyHash, LEFT_ANALOG_X);
+            gamePadAccept = A;
+            PlayerPrefs.SetString(17 + KeyHash, A);
+            gamePadCancel = B;
+            PlayerPrefs.SetString(18 + KeyHash, B);
+            gamePadPause = START;
+            PlayerPrefs.SetString(19 + KeyHash, START);
+        }
+
+        public bool AnyInput()
+        {
+            return Attack||Accept||
         }
     }
 }

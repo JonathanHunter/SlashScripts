@@ -13,22 +13,22 @@ namespace Assets.Scripts.Menus
 
         private VideoStateMachine machine;
         private delegate void state();
-        //private string VideoKey = "SlashVideo";
+        private string VideoKey = "SlashVideo";
         void Start()
         {
             machine = new VideoStateMachine();
-            resIndex = 0;//PlayerPrefs.GetInt(VideoKey + 0);
+            resIndex = PlayerPrefs.GetInt(VideoKey + 0);
             if (resIndex > Screen.resolutions.Length)
             {
                 resIndex = 0;
-                //PlayerPrefs.SetInt(VideoKey + 0, resIndex);
+                PlayerPrefs.SetInt(VideoKey + 0, resIndex);
             }
             fullscreen = Screen.fullScreen;
             quality = QualitySettings.GetQualityLevel();//PlayerPrefs.GetInt(VideoKey + 2);
             if (quality > QualitySettings.names.Length)
             {
                 quality = 0;
-                //PlayerPrefs.SetInt(VideoKey + 2, quality);
+                PlayerPrefs.SetInt(VideoKey + 2, quality);
             }
         }
 
@@ -37,7 +37,7 @@ namespace Assets.Scripts.Menus
             cursor = (int)machine.update();
             if (cursor == (int)(VideoStateMachine.State.Resolution))
             {
-                if (CustomInput.RightUp || CustomInput.AcceptUp)
+                if (CustomInput.RightUp)
                 {
                     resIndex++;
                     if (resIndex >= Screen.resolutions.Length)
@@ -49,6 +49,8 @@ namespace Assets.Scripts.Menus
                     if (resIndex < 0)
                         resIndex = Screen.resolutions.Length - 1;
                 }
+                if (CustomInput.AcceptUp)
+                    Accept();
             }
             if (cursor == (int)(VideoStateMachine.State.FullScreen) && CustomInput.AcceptUp)
                 fullscreen = !fullscreen;
@@ -81,9 +83,9 @@ namespace Assets.Scripts.Menus
                     fullscreen);
             FindObjectOfType<Camera>().ResetAspect();
             QualitySettings.SetQualityLevel(quality);
-            //PlayerPrefs.SetInt(VideoKey + 0, resIndex);
-            //PlayerPrefs.SetInt(VideoKey + 1, fullscreen ? 1 : 0);
-            //PlayerPrefs.SetInt(VideoKey + 2, quality);
+            PlayerPrefs.SetInt(VideoKey + 0, resIndex);
+            PlayerPrefs.SetInt(VideoKey + 1, fullscreen ? 1 : 0);
+            PlayerPrefs.SetInt(VideoKey + 2, quality);
         }
 
         void OnGUI()

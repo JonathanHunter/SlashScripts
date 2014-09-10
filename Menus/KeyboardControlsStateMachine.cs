@@ -10,7 +10,7 @@ namespace Assets.Scripts.Menus
         public enum State
         {
             Attack = 0, Jump, Dash, Pause, Accept,
-            Cancel, Up, Down, Left, Right, Default, Exit, GettingKey, Holding
+            Cancel, Up, Down, Left, Right, Default, Exit, GettingKey, Holding, Waiting
         }
         private delegate State machine();
         private machine[] getNextState;
