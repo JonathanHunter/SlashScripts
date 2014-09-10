@@ -30,16 +30,19 @@ namespace Assets.Scripts.Menus
                 Destroy(this.gameObject);
         }
 
-        private void GetNewKey(KeyCode temp)
+        private void GetNewKey()
         {
             GUI.Label(new Rect(Screen.width * (7f / 19f),
                 Screen.height * (6f / 12f), Screen.width * (6f / 19f),
                 Screen.height * (3f / 12f)),
                 "Press the new key you want to use, Escape to cancel."
                 , LabelStyle);
-            if (temp != 0)
+            Event e = Event.current;
+            if (e.isKey && e.keyCode != KeyCode.None)
             {
-                switch(machine.getPrieviousState())
+
+                KeyCode temp = e.keyCode;
+                switch (machine.getPrieviousState())
                 {
                     case KeyboardControlsStateMachine.State.Attack:CustomInput.KeyBoardAttack = temp;break;
                     case KeyboardControlsStateMachine.State.Jump:CustomInput.KeyBoardJump = temp;break;
@@ -52,7 +55,7 @@ namespace Assets.Scripts.Menus
                     case KeyboardControlsStateMachine.State.Cancel:CustomInput.KeyBoardCancel = temp;break;
                     default:CustomInput.KeyBoardPause = temp;break;
                 }
-                machine.done();
+                machine.Hold();
             }
         }
 
@@ -65,9 +68,9 @@ namespace Assets.Scripts.Menus
             if (cursor == (int)(KeyboardControlsStateMachine.State.GettingKey))
             {
                 if (Input.GetKey(KeyCode.Escape))
-                    machine.done();
+                    machine.Hold();
                 else
-                    GetNewKey(Event.current.keyCode);
+                    GetNewKey();
             }
         }
         private void drawButtons()

@@ -10,7 +10,7 @@ namespace Assets.Scripts.Menus
         public enum State
         {
             Attack = 0, Jump, Dash, Pause, Accept,
-            Cancel, Up, Down, Left, Right, Default, Exit, GettingKey, Holding, Waiting
+            Cancel, Up, Down, Left, Right, Default, Exit, GettingKey, Holding, Prep
         }
         private delegate State machine();
         private machine[] getNextState;
@@ -22,7 +22,7 @@ namespace Assets.Scripts.Menus
             currState = State.Attack;
             prevState = State.Attack;
             getNextState = new machine[] { Attack, Jump, Dash, Pause, Accept,
-            Cancel, Up, Down, Left, Right, Default, Exit, GettingKey, Holding };
+            Cancel, Up, Down, Left, Right, Default, Exit, GettingKey, Holding, Prep, };
         }
 
         public State update()
@@ -34,17 +34,22 @@ namespace Assets.Scripts.Menus
         {
             return prevState;
         }
-        public void done()
+        public void Hold()
         {
             currState = State.Holding;
         }
         private static State Holding()
         {
-            if (UnityEngine.Input.anyKey)
-                return State.Holding;
-            if (CustomInput.Cancel||CustomInput.CancelUp)
+            if (CustomInput.AnyInput())
                 return State.Holding;
             return prevState;
+        }
+
+        private static State Prep()
+        {
+            if (CustomInput.AnyInput())
+                return State.Prep;
+            return State.GettingKey;
         }
 
         private static State Attack()
@@ -52,7 +57,7 @@ namespace Assets.Scripts.Menus
             if (CustomInput.AcceptUp)
             {
                 prevState = State.Attack;
-                return State.GettingKey;
+                return State.Prep;
             }
             if (CustomInput.UpUp)
                 return State.Default;
@@ -69,7 +74,7 @@ namespace Assets.Scripts.Menus
             if (CustomInput.AcceptUp)
             {
                 prevState = State.Jump;
-                return State.GettingKey;
+                return State.Prep;
             }
             if (CustomInput.UpUp)
                 return State.Attack;
@@ -86,7 +91,7 @@ namespace Assets.Scripts.Menus
             if (CustomInput.AcceptUp)
             {
                 prevState = State.Dash;
-                return State.GettingKey;
+                return State.Prep;
             }
             if (CustomInput.UpUp)
                 return State.Jump;
@@ -103,7 +108,7 @@ namespace Assets.Scripts.Menus
             if (CustomInput.AcceptUp)
             {
                 prevState = State.Pause;
-                return State.GettingKey;
+                return State.Prep;
             }
             if (CustomInput.UpUp)
                 return State.Dash;
@@ -120,7 +125,7 @@ namespace Assets.Scripts.Menus
             if (CustomInput.AcceptUp)
             {
                 prevState = State.Accept;
-                return State.GettingKey;
+                return State.Prep;
             }
             if (CustomInput.UpUp)
                 return State.Pause;
@@ -137,7 +142,7 @@ namespace Assets.Scripts.Menus
             if (CustomInput.AcceptUp)
             {
                 prevState = State.Accept;
-                return State.GettingKey;
+                return State.Prep;
             }
             if (CustomInput.UpUp)
                 return State.Accept;
@@ -154,7 +159,7 @@ namespace Assets.Scripts.Menus
             if (CustomInput.AcceptUp)
             {
                 prevState = State.Up;
-                return State.GettingKey;
+                return State.Prep;
             }
             if (CustomInput.UpUp)
                 return State.Exit;
@@ -171,7 +176,7 @@ namespace Assets.Scripts.Menus
             if (CustomInput.AcceptUp)
             {
                 prevState = State.Down;
-                return State.GettingKey;
+                return State.Prep;
             }
             if (CustomInput.UpUp)
                 return State.Up;
@@ -188,7 +193,7 @@ namespace Assets.Scripts.Menus
             if (CustomInput.AcceptUp)
             {
                 prevState = State.Left;
-                return State.GettingKey;
+                return State.Prep;
             }
             if (CustomInput.UpUp)
                 return State.Down;
@@ -205,7 +210,7 @@ namespace Assets.Scripts.Menus
             if (CustomInput.AcceptUp)
             {
                 prevState = State.Right;
-                return State.GettingKey;
+                return State.Prep;
             }
             if (CustomInput.UpUp)
                 return State.Default;
