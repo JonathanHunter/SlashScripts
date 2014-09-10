@@ -45,7 +45,7 @@ namespace Assets.Scripts.Menus
                     if (cursor == (int)(MainMenuStateMachine.State.Credits))
                         menu = (GameObject)Instantiate(Credits);
                 }
-                if (CustomInput.CancelUp)
+                if (Input.GetKeyUp(KeyCode.Escape))
                     Application.Quit();
             }
         }
