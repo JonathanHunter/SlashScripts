@@ -25,53 +25,191 @@ namespace Assets.Scripts
         private const string LEFT_STICK = "LeftStick";
         private const string RIGHT_STICK = "RightStick";
 
+        private const int ATTACK = 0x1;
+        private const int JUMP = 0x2;
+        private const int DASH = 0x4;
+        private const int UP = 0x8;
+        private const int DOWN = 0x10;
+        private const int LEFT = 0x20;
+        private const int RIGHT = 0x40;
+        private const int ACCEPT = 0x80;
+        private const int CANCEL = 0x100;
+        private const int PAUSE = 0x200;
+
+        private static int bools = 0;
+        private static int boolsUp = 0;
+        private static int boolsHeld = 0;
+        private static int boolsFreshPress = 0;
+
+
+
         //true as long as the button is held
-        public static bool Attack = false;
-        public static bool Jump = false;
-        public static bool Dash = false;
-        public static bool Up = false;
-        public static bool Down = false;
-        public static bool Left = false;
-        public static bool Right = false;
-        public static bool Accept = false;
-        public static bool Cancel = false;
-        public static bool Pause = false;
+        public static bool Attack
+        {
+            get { return (bools & ATTACK) != 0; }
+        }
+        public static bool Jump
+        {
+            get { return (bools & JUMP) != 0; }
+        }
+        public static bool Dash
+        {
+            get { return (bools & DASH) != 0; }
+        }
+        public static bool Up
+        {
+            get { return (bools & UP) != 0; }
+        }
+        public static bool Down
+        {
+            get { return (bools & DOWN) != 0; }
+        }
+        public static bool Left
+        {
+            get { return (bools & LEFT) != 0; }
+        }
+        public static bool Right
+        {
+            get { return (bools & RIGHT) != 0; }
+        }
+        public static bool Accept
+        {
+            get { return (bools & ACCEPT) != 0; }
+        }
+        public static bool Cancel
+        {
+            get { return (bools & CANCEL) != 0; }
+        }
+        public static bool Pause
+        {
+            get { return (bools & PAUSE) != 0; }
+        }
 
         //true for one frame after button is let go.
-        public static bool AttackUp = false;
-        public static bool JumpUp = false;
-        public static bool DashUp = false;
-        public static bool UpUp = false;
-        public static bool DownUp = false;
-        public static bool LeftUp = false;
-        public static bool RightUp = false;
-        public static bool AcceptUp = false;
-        public static bool CancelUp = false;
-        public static bool PauseUp = false;
+        public static bool AttackUp
+        {
+            get { return (boolsUp & ATTACK) != 0; }
+        }
+        public static bool JumpUp
+        {
+            get { return (boolsUp & JUMP) != 0; }
+        }
+        public static bool DashUp
+        {
+            get { return (boolsUp & DASH) != 0; }
+        }
+        public static bool UpUp
+        {
+            get { return (boolsUp & UP) != 0; }
+        }
+        public static bool DownUp
+        {
+            get { return (boolsUp & DOWN) != 0; }
+        }
+        public static bool LeftUp
+        {
+            get { return (boolsUp & LEFT) != 0; }
+        }
+        public static bool RightUp
+        {
+            get { return (boolsUp & RIGHT) != 0; }
+        }
+        public static bool AcceptUp
+        {
+            get { return (boolsUp & ACCEPT) != 0; }
+        }
+        public static bool CancelUp
+        {
+            get { return (boolsUp & CANCEL) != 0; }
+        }
+        public static bool PauseUp
+        {
+            get { return (boolsUp & PAUSE) != 0; }
+        }
 
         //true until the button is let go.
-        public static bool AttackHeld = false;
-        public static bool JumpHeld = false;
-        public static bool DashHeld = false;
-        public static bool UpHeld = false;
-        public static bool DownHeld = false;
-        public static bool LeftHeld = false;
-        public static bool RightHeld = false;
-        public static bool AcceptHeld = false;
-        public static bool CancelHeld = false;
-        public static bool PauseHeld = false;
+        public static bool AttackHeld
+        {
+            get { return (boolsHeld & ATTACK) != 0; }
+        }
+        public static bool JumpHeld
+        {
+            get { return (boolsHeld & JUMP) != 0; }
+        }
+        public static bool DashHeld
+        {
+            get { return (boolsHeld & DASH) != 0; }
+        }
+        public static bool UpHeld
+        {
+            get { return (boolsHeld & UP) != 0; }
+        }
+        public static bool DownHeld
+        {
+            get { return (boolsHeld & DOWN) != 0; }
+        }
+        public static bool LeftHeld
+        {
+            get { return (boolsHeld & LEFT) != 0; }
+        }
+        public static bool RightHeld
+        {
+            get { return (boolsHeld & RIGHT) != 0; }
+        }
+        public static bool AcceptHeld
+        {
+            get { return (boolsHeld & ACCEPT) != 0; }
+        }
+        public static bool CancelHeld
+        {
+            get { return (boolsHeld & CANCEL) != 0; }
+        }
+        public static bool PauseHeld
+        {
+            get { return (boolsHeld & PAUSE) != 0; }
+        }
 
         //true as long as the button is held
-        public static bool AttackFreshPress = false;
-        public static bool JumpFreshPress = false;
-        public static bool DashFreshPress = false;
-        public static bool UpFreshPress = false;
-        public static bool DownFreshPress = false;
-        public static bool LeftFreshPress = false;
-        public static bool RightFreshPress = false;
-        public static bool AcceptFreshPress = false;
-        public static bool CancelFreshPress = false;
-        public static bool PauseFreshPress = false;
+        public static bool AttackFreshPress
+        {
+            get { return (boolsFreshPress & ATTACK) != 0; }
+        }
+        public static bool JumpFreshPress
+        {
+            get { return (boolsFreshPress & JUMP) != 0; }
+        }
+        public static bool DashFreshPress
+        {
+            get { return (boolsFreshPress & DASH) != 0; }
+        }
+        public static bool UpFreshPress
+        {
+            get { return (boolsFreshPress & UP) != 0; }
+        }
+        public static bool DownFreshPress
+        {
+            get { return (boolsFreshPress & DOWN) != 0; }
+        }
+        public static bool LeftFreshPress
+        {
+            get { return (boolsFreshPress & LEFT) != 0; }
+        }
+        public static bool RightFreshPress
+        {
+            get { return (boolsFreshPress & RIGHT) != 0; }
+        }
+        public static bool AcceptFreshPress
+        {
+            get { return (boolsFreshPress & ACCEPT) != 0; }
+        }
+        public static bool CancelFreshPress
+        {
+            get { return (boolsFreshPress & CANCEL) != 0; }
+        }
+        public static bool PauseFreshPress
+        {
+            get { return (boolsFreshPress & PAUSE) != 0; }
+        }
 
         private static KeyCode keyBoardAttack;
         private static KeyCode keyBoardJump;
@@ -228,32 +366,32 @@ namespace Assets.Scripts
 
             if (!usePad)
             {
-                updateKey(ref Attack, ref AttackUp, ref AttackHeld, ref AttackFreshPress, keyBoardAttack);
-                updateKey(ref Jump, ref JumpUp, ref JumpHeld, ref JumpFreshPress, keyBoardJump);
-                updateKey(ref Dash, ref DashUp, ref DashHeld, ref DashFreshPress, keyBoardDash);
-                updateKey(ref Up, ref UpUp, ref Up, ref UpFreshPress, KeyCode.UpArrow, keyBoardUp);
-                updateKey(ref Down, ref DownUp, ref DownHeld, ref DownFreshPress, KeyCode.DownArrow, keyBoardDown);
-                updateKey(ref Left, ref LeftUp, ref LeftHeld, ref LeftFreshPress, KeyCode.LeftArrow, keyBoardLeft);
-                updateKey(ref Right, ref RightUp, ref RightHeld, ref RightFreshPress, KeyCode.RightArrow, keyBoardRight);
-                updateKey(ref Accept, ref AcceptUp, ref AcceptHeld, ref AcceptFreshPress, KeyCode.Return, keyBoardAccept);
-                updateKey(ref Cancel, ref CancelUp, ref CancelHeld, ref CancelFreshPress, KeyCode.Escape, keyBoardCancel);
-                updateKey(ref Pause, ref PauseUp, ref PauseHeld, ref PauseFreshPress, keyBoardPause);
+                updateKey(ATTACK, keyBoardAttack);
+                updateKey(JUMP, keyBoardJump);
+                updateKey(DASH, keyBoardDash);
+                updateKey(UP, KeyCode.UpArrow, keyBoardUp);
+                updateKey(DOWN, KeyCode.DownArrow, keyBoardDown);
+                updateKey(LEFT, KeyCode.LeftArrow, keyBoardLeft);
+                updateKey(RIGHT, KeyCode.RightArrow, keyBoardRight);
+                updateKey(ACCEPT, KeyCode.Return, keyBoardAccept);
+                updateKey(CANCEL, KeyCode.Escape, keyBoardCancel);
+                updateKey(PAUSE, keyBoardPause);
             }
             else
             {
-                updatePadButtons(ref Attack, ref AttackUp, ref AttackHeld, ref AttackFreshPress, gamePadAttack);
-                updatePadButtons(ref Jump, ref JumpUp, ref JumpHeld, ref JumpFreshPress, gamePadJump);
-                updatePadButtons(ref Dash, ref DashUp, ref DashHeld, ref DashFreshPress, gamePadDash);
-                updatePadMovementUpRight(ref Up, ref UpUp, ref Up, ref UpFreshPress, gamePadUp);
-                updatePadMovementDownLeft(ref Down, ref DownUp, ref DownHeld, ref DownFreshPress, gamePadDown);
-                updatePadMovementDownLeft(ref Left, ref LeftUp, ref LeftHeld, ref LeftFreshPress, gamePadLeft);
-                updatePadMovementUpRight(ref Right, ref RightUp, ref RightHeld, ref RightFreshPress, gamePadRight);
-                updatePadButtons(ref Accept, ref AcceptUp, ref AcceptHeld, ref AcceptFreshPress, gamePadAccept);
-                updatePadButtons(ref Cancel, ref CancelUp, ref CancelHeld, ref CancelFreshPress, gamePadCancel);
-                updatePadButtons(ref Pause, ref PauseUp, ref PauseHeld, ref PauseFreshPress, gamePadPause);
+                updatePadButtons(ATTACK, gamePadAttack);
+                updatePadButtons(JUMP, gamePadJump);
+                updatePadButtons(DASH, gamePadDash);
+                updatePadMovementUpRight(UP, gamePadUp);
+                updatePadMovementDownLeft(DOWN, gamePadDown);
+                updatePadMovementDownLeft(LEFT, gamePadLeft);
+                updatePadMovementUpRight(RIGHT, gamePadRight);
+                updatePadButtons(ACCEPT, gamePadAccept);
+                updatePadButtons(CANCEL, gamePadCancel);
+                updatePadButtons(PAUSE, gamePadPause);
             }
         }
-        private void updateKey(ref bool button, ref bool buttonUp, ref bool buttonHeld, ref bool buttonFreshPress, params KeyCode[] keys)
+        private void updateKey(int state, params KeyCode[] keys)
         {
             bool key = false, keyUp = false;
             foreach (KeyCode k in keys)
@@ -263,105 +401,93 @@ namespace Assets.Scripts
                 else if (Input.GetKeyUp(k))
                     keyUp = true;
             }
-            if (button)
-                buttonFreshPress = false;
+            if ((bools & state) != 0)
+                boolsFreshPress = boolsFreshPress & ~state;
             else if (key)
-                buttonFreshPress = true;
+                boolsFreshPress = boolsFreshPress | state;
             if (key)
             {
-                button = true;
-                buttonHeld = true;
-                buttonUp = false;
+                bools = bools | state;
+                boolsHeld = boolsHeld | state;
+                boolsUp = boolsUp & ~state;
             }
             else if (keyUp)
             {
-                button = false;
-                buttonHeld = false;
-                buttonUp = true;
+                bools = bools & ~state;
+                boolsHeld = boolsHeld & ~state;
+                boolsUp = boolsUp | state;
             }
             else
-                buttonUp = false;
+                boolsUp = boolsUp & ~state;
         }
-        private void updatePadButtons(ref bool button, ref bool buttonUp, ref bool buttonHeld, ref bool buttonFreshPress, string axes)
+        private void updatePadButtons(int state, string axes)
         {
             float input = Input.GetAxis(axes);
             bool key = false, keyUp = false;
             if (input > 1000f)
-                key = true;
-            else if (button)
-                keyUp = true;
-            if (button)
-                buttonFreshPress = false;
+                boolsFreshPress = boolsFreshPress & ~state;
             else if (key)
-                buttonFreshPress = true;
+                boolsFreshPress = boolsFreshPress | state;
             if (key)
             {
-                button = true;
-                buttonHeld = true;
-                buttonUp = false;
+                bools = bools | state;
+                boolsHeld = boolsHeld | state;
+                boolsUp = boolsUp & ~state;
             }
             else if (keyUp)
             {
-                button = false;
-                buttonHeld = false;
-                buttonUp = true;
+                bools = bools & ~state;
+                boolsHeld = boolsHeld & ~state;
+                boolsUp = boolsUp | state;
             }
             else
-                buttonUp = false;
+                boolsUp = boolsUp & ~state;
         }
-        private void updatePadMovementUpRight(ref bool button, ref bool buttonUp, ref bool buttonHeld, ref bool buttonFreshPress, string axes)
+        private void updatePadMovementUpRight(int state, string axes)
         {
             float input = Input.GetAxis(axes);
             bool key = false, keyUp = false;
             if (input > 1f)
-                key = true;
-            else if (button)
-                keyUp = true;
-            if (button)
-                buttonFreshPress = false;
+                boolsFreshPress = boolsFreshPress & ~state;
             else if (key)
-                buttonFreshPress = true;
+                boolsFreshPress = boolsFreshPress | state;
             if (key)
             {
-                button = true;
-                buttonHeld = true;
-                buttonUp = false;
+                bools = bools | state;
+                boolsHeld = boolsHeld | state;
+                boolsUp = boolsUp & ~state;
             }
             else if (keyUp)
             {
-                button = false;
-                buttonHeld = false;
-                buttonUp = true;
+                bools = bools & ~state;
+                boolsHeld = boolsHeld & ~state;
+                boolsUp = boolsUp | state;
             }
             else
-                buttonUp = false;
+                boolsUp = boolsUp & ~state;
         }
-        private void updatePadMovementDownLeft(ref bool button, ref bool buttonUp, ref bool buttonHeld, ref bool buttonFreshPress, string axes)
+        private void updatePadMovementDownLeft(int state, string axes)
         {
             float input = Input.GetAxis(axes);
             bool key = false, keyUp = false;
             if (input < 1f)
-                key = true;
-            else if (button)
-                keyUp = true;
-            if (button)
-                buttonFreshPress = false;
+                boolsFreshPress = boolsFreshPress & ~state;
             else if (key)
-                buttonFreshPress = true;
+                boolsFreshPress = boolsFreshPress | state;
             if (key)
             {
-                button = true;
-                buttonHeld = true;
-                buttonUp = false;
+                bools = bools | state;
+                boolsHeld = boolsHeld | state;
+                boolsUp = boolsUp & ~state;
             }
             else if (keyUp)
             {
-                button = false;
-                buttonHeld = false;
-                buttonUp = true;
+                bools = bools & ~state;
+                boolsHeld = boolsHeld & ~state;
+                boolsUp = boolsUp | state;
             }
             else
-                buttonUp = false;
+                boolsUp = boolsUp & ~state;
         }
 
         public static void Default()
@@ -418,9 +544,9 @@ namespace Assets.Scripts
             PlayerPrefs.SetString(19 + KeyHash, START);
         }
 
-        public bool AnyInput()
+        public static bool AnyInput()
         {
-            return Attack||Accept||
+            return bools != 0 || boolsFreshPress != 0 || boolsHeld != 0 || boolsUp != 0;
         }
     }
 }
