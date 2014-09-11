@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Assets.Scripts.Menus
 {
-    class KeyboardControlsGUI : MonoBehaviour
+    class GamePadControlGUI : MonoBehaviour
     {
         public Texture Title, CursorPic;
         public GUIStyle LabelStyle;
@@ -22,7 +22,7 @@ namespace Assets.Scripts.Menus
             if(CustomInput.AcceptUp)
             {
                 if (cursor == (int)(ControlBinderStateMachine.State.Default))
-                    CustomInput.DefaultKey();
+                    CustomInput.DefaultPad();
                 if (cursor == (int)(ControlBinderStateMachine.State.Exit))
                     Destroy(this.gameObject);
             }
@@ -30,33 +30,79 @@ namespace Assets.Scripts.Menus
                 Destroy(this.gameObject);
         }
 
-        private void GetNewKey()
+        private void GetNewButton()
         {
             GUI.Label(new Rect(Screen.width * (7f / 19f),
                 Screen.height * (6f / 12f), Screen.width * (6f / 19f),
                 Screen.height * (3f / 12f)),
-                "Press the new key you want to use, Escape to cancel."
+                "Press the new button you want to use, Escape to cancel."
                 , LabelStyle);
-            Event e = Event.current;
-            if (e.isKey && e.keyCode != KeyCode.None)
-            {
+            if (Input.GetAxis(CustomInput.LEFT_STICK_RIGHT) > 0)
+                setButton(CustomInput.LEFT_STICK_RIGHT);
+            if (Input.GetAxis(CustomInput.LEFT_STICK_LEFT) < 0)
+                setButton(CustomInput.LEFT_STICK_LEFT);
+            else if (Input.GetAxis(CustomInput.LEFT_STICK_UP) < 0)
+                setButton(CustomInput.LEFT_STICK_UP);
+            else if (Input.GetAxis(CustomInput.LEFT_STICK_DOWN) > 0)
+                setButton(CustomInput.LEFT_STICK_DOWN);
+            else if (Input.GetAxis(CustomInput.RIGHT_STICK_RIGHT) > 0)
+                setButton(CustomInput.RIGHT_STICK_RIGHT);
+            else if (Input.GetAxis(CustomInput.RIGHT_STICK_LEFT) < 0)
+                setButton(CustomInput.RIGHT_STICK_LEFT);
+            else if (Input.GetAxis(CustomInput.RIGHT_STICK_UP) < 0)
+                setButton(CustomInput.RIGHT_STICK_UP);
+            else if (Input.GetAxis(CustomInput.RIGHT_STICK_DOWN) > 0)
+                setButton(CustomInput.RIGHT_STICK_DOWN);
+            else if (Input.GetAxis(CustomInput.DPAD_RIGHT) > 0)
+                setButton(CustomInput.DPAD_RIGHT);
+            else if (Input.GetAxis(CustomInput.DPAD_LEFT) < 0)
+                setButton(CustomInput.DPAD_LEFT);
+            else if (Input.GetAxis(CustomInput.DPAD_UP) < 0)
+                setButton(CustomInput.DPAD_UP);
+            else if (Input.GetAxis(CustomInput.DPAD_DOWN) > 0)
+                setButton(CustomInput.DPAD_DOWN);
+            else if (Input.GetAxis(CustomInput.LEFT_TRIGGER) != 0)
+                setButton(CustomInput.LEFT_TRIGGER);
+            else if (Input.GetAxis(CustomInput.RIGHT_TRIGGER) != 0)
+                setButton(CustomInput.RIGHT_TRIGGER);
+            else if (Input.GetAxis(CustomInput.A) != 0)
+                setButton(CustomInput.A);
+            else if (Input.GetAxis(CustomInput.B) != 0)
+                setButton(CustomInput.B);
+            else if (Input.GetAxis(CustomInput.X) != 0)
+                setButton(CustomInput.X);
+            else if (Input.GetAxis(CustomInput.Y) != 0)
+                setButton(CustomInput.Y);
+            else if (Input.GetAxis(CustomInput.LB) != 0)
+                setButton(CustomInput.LB);
+            else if (Input.GetAxis(CustomInput.RB) != 0)
+                setButton(CustomInput.RB);
+            else if (Input.GetAxis(CustomInput.BACK) != 0)
+                setButton(CustomInput.BACK);
+            else if (Input.GetAxis(CustomInput.START) != 0)
+                setButton(CustomInput.START);
+            else if (Input.GetAxis(CustomInput.LEFT_STICK) != 0)
+                setButton(CustomInput.LEFT_STICK);
+            else if (Input.GetAxis(CustomInput.RIGHT_STICK) != 0)
+                setButton(CustomInput.RIGHT_STICK);
+        }
 
-                KeyCode temp = e.keyCode;
-                switch (machine.getPrieviousState())
-                {
-                    case ControlBinderStateMachine.State.Attack:CustomInput.KeyBoardAttack = temp;break;
-                    case ControlBinderStateMachine.State.Jump:CustomInput.KeyBoardJump = temp;break;
-                    case ControlBinderStateMachine.State.Dash:CustomInput.KeyBoardDash = temp;break;
-                    case ControlBinderStateMachine.State.Up:CustomInput.KeyBoardUp = temp;break;
-                    case ControlBinderStateMachine.State.Down:CustomInput.KeyBoardDown = temp;break;
-                    case ControlBinderStateMachine.State.Left:CustomInput.KeyBoardLeft = temp;break;
-                    case ControlBinderStateMachine.State.Right:CustomInput.KeyBoardRight = temp;break;
-                    case ControlBinderStateMachine.State.Accept:CustomInput.KeyBoardAccept = temp;break;
-                    case ControlBinderStateMachine.State.Cancel:CustomInput.KeyBoardCancel = temp;break;
-                    default:CustomInput.KeyBoardPause = temp;break;
-                }
-                machine.Hold();
+        private void setButton(string button)
+        {
+            switch (machine.getPrieviousState())
+            {
+                case ControlBinderStateMachine.State.Attack: CustomInput.GamePadAttack = button; break;
+                case ControlBinderStateMachine.State.Jump: CustomInput.GamePadJump = button; break;
+                case ControlBinderStateMachine.State.Dash: CustomInput.GamePadDash = button; break;
+                case ControlBinderStateMachine.State.Up: CustomInput.GamePadUp = button; break;
+                case ControlBinderStateMachine.State.Down: CustomInput.GamePadDown = button; break;
+                case ControlBinderStateMachine.State.Left: CustomInput.GamePadLeft = button; break;
+                case ControlBinderStateMachine.State.Right: CustomInput.GamePadRight = button; break;
+                case ControlBinderStateMachine.State.Accept: CustomInput.GamePadAccept = button; break;
+                case ControlBinderStateMachine.State.Cancel: CustomInput.GamePadCancel = button; break;
+                default: CustomInput.GamePadPause = button; break;
             }
+            machine.Hold();
         }
 
         void OnGUI()
@@ -70,43 +116,43 @@ namespace Assets.Scripts.Menus
                 if (Input.GetKey(KeyCode.Escape))
                     machine.Hold();
                 else
-                    GetNewKey();
+                    GetNewButton();
             }
         }
         private void drawButtons()
         {
             if(GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), 
-                CustomInput.KeyBoardAttack.ToString(), LabelStyle))
+                CustomInput.GamePadAttack, LabelStyle))
                 machine.AttackClicked();
             if(GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (5f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.KeyBoardJump.ToString(), LabelStyle))
+                CustomInput.GamePadJump, LabelStyle))
                 machine.JumpClicked();
             if(GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (6f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.KeyBoardDash.ToString(), LabelStyle))
+                CustomInput.GamePadDash, LabelStyle))
                 machine.DashClicked();
             if(GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (7f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.KeyBoardPause.ToString(), LabelStyle))
+                CustomInput.GamePadPause, LabelStyle))
                 machine.PauseClicked();
             if(GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (8f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.KeyBoardAccept + "/Enter", LabelStyle))
+                CustomInput.GamePadAccept, LabelStyle))
                 machine.AcceptClicked();
             if(GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (9f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.KeyBoardCancel + "/Escape", LabelStyle))
+                CustomInput.GamePadCancel, LabelStyle))
                 machine.CancelClicked();
             if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.KeyBoardUp + "/Up arrow", LabelStyle))
+                CustomInput.GamePadUp, LabelStyle))
                 machine.UpClicked();
             if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (5f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.KeyBoardDown + "/Down arrow", LabelStyle))
+                CustomInput.GamePadDown, LabelStyle))
                 machine.DownClicked();
             if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (6f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.KeyBoardLeft + "/Left arrow", LabelStyle))
+                CustomInput.GamePadLeft, LabelStyle))
                 machine.LeftClicked();
             if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (7f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.KeyBoardRight + "/Right arrow", LabelStyle))
+                CustomInput.GamePadRight, LabelStyle))
                 machine.RightClicked();
             if(GUI.Button(new Rect(Screen.width * (9f / 19f), Screen.height * (10f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Defaults", LabelStyle))
-                CustomInput.DefaultKey();
+                CustomInput.DefaultPad();
             if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (10f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Exit", LabelStyle))
                 Destroy(this.gameObject);
         }

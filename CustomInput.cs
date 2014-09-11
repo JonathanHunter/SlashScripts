@@ -6,24 +6,30 @@ namespace Assets.Scripts
 {
     public class CustomInput : MonoBehaviour
     {
-        private const string LEFT_ANALOG_X = "LeftAnalogX";
-        private const string LEFT_ANALOG_Y = "LeftAnalogY";
-        private const string RIGHT_ANALOG_X = "RightAnalogX";
-        private const string RIGHT_ANALOG_Y = "RightAnalogY";
-        private const string DPAD_X = "DpadX";
-        private const string DPAD_Y = "DpadY";
-        private const string LEFT_TRIGGER = "LeftTrigger";
-        private const string RIGHT_TRIGGER = "RightTrigger";
-        private const string A = "A";
-        private const string B = "B";
-        private const string X = "X";
-        private const string Y = "Y";
-        private const string LB = "LB";
-        private const string RB = "RB";
-        private const string BACK = "Back";
-        private const string START = "Start";
-        private const string LEFT_STICK = "LeftStick";
-        private const string RIGHT_STICK = "RightStick";
+        public const string LEFT_STICK_RIGHT = "Left Stick Right";
+        public const string LEFT_STICK_LEFT = "Left Stick Left";
+        public const string LEFT_STICK_UP = "Left Stick Up";
+        public const string LEFT_STICK_DOWN = "Left Stick Down";
+        public const string RIGHT_STICK_RIGHT = "Right Stick Right";
+        public const string RIGHT_STICK_LEFT = "Right Stick Left";
+        public const string RIGHT_STICK_UP = "Right Stick Up";
+        public const string RIGHT_STICK_DOWN = "Right Stick Down";
+        public const string DPAD_RIGHT = "Dpad Right";
+        public const string DPAD_LEFT = "Dpad Left";
+        public const string DPAD_UP = "Dpad Up";
+        public const string DPAD_DOWN = "Dpad Down";
+        public const string LEFT_TRIGGER = "Left Trigger";
+        public const string RIGHT_TRIGGER = "Right Trigger";
+        public const string A = "A";
+        public const string B = "B";
+        public const string X = "X";
+        public const string Y = "Y";
+        public const string LB = "LB";
+        public const string RB = "RB";
+        public const string BACK = "Back";
+        public const string START = "Start";
+        public const string LEFT_STICK = "Left Stick Click";
+        public const string RIGHT_STICK = "Right Stick Click";
 
         private const int ATTACK = 0x1;
         private const int JUMP = 0x2;
@@ -327,6 +333,96 @@ namespace Assets.Scripts
                 PlayerPrefs.SetInt(9 + KeyHash, (int)value);
             }
         }
+        public static string GamePadAttack
+        {
+            get { return gamePadAttack; }
+            set
+            {
+                gamePadAttack = value;
+                PlayerPrefs.SetString(10 + KeyHash, value);
+            }
+        }
+        public static string GamePadJump
+        {
+            get { return gamePadJump; }
+            set
+            {
+                gamePadJump = value;
+                PlayerPrefs.SetString(11 + KeyHash, value);
+            }
+        }
+        public static string GamePadDash
+        {
+            get { return gamePadDash; }
+            set
+            {
+                gamePadDash = value;
+                PlayerPrefs.SetString(12 + KeyHash, value);
+            }
+        }
+        public static string GamePadUp
+        {
+            get { return gamePadUp; }
+            set
+            {
+                gamePadUp = value;
+                PlayerPrefs.SetString(13 + KeyHash, value);
+            }
+        }
+        public static string GamePadDown
+        {
+            get { return gamePadDown; }
+            set
+            {
+                gamePadDown = value;
+                PlayerPrefs.SetString(14 + KeyHash, value);
+            }
+        }
+        public static string GamePadLeft
+        {
+            get { return gamePadLeft; }
+            set
+            {
+                gamePadLeft = value;
+                PlayerPrefs.SetString(15 + KeyHash, value);
+            }
+        }
+        public static string GamePadRight
+        {
+            get { return gamePadRight; }
+            set
+            {
+                gamePadRight = value;
+                PlayerPrefs.SetString(16 + KeyHash, value);
+            }
+        }
+        public static string GamePadAccept
+        {
+            get { return gamePadAccept; }
+            set
+            {
+                gamePadAccept = value;
+                PlayerPrefs.SetString(17 + KeyHash, value);
+            }
+        }
+        public static string GamePadCancel
+        {
+            get { return gamePadCancel; }
+            set
+            {
+                gamePadCancel = value;
+                PlayerPrefs.SetString(18 + KeyHash, value);
+            }
+        }
+        public static string GamePadPause
+        {
+            get { return gamePadPause; }
+            set
+            {
+                gamePadPause = value;
+                PlayerPrefs.SetString(19 + KeyHash, value);
+            }
+        }
 
         void Start()
         {
@@ -361,9 +457,8 @@ namespace Assets.Scripts
         {
             if (Input.anyKey)
                 usePad = false;
-            if (Input.GetAxis(START) > 0)
+            if (AnyPadInput())
                 usePad = true;
-
             if (!usePad)
             {
                 updateKey(ATTACK, keyBoardAttack);
@@ -379,19 +474,19 @@ namespace Assets.Scripts
             }
             else
             {
-                updatePadButtons(ATTACK, gamePadAttack);
-                updatePadButtons(JUMP, gamePadJump);
-                updatePadButtons(DASH, gamePadDash);
-                updatePadMovementUpRight(UP, gamePadUp);
-                updatePadMovementDownLeft(DOWN, gamePadDown);
-                updatePadMovementDownLeft(LEFT, gamePadLeft);
-                updatePadMovementUpRight(RIGHT, gamePadRight);
-                updatePadButtons(ACCEPT, gamePadAccept);
-                updatePadButtons(CANCEL, gamePadCancel);
-                updatePadButtons(PAUSE, gamePadPause);
+                updatePad(ATTACK, gamePadAttack);
+                updatePad(JUMP, gamePadJump);
+                updatePad(DASH, gamePadDash);
+                updatePad(UP, gamePadUp);
+                updatePad(DOWN, gamePadDown);
+                updatePad(LEFT, gamePadLeft);
+                updatePad(RIGHT, gamePadRight);
+                updatePad(ACCEPT, gamePadAccept);
+                updatePad(CANCEL, gamePadCancel);
+                updatePad(PAUSE, gamePadPause);
             }
         }
-        private void updateKey(int state, params KeyCode[] keys)
+        private static void updateKey(int state, params KeyCode[] keys)
         {
             bool key = false, keyUp = false;
             foreach (KeyCode k in keys)
@@ -420,57 +515,22 @@ namespace Assets.Scripts
             else
                 boolsUp = boolsUp & ~state;
         }
-        private void updatePadButtons(int state, string axes)
+        private static void updatePad(int state, string axes)
         {
             float input = Input.GetAxis(axes);
             bool key = false, keyUp = false;
-            if (input > 1000f)
-                boolsFreshPress = boolsFreshPress & ~state;
-            else if (key)
-                boolsFreshPress = boolsFreshPress | state;
-            if (key)
+            if (axes == LEFT_STICK_LEFT || axes == LEFT_STICK_UP || axes == RIGHT_STICK_LEFT || axes == RIGHT_STICK_UP || axes == DPAD_LEFT || axes == DPAD_UP)
             {
-                bools = bools | state;
-                boolsHeld = boolsHeld | state;
-                boolsUp = boolsUp & ~state;
+                if (input < 0)
+                    key = true;
+                else if ((bools & state) != 0)
+                    keyUp = true;
             }
-            else if (keyUp)
-            {
-                bools = bools & ~state;
-                boolsHeld = boolsHeld & ~state;
-                boolsUp = boolsUp | state;
-            }
-            else
-                boolsUp = boolsUp & ~state;
-        }
-        private void updatePadMovementUpRight(int state, string axes)
-        {
-            float input = Input.GetAxis(axes);
-            bool key = false, keyUp = false;
-            if (input > 1f)
-                boolsFreshPress = boolsFreshPress & ~state;
-            else if (key)
-                boolsFreshPress = boolsFreshPress | state;
-            if (key)
-            {
-                bools = bools | state;
-                boolsHeld = boolsHeld | state;
-                boolsUp = boolsUp & ~state;
-            }
-            else if (keyUp)
-            {
-                bools = bools & ~state;
-                boolsHeld = boolsHeld & ~state;
-                boolsUp = boolsUp | state;
-            }
-            else
-                boolsUp = boolsUp & ~state;
-        }
-        private void updatePadMovementDownLeft(int state, string axes)
-        {
-            float input = Input.GetAxis(axes);
-            bool key = false, keyUp = false;
-            if (input < 1f)
+            else if (input > 0)
+                key = true;
+            else if ((bools & state) != 0)
+                keyUp = true;
+            if ((bools & state) != 0)
                 boolsFreshPress = boolsFreshPress & ~state;
             else if (key)
                 boolsFreshPress = boolsFreshPress | state;
@@ -522,20 +582,20 @@ namespace Assets.Scripts
 
         public static void DefaultPad()
         {
-            gamePadAttack = B;
-            PlayerPrefs.SetString(10 + KeyHash, B);
+            gamePadAttack = X;
+            PlayerPrefs.SetString(10 + KeyHash, X);
             gamePadJump = A;
             PlayerPrefs.SetString(11 + KeyHash, A);
-            gamePadDash = X;
-            PlayerPrefs.SetString(12 + KeyHash, X);
-            gamePadUp = LEFT_ANALOG_Y;
-            PlayerPrefs.SetString(13 + KeyHash, LEFT_ANALOG_Y);
-            gamePadDown = LEFT_ANALOG_Y;
-            PlayerPrefs.SetString(14 + KeyHash, LEFT_ANALOG_Y);
-            gamePadLeft = LEFT_ANALOG_X;
-            PlayerPrefs.SetString(15 + KeyHash, LEFT_ANALOG_X);
-            gamePadRight = LEFT_ANALOG_X;
-            PlayerPrefs.SetString(16 + KeyHash, LEFT_ANALOG_X);
+            gamePadDash = B;
+            PlayerPrefs.SetString(12 + KeyHash, B);
+            gamePadUp = LEFT_STICK_UP;
+            PlayerPrefs.SetString(13 + KeyHash, LEFT_STICK_UP);
+            gamePadDown = LEFT_STICK_DOWN;
+            PlayerPrefs.SetString(14 + KeyHash, LEFT_STICK_DOWN);
+            gamePadLeft = LEFT_STICK_LEFT;
+            PlayerPrefs.SetString(15 + KeyHash, LEFT_STICK_LEFT);
+            gamePadRight = LEFT_STICK_RIGHT;
+            PlayerPrefs.SetString(16 + KeyHash, LEFT_STICK_RIGHT);
             gamePadAccept = A;
             PlayerPrefs.SetString(17 + KeyHash, A);
             gamePadCancel = B;
@@ -547,6 +607,47 @@ namespace Assets.Scripts
         public static bool AnyInput()
         {
             return bools != 0 || boolsFreshPress != 0 || boolsHeld != 0 || boolsUp != 0;
+        }
+
+        public static bool AnyPadInput()
+        {
+            if (Input.GetAxis(LEFT_STICK_RIGHT) != 0)
+                return true;
+            if (Input.GetAxis(LEFT_STICK_UP) != 0)
+                return true;
+            if (Input.GetAxis(RIGHT_STICK_RIGHT) != 0)
+                return true;
+            if (Input.GetAxis(RIGHT_STICK_UP) != 0)
+                return true;
+            if (Input.GetAxis(DPAD_RIGHT) != 0)
+                return true;
+            if (Input.GetAxis(DPAD_UP) != 0)
+                return true;
+            if (Input.GetAxis(LEFT_TRIGGER) != 0)
+                return true;
+            if (Input.GetAxis(RIGHT_TRIGGER) != 0)
+                return true;
+            if (Input.GetAxis(A) != 0)
+                return true;
+            if (Input.GetAxis(B) != 0)
+                return true;
+            if (Input.GetAxis(X) != 0)
+                return true;
+            if (Input.GetAxis(Y) != 0)
+                return true;
+            if (Input.GetAxis(LB) != 0)
+                return true;
+            if (Input.GetAxis(RB) != 0)
+                return true;
+            if (Input.GetAxis(BACK) != 0)
+                return true;
+            if (Input.GetAxis(START) != 0)
+                return true;
+            if (Input.GetAxis(LEFT_STICK) != 0)
+                return true;
+            if (Input.GetAxis(RIGHT_STICK) != 0)
+                return true;
+            return false;
         }
     }
 }

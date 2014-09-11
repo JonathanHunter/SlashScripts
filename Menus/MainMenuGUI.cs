@@ -17,7 +17,13 @@ namespace Assets.Scripts.Menus
         void Start()
         {
             machine = new MainMenuStateMachine();
-            DontDestroyOnLoad(FindObjectOfType<CustomInput>().gameObject);
+            CustomInput[] arr=FindObjectsOfType<CustomInput>();
+            if (arr.Length > 1)
+            {
+                for (int i = 1; i < arr.Length; i++)
+                    Destroy(arr[i].gameObject);
+            }
+            DontDestroyOnLoad(arr[0].gameObject);
             if (PlayerPrefs.HasKey(AudioGUI.AudioKey + 0))
             {
                 Data.MusicVol = PlayerPrefs.GetFloat(AudioGUI.AudioKey + 0);

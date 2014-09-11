@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Assets.Scripts.Menus
 {
-    class KeyboardControlsStateMachine
+    class ControlBinderStateMachine
     {
         public enum State
         {
@@ -17,7 +17,7 @@ namespace Assets.Scripts.Menus
         private State currState;
         private static State prevState;
 
-        public KeyboardControlsStateMachine()
+        public ControlBinderStateMachine()
         {
             currState = State.Attack;
             prevState = State.Attack;
