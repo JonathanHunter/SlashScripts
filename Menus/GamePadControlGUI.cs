@@ -57,9 +57,9 @@ namespace Assets.Scripts.Menus
                 setButton(CustomInput.DPAD_RIGHT);
             else if (Input.GetAxis(CustomInput.DPAD_LEFT) < 0)
                 setButton(CustomInput.DPAD_LEFT);
-            else if (Input.GetAxis(CustomInput.DPAD_UP) < 0)
+            else if (Input.GetAxis(CustomInput.DPAD_UP) > 0)
                 setButton(CustomInput.DPAD_UP);
-            else if (Input.GetAxis(CustomInput.DPAD_DOWN) > 0)
+            else if (Input.GetAxis(CustomInput.DPAD_DOWN) < 0)
                 setButton(CustomInput.DPAD_DOWN);
             else if (Input.GetAxis(CustomInput.LEFT_TRIGGER) != 0)
                 setButton(CustomInput.LEFT_TRIGGER);
