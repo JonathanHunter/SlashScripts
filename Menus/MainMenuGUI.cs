@@ -24,6 +24,12 @@ namespace Assets.Scripts.Menus
                     Destroy(arr[i].gameObject);
             }
             DontDestroyOnLoad(arr[0].gameObject);
+            Data[] datas = FindObjectsOfType<Data>();
+            if (arr.Length > 1)
+            {
+                for (int i = 1; i < arr.Length; i++)
+                    Destroy(datas[i].gameObject);
+            }
             if (PlayerPrefs.HasKey(AudioGUI.AudioKey + 0))
             {
                 Data.MusicVol = PlayerPrefs.GetFloat(AudioGUI.AudioKey + 0);
@@ -34,7 +40,10 @@ namespace Assets.Scripts.Menus
                 Data.MusicVol = 1;
                 Data.SfxVol = 1;
             }
-            FindObjectOfType<BGM>().PlaySong();
+            if (PlayerPrefs.HasKey(VideoGUI.VideoKey + 2))
+                Data.AspectRatio=PlayerPrefs.GetFloat(VideoGUI.VideoKey + 2);
+            else
+                Data.AspectRatio = FindObjectOfType<Camera>().aspect;
         }
 
         void Update()

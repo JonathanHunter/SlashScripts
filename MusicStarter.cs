@@ -7,7 +7,7 @@ namespace Assets.Scripts
     {
         void Start()
         {
-            GetComponent<BGM>().PlaySong();
+            GetComponent<SoundPlayer>().PlaySong();
         }
     }
 }

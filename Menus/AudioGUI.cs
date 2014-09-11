@@ -80,7 +80,7 @@ namespace Assets.Scripts.Menus
             PlayerPrefs.SetFloat(AudioKey + 1, sfxVol);
             Data.MusicVol = musicVol;
             Data.SfxVol = sfxVol;
-            FindObjectOfType<BGM>().SetVolume(musicVol);
+            FindObjectOfType<SoundPlayer>().SetVolume(musicVol);
             oMusicVol = musicVol;
             oSfxVol = sfxVol;
         }

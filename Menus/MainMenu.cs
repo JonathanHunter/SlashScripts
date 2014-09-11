@@ -51,7 +51,6 @@ namespace Assets.Scripts.Menus
                 PlayerPrefs.SetInt(VideoKey + 2, quality);
                 QualitySettings.SetQualityLevel(quality);
             }
-            FindObjectOfType<BGM>().PlaySong();
         }
         void Update()
         {

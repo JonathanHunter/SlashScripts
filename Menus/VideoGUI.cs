@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Assets.Scripts.Menus
 {
@@ -13,7 +14,7 @@ namespace Assets.Scripts.Menus
 
         private VideoStateMachine machine;
         private delegate void state();
-        private string VideoKey = "SlashVideo";
+        internal static string VideoKey = "SlashVideo";
         void Start()
         {
             machine = new VideoStateMachine();
@@ -24,12 +25,7 @@ namespace Assets.Scripts.Menus
                 PlayerPrefs.SetInt(VideoKey + 0, resIndex);
             }
             fullscreen = Screen.fullScreen;
-            quality = QualitySettings.GetQualityLevel();//PlayerPrefs.GetInt(VideoKey + 2);
-            if (quality > QualitySettings.names.Length)
-            {
-                quality = 0;
-                PlayerPrefs.SetInt(VideoKey + 2, quality);
-            }
+            quality = QualitySettings.GetQualityLevel();
         }
 
         void Update()
@@ -85,7 +81,9 @@ namespace Assets.Scripts.Menus
             QualitySettings.SetQualityLevel(quality);
             PlayerPrefs.SetInt(VideoKey + 0, resIndex);
             PlayerPrefs.SetInt(VideoKey + 1, fullscreen ? 1 : 0);
-            PlayerPrefs.SetInt(VideoKey + 2, quality);
+            Data.AspectRatio = (float)Screen.width / Screen.height;
+            PlayerPrefs.SetFloat(VideoKey + 2, Data.AspectRatio);
+            FindObjectOfType<Camera>().aspect = Data.AspectRatio;
         }
 
         void OnGUI()

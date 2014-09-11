@@ -3,12 +3,17 @@ using System.Collections;
 
 namespace Assets.Scripts
 {
-    class BGM : MonoBehaviour
+    class SoundPlayer : MonoBehaviour
     {
         public AudioClip song;
+        public bool SFX;
+        public bool playOnLoad;
+        public bool loop;
 
         void Start()
         {
+            if (playOnLoad)
+                PlaySong();
         }
 
         void Update()
@@ -18,8 +23,11 @@ namespace Assets.Scripts
         public void PlaySong()
         {
             audio.Stop();
-            audio.volume = Data.MusicVol;
-            audio.loop = true;
+            if (SFX)
+                audio.volume = Data.SfxVol;
+            else
+                audio.volume = Data.MusicVol;
+            audio.loop = loop;
             audio.clip = song;
             audio.Play();
         }
