@@ -1,1 +1,1 @@
-C# code for the Unity game Slash. It is a work in progress.
+C# code for the Unity game Ø (pronounced as Zero).
