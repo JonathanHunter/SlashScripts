@@ -5,52 +5,38 @@ using System.Text;
 
 namespace Assets.Scripts.Menus
 {
-    class PauseMenuStateMachine
+    class GameOverStateMachine
     {
         public enum State
         {
-            Wait, Resume, Exit
+            Continue, Exit
         }
         private delegate State machine();
         private machine[] getNextState;
         private State currState;
 
-        public PauseMenuStateMachine()
+        public GameOverStateMachine()
         {
-            currState = State.Wait;
-            getNextState = new machine[] { Wait, Resume, Exit };
+            currState = State.Continue;
+            getNextState = new machine[] { Continue, Exit };
         }
 
         public State update()
         {
             return currState = getNextState[((int)currState)]();
         }
-        private static State Wait()
-        {
-            if (CustomInput.PauseUp && !Data.Paused)
-            {
-                Data.Paused = true;
-                return State.Resume;
-            }
-            return State.Wait;
-        }
-        private static State Resume()
+
+        private static State Continue()
         {
             if (CustomInput.UpUp || CustomInput.DownUp)
                 return State.Exit;
-            return State.Resume;
+            return State.Continue;
         }
         private static State Exit()
         {
             if (CustomInput.UpUp || CustomInput.DownUp)
-                return State.Resume;
+                return State.Continue;
             return State.Exit;
-        }
-
-        public void UnPause()
-        {
-            currState = State.Wait;
-            Data.Paused = false;
         }
     }
 }

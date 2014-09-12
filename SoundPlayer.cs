@@ -5,7 +5,7 @@ namespace Assets.Scripts
 {
     class SoundPlayer : MonoBehaviour
     {
-        public AudioClip song;
+        public AudioClip[] song;
         public bool SFX;
         public bool playOnLoad;
         public bool loop;
@@ -13,14 +13,14 @@ namespace Assets.Scripts
         void Start()
         {
             if (playOnLoad)
-                PlaySong();
+                PlaySong(0);
         }
 
         void Update()
         {
         }
 
-        public void PlaySong()
+        public void PlaySong(int index)
         {
             audio.Stop();
             if (SFX)
@@ -28,7 +28,7 @@ namespace Assets.Scripts
             else
                 audio.volume = Data.MusicVol;
             audio.loop = loop;
-            audio.clip = song;
+            audio.clip = song[index];
             audio.Play();
         }
 

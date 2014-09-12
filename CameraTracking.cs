@@ -14,6 +14,8 @@ namespace Assets.Scripts
         void Start()
         {
             camera.aspect = Data.AspectRatio;
+            if (Data.AspectRatio == 0)
+                camera.ResetAspect();
         }
 
         void Update()

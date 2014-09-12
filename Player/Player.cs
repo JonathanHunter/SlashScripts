@@ -6,7 +6,7 @@ namespace Assets.Scripts.Player
 {
     class Player : MonoBehaviour
     {
-        public const int MAX_HEALTH = 100;
+        public int MAX_HEALTH = 10;
         public const int MOVE_SPEED = 4;
         public const int JUMP_SPEED = 4;
         public const float MAX_JUMP_SPEED = 5f;
@@ -14,8 +14,10 @@ namespace Assets.Scripts.Player
         public const float MAX_RUN_SPEED = 5f;
         public const float MAX_DASH_SPEED = 10f;
         public const float GRAVITY = 2f;
+        public const float INVUNERABILITY_TIME = 1f;
 
         public GameObject AttackPrefab;
+        public GameObject GameOverScreen;
         public Transform backFoot;
         public Transform frontFoot;
         public Transform head;
@@ -32,6 +34,7 @@ namespace Assets.Scripts.Player
         private static bool WallOnleft = false;
         private static Transform pos;
         private static float fallSpeed = MAX_FALL_SPEED;
+        private static bool hitFromLeft = false;
 
         public int Health
         {
@@ -43,6 +46,9 @@ namespace Assets.Scripts.Player
         private PlayerStateMachine machine;
         private delegate void state();
         private state[] doState;
+        private bool hit;
+        private bool render = true;
+        private float invulerability = 0;
 
 
         void Start()
@@ -54,7 +60,7 @@ namespace Assets.Scripts.Player
             pos = this.gameObject.transform;
             doState = new state[] { Idle, 
             Attacking, MovingAttack, InAirAttack, Move, 
-            Dashing, Jumping, InAirNow, OnWall, WallJump };
+            Dashing, Jumping, InAirNow, OnWall, WallJump, Hit };
             attackPrefab = AttackPrefab;
         }
 
@@ -62,6 +68,14 @@ namespace Assets.Scripts.Player
         {
             if (!Data.Paused)
             {
+                if (coll.collider.tag == "Enemy")
+                {
+                    hit = true;
+                    if (coll.gameObject.transform.position.x < this.gameObject.transform.position.x)
+                        hitFromLeft = true;
+                    else
+                        hitFromLeft = false;
+                }
             }
         }
 
@@ -69,16 +83,42 @@ namespace Assets.Scripts.Player
         {
             if (!Data.Paused)
             {
+                rigidbody2D.velocity = new Vector2();
+                bool inAir=false, nextToClimableWall=false;
+                TouchingSomething(ref inAir, ref nextToClimableWall);
+                if (invulerability > 0)
+                {
+                    render = !render;
+                    renderer.enabled = render;
+                    hit = false;
+                    invulerability -= Time.deltaTime;
+                }
+                else
+                    renderer.enabled = true;
                 if (alteredGravity)
                 {
                     fallSpeed = MAX_FALL_SPEED;
                     alteredGravity = false;
                 }
-                bool inAir = !(Physics2D.Raycast(backFoot.position, -Vector2.up, 0.05f) || Physics2D.Raycast(frontFoot.position, -Vector2.up, 0.05f));
-                int state = (int)machine.update(inAir, nextToClimableWall(), anim);
+                int state = (int)machine.update(inAir, nextToClimableWall, hit, anim);
                 doState[state]();
-                if(!inAir)
-                    IsSomethingInTheWay();
+                if (hit)
+                {
+                    health--;
+                    if (health < 1)
+                    {
+                        renderer.enabled = true;
+                        Data.Paused = true;
+                        GetComponent<SoundPlayer>().PlaySong(1);
+                        Instantiate(GameOverScreen);
+                    }
+                    else
+                        GetComponent<SoundPlayer>().PlaySong(0);
+                    xVel = 0;
+                    yVel = 0;
+                    invulerability = INVUNERABILITY_TIME;
+                    hit = false;
+                }
                 MoveManually(inAir);
                 LeftRight();
                 if (attack != null &&
@@ -90,29 +130,29 @@ namespace Assets.Scripts.Player
                 }
             }
         }
-        private bool nextToClimableWall()
+        private void TouchingSomething(ref bool inAir, ref bool nextToClimableWall)
         {
-            RaycastHit2D a;
-            if (FacingLeft)
-                a = Physics2D.Raycast(right.position, -Vector2.right, 0.05f);
-            else
-                a = Physics2D.Raycast(right.position, Vector2.right, 0.05f);
-            if (a == null || a.collider == null)
-                return false;
-            else
-            {
-                WallOnleft = a.collider.gameObject.transform.position.x < this.gameObject.transform.position.x;
-                return a.collider.tag.Equals("Ground");
-            }
-        }
-        private void IsSomethingInTheWay()
-        {
-            if (FacingLeft && Physics2D.Raycast(right.position, -Vector2.right, 0.05f))
-                xVel = 0;
-            else if (Physics2D.Raycast(right.position, Vector2.right, 0.05f))
-                xVel = 0;
+            inAir = !(Physics2D.Raycast(backFoot.position, -Vector2.up, 0.05f) || Physics2D.Raycast(frontFoot.position, -Vector2.up, 0.05f));
             if (Physics2D.Raycast(head.position, Vector2.up, 0.05f))
                 yVel = 0;
+            RaycastHit2D ray;
+            if (FacingLeft)
+                ray = Physics2D.Raycast(right.position, -Vector2.right, 0.05f);
+            else
+                ray = Physics2D.Raycast(right.position, Vector2.right, 0.05f);
+            if (ray == null || ray.collider == null)
+                nextToClimableWall=false;
+            else
+            {
+                xVel = 0;
+                if (ray.collider.tag == "Enemy")
+                {
+                    hit = true;
+                    hitFromLeft = FacingLeft;
+                }
+                WallOnleft = ray.collider.gameObject.transform.position.x < this.gameObject.transform.position.x;
+                nextToClimableWall = ray.collider.tag.Equals("Ground");
+            }
         }
         private void MoveManually(bool inAir)
         {
@@ -136,10 +176,6 @@ namespace Assets.Scripts.Player
                         xVel = -MAX_RUN_SPEED;
                 }
             }
-            //this.transform.position = new Vector3(
-            //    this.transform.position.x + xVel * Time.deltaTime,
-            //    this.transform.position.y + yVel * Time.deltaTime,
-            //    this.transform.position.z);
             transform.Translate(new Vector3(xVel * Time.deltaTime, yVel * Time.deltaTime, 0));
             if (inAir)
             {
@@ -263,6 +299,15 @@ namespace Assets.Scripts.Player
                 xVel += MOVE_SPEED * .15f;
             else
                 xVel -= MOVE_SPEED * .15f;
+        }
+
+        private static void Hit()
+        {
+            yVel += JUMP_SPEED * .4f;
+            if (hitFromLeft)
+                xVel += MOVE_SPEED;
+            else
+                xVel -= MOVE_SPEED;
         }
     }
 }

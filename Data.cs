@@ -37,5 +37,12 @@ namespace Assets.Scripts
             get { return aspectRatio; }
             set { aspectRatio = value; }
         }
+
+        private static int level;
+        public static int Level
+        {
+            get { return level; }
+            set { level = value; }
+        }
     }
 }

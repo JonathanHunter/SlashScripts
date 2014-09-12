@@ -10,34 +10,35 @@ namespace Assets.Scripts.Player
         public enum State
         {
             Idle = 0, Attack, MovingAttack, InAirAttack,
-            Move, Dash, Jump, InAir, OnWall, WallJump
+            Move, Dash, Jump, InAir, OnWall, WallJump, Hit
         }
-        private delegate State machine(bool inAir, bool nextToWall);
+        private delegate State machine(bool inAir, bool nextToWall, bool hit);
         private machine[] getNextState;
         private State currState;
+        private static float hold = 0;
         private static AnimationHandler animHandler;
 
         public PlayerStateMachine()
         {
             currState = State.Idle;
-            animHandler = new AnimationHandler(1, 4, 5, 4, 6, 6, 2, 1, 1, 2);
+            animHandler = new AnimationHandler(1, 4, 5, 4, 6, 6, 2, 1, 1, 2, 1);
             animHandler.frameRate = 10;
             getNextState = new machine[] { Idle, 
             Attacking, MovingAttack, InAirAttack, Move,
-            Dashing, Jumping, InAirNow, OnWall, WallJump };
+            Dashing, Jumping, InAirNow, OnWall, WallJump, Hit };
         }
 
-        public State update(bool inAir, bool nextToWall, UnityEngine.Animator anim)
+        public State update(bool inAir, bool nextToWall, bool hit, UnityEngine.Animator anim)
         {
-            runMachine(inAir, nextToWall);
+            runMachine(inAir, nextToWall, hit);
             animHandler.stepAnimation((int)currState, anim);
             return currState;
         }
 
-        private void runMachine(bool inAir, bool nextToWall)
+        private void runMachine(bool inAir, bool nextToWall, bool hit)
         {
             State prev = currState;
-            currState = getNextState[((int)currState)](inAir, nextToWall);
+            currState = getNextState[((int)currState)](inAir, nextToWall, hit);
             if (prev != currState)
                 animHandler.resetFrame();
         }
@@ -47,8 +48,10 @@ namespace Assets.Scripts.Player
             return animHandler.isDone((int)currState);
         }
 
-        private static State Idle(bool inAir, bool nextToWall)
+        private static State Idle(bool inAir, bool nextToWall, bool hit)
         {
+            if (hit)
+                return State.Hit; ;
             if (inAir)
                 return State.InAir;
             if (CustomInput.AttackFreshPress)
@@ -61,14 +64,18 @@ namespace Assets.Scripts.Player
                 return State.Move;
             return State.Idle;
         }
-        private static State Attacking(bool inAir, bool nextToWall)
+        private static State Attacking(bool inAir, bool nextToWall, bool hit)
         {
+            if (hit)
+                return State.Hit;
             if (isDone(State.Attack))
                 return State.Idle;
             return State.Attack;
         }
-        private static State MovingAttack(bool inAir, bool nextToWall)
+        private static State MovingAttack(bool inAir, bool nextToWall, bool hit)
         {
+            if (hit)
+                return State.Hit;
             if (isDone(State.MovingAttack))
             {
                 if (CustomInput.Left || CustomInput.Right)
@@ -81,8 +88,10 @@ namespace Assets.Scripts.Player
             }
             return State.MovingAttack;
         }
-        private static State InAirAttack(bool inAir, bool nextToWall)
+        private static State InAirAttack(bool inAir, bool nextToWall, bool hit)
         {
+            if (hit)
+                return State.Hit;
             if (isDone(State.InAirAttack))
             {
                 if (nextToWall && (CustomInput.Left || CustomInput.Right))
@@ -93,8 +102,10 @@ namespace Assets.Scripts.Player
             }
             return State.InAirAttack;
         }
-        private static State Move(bool inAir, bool nextToWall)
+        private static State Move(bool inAir, bool nextToWall, bool hit)
         {
+            if (hit)
+                return State.Hit;
             if (CustomInput.Left || CustomInput.Right)
             {
                 if (inAir)
@@ -109,8 +120,10 @@ namespace Assets.Scripts.Player
             }
             return State.Idle;
         }
-        private static State Dashing(bool inAir, bool nextToWall)
+        private static State Dashing(bool inAir, bool nextToWall, bool hit)
         {
+            if (hit)
+                return State.Hit;
             if (isDone(State.Dash))
             {
                 if (inAir)
@@ -131,8 +144,10 @@ namespace Assets.Scripts.Player
                 return State.Jump;
             return State.Dash;
         }
-        private static State Jumping(bool inAir, bool nextToWall)
+        private static State Jumping(bool inAir, bool nextToWall, bool hit)
         {
+            if (hit)
+                return State.Hit;
             if (isDone(State.Jump) || !CustomInput.Jump)
             {
                 if (nextToWall && (CustomInput.Left || CustomInput.Right))
@@ -143,8 +158,10 @@ namespace Assets.Scripts.Player
             }
             return State.Jump;
         }
-        private static State InAirNow(bool inAir, bool nextToWall)
+        private static State InAirNow(bool inAir, bool nextToWall, bool hit)
         {
+            if (hit)
+                return State.Hit;
             if (nextToWall && (CustomInput.Left || CustomInput.Right))
                 return State.OnWall;
             if (CustomInput.AttackFreshPress)
@@ -161,8 +178,10 @@ namespace Assets.Scripts.Player
             }
             return State.InAir;
         }
-        private static State OnWall(bool inAir, bool nextToWall)
+        private static State OnWall(bool inAir, bool nextToWall, bool hit)
         {
+            if (hit)
+                return State.Hit;
             if (CustomInput.JumpFreshPress)
                 return State.WallJump;
             if (!nextToWall || (!CustomInput.Left && !CustomInput.Right))
@@ -184,8 +203,10 @@ namespace Assets.Scripts.Player
                 return State.Idle;
             return State.OnWall;
         }
-        private static State WallJump(bool inAir, bool nextToWall)
+        private static State WallJump(bool inAir, bool nextToWall, bool hit)
         {
+            if (hit)
+                return State.Hit;
             if (isDone(State.WallJump) || !CustomInput.Jump)
                 {
                 if (nextToWall)
@@ -195,6 +216,17 @@ namespace Assets.Scripts.Player
                 return State.InAir;
             }
             return State.WallJump;
+        }
+
+        private static State Hit(bool inAir, bool nextToWall, bool hit)
+        {
+            hold += UnityEngine.Time.deltaTime;
+            if (hold > .2f)
+            {
+                hold = 0;
+                return State.Idle;
+            }
+            return State.Hit;
         }
     }
 }

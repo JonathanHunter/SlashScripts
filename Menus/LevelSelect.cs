@@ -12,6 +12,7 @@ namespace Assets.Scripts.Menus
         }
         void Update()
         {
+            Data.Level = 1;
             Application.LoadLevel("Level 1");
         }
         void OnGUI()

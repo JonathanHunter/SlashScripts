@@ -44,6 +44,7 @@ namespace Assets.Scripts.Menus
                 Data.AspectRatio=PlayerPrefs.GetFloat(VideoGUI.VideoKey + 2);
             else
                 Data.AspectRatio = FindObjectOfType<Camera>().aspect;
+            FindObjectOfType<SoundPlayer>().PlaySong(0);
         }
 
         void Update()
