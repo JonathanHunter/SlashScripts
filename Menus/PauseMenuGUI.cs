@@ -24,7 +24,10 @@ namespace Assets.Scripts.Menus
                 if (currState == (int)PauseMenuStateMachine.State.Resume)
                     machine.UnPause();
                 if (currState == (int)PauseMenuStateMachine.State.Exit)
+                {
+                    Data.Paused = false;
                     Application.LoadLevel("Main Menu");
+                }
             }
             if (CustomInput.CancelUp && currState != (int)PauseMenuStateMachine.State.Wait) 
                 machine.UnPause();

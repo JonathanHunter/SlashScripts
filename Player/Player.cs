@@ -133,8 +133,6 @@ namespace Assets.Scripts.Player
         private void TouchingSomething(ref bool inAir, ref bool nextToClimableWall)
         {
             inAir = !(Physics2D.Raycast(backFoot.position, -Vector2.up, 0.05f) || Physics2D.Raycast(frontFoot.position, -Vector2.up, 0.05f));
-            if (Physics2D.Raycast(head.position, Vector2.up, 0.05f))
-                yVel = 0;
             RaycastHit2D ray;
             if (FacingLeft)
                 ray = Physics2D.Raycast(right.position, -Vector2.right, 0.05f);

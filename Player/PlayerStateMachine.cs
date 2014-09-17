@@ -208,7 +208,7 @@ namespace Assets.Scripts.Player
             if (hit)
                 return State.Hit;
             if (isDone(State.WallJump) || !CustomInput.Jump)
-                {
+            {
                 if (nextToWall)
                     return State.OnWall;
                 if (CustomInput.AttackFreshPress)

@@ -53,7 +53,8 @@ namespace Assets.Scripts.Enemies
         }
         private State Hit(bool beingHit, bool shouldTurn)
         {
-            if (hold++ > 5)
+            hold += UnityEngine.Time.deltaTime;
+            if (hold > .2f)
             {
                 hold = 0;
                 return State.Idle;
