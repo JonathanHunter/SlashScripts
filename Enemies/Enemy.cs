@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Assets.Scripts.Enemies
 {
-    abstract class Enemycs : MonoBehaviour
+    abstract class Enemy : MonoBehaviour
     {
         public GameObject explosion;
         public Transform backFoot;
@@ -12,11 +12,12 @@ namespace Assets.Scripts.Enemies
         public int maxHealth = 10;
         public int frameRate = 9;
 
+        protected int damage = 0;
+
         private EnemyStateMachine machine;
         private Animator anim;
         private bool beingHit;
         private int health;
-        private int damage = 0;
 
 
         void Start()
@@ -25,14 +26,12 @@ namespace Assets.Scripts.Enemies
             machine = getStateMachine(frameRate);
             anim = this.gameObject.GetComponent<Animator>();
             beingHit = false;
+            Initialize();
         }
 
         protected abstract EnemyStateMachine getStateMachine(int frameRate);
 
-        protected void Initialize()
-        {
-
-        }
+        protected abstract void Initialize();
 
         void OnCollisionEnter2D(Collision2D coll)
         {

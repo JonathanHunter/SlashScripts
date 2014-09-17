@@ -5,42 +5,31 @@ using System.Text;
 
 namespace Assets.Scripts.Enemies
 {
-    class BasicEnemyStateMachine
+    class BasicEnemyStateMachine : EnemyStateMachine
     {
         public enum State
         {
             Idle = 0, Hit, Walk, Turn
         };
-        private State currState;
-        private AnimationHandler animHandler;
         private double hold;
 
-        public BasicEnemyStateMachine()
+        public BasicEnemyStateMachine(int frameRate) : base(frameRate) { }
+
+        protected override int[] Initialize()
         {
-            currState = State.Idle;
-            animHandler = new AnimationHandler(1, 1, 2, 1);
-            animHandler.frameRate = 9;
+            return new int[] { 1, 1, 2, 1 };
         }
 
-        public State update(bool beingHit, bool shouldTurn, UnityEngine.Animator anim)
+        protected override int StateMachine(int currState, bool beingHit, bool[] flags)
         {
-            runMachine(beingHit, shouldTurn);
-            animHandler.stepAnimation((int)currState, anim);
-            return currState;
-        }
-
-        private void runMachine(bool beingHit, bool shouldTurn)
-        {
-            State prev = currState;
             switch (currState)
             {
-                case State.Idle: currState = Idle(beingHit, shouldTurn); break;
-                case State.Hit: currState = Hit(beingHit, shouldTurn); break;
-                case State.Walk: currState = Walk(beingHit, shouldTurn); break;
-                case State.Turn: currState = Turn(beingHit, shouldTurn); break;    
+                case (int)State.Idle: currState = (int)Idle(beingHit, flags[0]); break;
+                case (int)State.Hit: currState = (int)Hit(beingHit, flags[0]); break;
+                case (int)State.Walk: currState = (int)Walk(beingHit, flags[0]); break;
+                case (int)State.Turn: currState = (int)Turn(beingHit, flags[0]); break;
             }
-            if (prev != currState)
-                animHandler.resetFrame();
+            return currState;
         }
 
         private State Idle(bool beingHit, bool shouldTurn)

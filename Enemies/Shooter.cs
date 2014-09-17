@@ -3,128 +3,69 @@ using System.Collections;
 
 namespace Assets.Scripts.Enemies
 {
-    class Shooter : MonoBehaviour
+    class Shooter : Enemy
     {
-        public int MAX_HEALTH = 10;
-        public GameObject explosion;
-        public float detected, close;
-        public int numOfShots;
-        public Transform backFoot;
-        public Transform frontFoot;
-        public Transform right;
-        public Transform gunPos;
         public GameObject Shot;
+        public Transform gunPos;
+        public int numOfShots;
+        public float detected;
+        public float close;
         public float shotTime;
 
-        private bool doOnce = false;
-        private int damage = 0;
-        private int shots = 0;
-        private int health;
-        private Animator anim;
-        private bool beingHit;
-        private ShooterStateMachine machine;
-        private int prevState = 0;
         private Transform player;
+        private int shots = 0;
+        private int prevState = 0;
         private float wait = 0;
+        private bool doOnce = false;
 
-
-        void Start()
+        protected override EnemyStateMachine getStateMachine(int frameRate)
         {
-            Physics2D.IgnoreLayerCollision(8, 9);
-            health = MAX_HEALTH;
-            machine = new ShooterStateMachine();
-            anim = this.gameObject.GetComponent<Animator>();
-            beingHit = false;
+            return new ShooterStateMachine(frameRate);
+        }
+
+        protected override void Initialize()
+        {
             Player.Player temp = FindObjectOfType<Player.Player>();
             if (temp == null)
                 Destroy(this.gameObject);
             player = temp.gameObject.transform;
         }
 
-        void OnCollisionEnter2D(Collision2D coll)
+        protected override bool[] getFlags()
         {
-            if (!Data.Paused)
+            float dist = Mathf.Abs(player.position.x - this.gameObject.transform.position.x);
+            bool playerDetected = dist < detected;
+            bool playerClose = dist < close;
+            bool doneFiring = shots >= numOfShots;
+            if (doneFiring)
+                shots = 0;
+            bool blocked = false;
+            bool inAir = false;
+            TouchingSomething(ref inAir, ref blocked);
+            return new bool[] { playerDetected, playerClose, blocked, doneFiring, inAir };
+        }
+
+        protected override void RunBehavior(int state)
+        {
+            if (state != prevState)
             {
-                if (coll.gameObject.tag == "PlayerAttack")
-                    beingHit = true;
+                doOnce = false;
+                prevState = state;
             }
-        }
-
-        void Update()
-        {
-            if (!Data.Paused)
+            switch (state)
             {
-                float dist=Mathf.Abs(player.position.x-this.gameObject.transform.position.x);
-                bool playerDetected = dist < detected;
-                bool playerClose = dist < close;
-                bool doneFiring = shots >= numOfShots;
-                if (doneFiring)
-                    shots = 0;
-                bool blocked=false;
-                bool inAir=false;
-                TouchingSomething(ref inAir, ref blocked);
-                int state = (int)machine.update(beingHit, playerDetected, playerClose, doneFiring, blocked, inAir, anim);
-                if (state != prevState)
-                {
-                    doOnce = false;
-                    prevState = state;
-                }
-                switch (state)
-                {
-                    case (int)ShooterStateMachine.State.Idle: Idle(); break;
-                    case (int)ShooterStateMachine.State.Hit: Hit(); break;
-                    case (int)ShooterStateMachine.State.Walk: Walk(transform); break;
-                    case (int)ShooterStateMachine.State.Jump: Jump(); break;
-                    case (int)ShooterStateMachine.State.InAir: InAir(); break;
-                    case (int)ShooterStateMachine.State.Shoot: Shoot(); break;    
-                }
-                if (player.position.x > this.transform.position.x)
-                    faceRight();
-                else
-                    faceLeft();
-                if (beingHit)
-                    beingHit = false;
-                health -= damage;
-                if (damage > 0)
-                    damage = 0;
-                if (health <= 0 && state != (int)BasicEnemyStateMachine.State.Hit)
-                {
-                    ((GameObject)Instantiate(explosion)).GetComponent<Explosion>().MoveToPosition(this.transform);
-                    Destroy(this.gameObject);
-                }
+                case (int)ShooterStateMachine.State.Idle: Idle(); break;
+                case (int)ShooterStateMachine.State.Hit: Hit(); break;
+                case (int)ShooterStateMachine.State.Walk: Walk(transform); break;
+                case (int)ShooterStateMachine.State.Jump: Jump(); break;
+                case (int)ShooterStateMachine.State.InAir: InAir(); break;
+                case (int)ShooterStateMachine.State.Shoot: Shoot(); break;
             }
-        }
-        private void TouchingSomething(ref bool inAir, ref bool blocked)
-        {
-            inAir = !(Physics2D.Raycast(backFoot.position, -Vector2.up, 0.05f) || Physics2D.Raycast(frontFoot.position, -Vector2.up, 0.05f));
-            RaycastHit2D ray;
-            if (this.transform.localScale.x>0)
-                ray = Physics2D.Raycast(right.position, -Vector2.right, 0.05f);
+            if (player.position.x > this.transform.position.x)
+                faceRight();
             else
-                ray = Physics2D.Raycast(right.position, Vector2.right, 0.05f);
-            if (ray == null || ray.collider == null)
-                blocked = false;
-            else
-                blocked = ray.collider.tag.Equals("Ground");
+                faceLeft();
         }
-
-        protected void faceLeft()
-        {
-            this.transform.localScale = new Vector3(Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
-        }
-        protected void faceRight()
-        {
-            this.transform.localScale = new Vector3(-Mathf.Abs(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
-        }
-        protected void turn()
-        {
-            this.transform.localScale = new Vector3(-(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
-        }
-        protected Vector2 getForward()
-        {
-            return new Vector2(-Mathf.Sign(this.transform.localScale.x), 0);
-        }
-
 
         private void Idle()
         {

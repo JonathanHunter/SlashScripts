@@ -5,44 +5,33 @@ using System.Text;
 
 namespace Assets.Scripts.Enemies
 {
-    class ShooterStateMachine
+    class ShooterStateMachine : EnemyStateMachine
     {
         public enum State
         {
             Idle = 0, Hit, Walk, Jump, InAir, Shoot
         };
-        private State currState;
-        private AnimationHandler animHandler;
         private double hold;
 
-        public ShooterStateMachine()
+        public ShooterStateMachine(int frameRate) : base(frameRate) { }
+
+        protected override int[] Initialize()
         {
-            currState = State.Idle;
-            animHandler = new AnimationHandler(1, 1, 2, 2, 1, 1);
-            animHandler.frameRate = 9;
+            return new int[] { 1, 1, 2, 2, 1, 1 };
         }
 
-        public State update(bool beingHit, bool playerDetected, bool playerClose, bool doneFiring, bool blocked, bool inAir, UnityEngine.Animator anim)
+        protected override int StateMachine(int currState, bool beingHit, bool[] flags)
         {
-            runMachine(beingHit, playerDetected, playerClose, doneFiring, blocked, inAir);
-            animHandler.stepAnimation((int)currState, anim);
-            return currState;
-        }
-
-        private void runMachine(bool beingHit, bool playerDetected, bool playerClose, bool doneFiring, bool blocked, bool inAir)
-        {
-            State prev = currState;
             switch (currState)
             {
-                case State.Idle: currState = Idle(beingHit, playerDetected, inAir); break;
-                case State.Hit: currState = Hit(inAir); break;
-                case State.Walk: currState = Walk(beingHit, playerDetected, playerClose, blocked, inAir); break;
-                case State.Jump: currState = Jump(beingHit); break;
-                case State.InAir: currState = InAir(beingHit, inAir); break;
-                case State.Shoot: currState = Shoot(beingHit, doneFiring); break;    
+                case (int)State.Idle: currState = (int)Idle(beingHit, flags[0], flags[4]); break;
+                case (int)State.Hit: currState = (int)Hit(flags[4]); break;
+                case (int)State.Walk: currState = (int)Walk(beingHit, flags[0], flags[1], flags[2], flags[4]); break;
+                case (int)State.Jump: currState = (int)Jump(beingHit); break;
+                case (int)State.InAir: currState = (int)InAir(beingHit, flags[4]); break;
+                case (int)State.Shoot: currState = (int)Shoot(beingHit, flags[3]); break;    
             }
-            if (prev != currState)
-                animHandler.resetFrame();
+            return currState;
         }
 
         private State Idle(bool beingHit, bool playerDetected, bool inAir)

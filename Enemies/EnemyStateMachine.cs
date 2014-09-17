@@ -10,12 +10,14 @@ namespace Assets.Scripts.Enemies
         protected int currState;
         protected AnimationHandler animHandler;
 
-        public EnemyStateMachine(int frameRate)
+        protected EnemyStateMachine(int frameRate)
         {
             currState = 0;
             animHandler = new AnimationHandler(Initialize());
             animHandler.frameRate = frameRate;
+            Initialize();
         }
+
         protected abstract int[] Initialize();
 
         public int update(UnityEngine.Animator anim, bool beingHit, bool[] flags)
