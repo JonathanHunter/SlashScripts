@@ -7,7 +7,7 @@ namespace Assets.Scripts.Enemies
 {
     abstract class EnemyStateMachine
     {
-        protected int currState;
+        private int currState;
         protected AnimationHandler animHandler;
 
         protected EnemyStateMachine(int frameRate)

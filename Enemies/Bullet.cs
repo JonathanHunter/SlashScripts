@@ -22,7 +22,10 @@ namespace Assets.Scripts.Enemies
 
         void Update()
         {
-            transform.Translate(dir * speed * Time.deltaTime);
+            if (!Data.Paused)
+            {
+                transform.Translate(dir * speed * Time.deltaTime);
+            }
         }
     }
 }

@@ -40,10 +40,10 @@ namespace Assets.Scripts.Menus
                 Data.MusicVol = 1;
                 Data.SfxVol = 1;
             }
-            if (PlayerPrefs.HasKey(VideoGUI.VideoKey + 2))
-                Data.AspectRatio=PlayerPrefs.GetFloat(VideoGUI.VideoKey + 2);
-            else
-                Data.AspectRatio = FindObjectOfType<Camera>().aspect;
+            //if (PlayerPrefs.HasKey(VideoGUI.VideoKey + 2))
+            //    Data.AspectRatio=PlayerPrefs.GetFloat(VideoGUI.VideoKey + 2);
+            //else
+            //    Data.AspectRatio = FindObjectOfType<Camera>().aspect;
             FindObjectOfType<SoundPlayer>().PlaySong(0);
         }
 

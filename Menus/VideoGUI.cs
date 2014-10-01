@@ -81,9 +81,9 @@ namespace Assets.Scripts.Menus
             QualitySettings.SetQualityLevel(quality);
             PlayerPrefs.SetInt(VideoKey + 0, resIndex);
             PlayerPrefs.SetInt(VideoKey + 1, fullscreen ? 1 : 0);
-            Data.AspectRatio = (float)Screen.width / Screen.height;
-            PlayerPrefs.SetFloat(VideoKey + 2, Data.AspectRatio);
-            FindObjectOfType<Camera>().aspect = Data.AspectRatio;
+            //Data.AspectRatio = (float)Screen.width / Screen.height;
+            //PlayerPrefs.SetFloat(VideoKey + 2, Data.AspectRatio);
+            //FindObjectOfType<Camera>().aspect = Data.AspectRatio;
         }
 
         void OnGUI()

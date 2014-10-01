@@ -13,9 +13,9 @@ namespace Assets.Scripts
 
         void Start()
         {
-            camera.aspect = Data.AspectRatio;
-            if (Data.AspectRatio == 0)
-                camera.ResetAspect();
+            //camera.aspect = Data.AspectRatio;
+            //if (Data.AspectRatio == 0)
+            //    camera.ResetAspect();
         }
 
         void Update()
@@ -35,13 +35,13 @@ namespace Assets.Scripts
 
             if (player.position.y > lowerBound.transform.position.y && player.position.y < upperBound.position.y)
                 this.transform.position = Vector3.MoveTowards(this.transform.position,
-                    new Vector3(this.transform.position.x, player.position.y + 1, this.transform.position.z), speed);
+                    new Vector3(this.transform.position.x, player.position.y + 1.5f, this.transform.position.z), speed);
             else if (player.position.y < lowerBound.transform.position.y)
                 this.transform.position = Vector3.MoveTowards(this.transform.position,
-                    new Vector3(this.transform.position.x, lowerBound.position.y + 1, this.transform.position.z), speed);
+                    new Vector3(this.transform.position.x, lowerBound.position.y + 1.5f, this.transform.position.z), speed);
             else
                 this.transform.position = Vector3.MoveTowards(this.transform.position,
-                    new Vector3(this.transform.position.x, upperBound.position.y + 1, this.transform.position.z), speed);
+                    new Vector3(this.transform.position.x, upperBound.position.y + 1.5f, this.transform.position.z), speed);
         }
     }
 }

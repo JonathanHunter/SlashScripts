@@ -56,7 +56,7 @@ namespace Assets.Scripts.Enemies
             {
                 case (int)ShooterStateMachine.State.Idle: Idle(); break;
                 case (int)ShooterStateMachine.State.Hit: Hit(); break;
-                case (int)ShooterStateMachine.State.Walk: Walk(transform); break;
+                case (int)ShooterStateMachine.State.Walk: Walk(); break;
                 case (int)ShooterStateMachine.State.Jump: Jump(); break;
                 case (int)ShooterStateMachine.State.InAir: InAir(); break;
                 case (int)ShooterStateMachine.State.Shoot: Shoot(); break;
@@ -78,7 +78,7 @@ namespace Assets.Scripts.Enemies
                 doOnce = true;
             }
         }
-        private void Walk(Transform transform)
+        private void Walk()
         {
             transform.Translate(getForward() * Time.deltaTime);
         }

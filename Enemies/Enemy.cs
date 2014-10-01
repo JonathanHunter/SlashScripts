@@ -13,10 +13,10 @@ namespace Assets.Scripts.Enemies
         public int frameRate = 9;
 
         protected int damage = 0;
+        protected bool beingHit;
 
         private EnemyStateMachine machine;
         private Animator anim;
-        private bool beingHit;
         private int health;
 
 

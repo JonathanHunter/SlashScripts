@@ -31,12 +31,12 @@ namespace Assets.Scripts
             set { paused = value; }
         }
 
-        private static float aspectRatio;
-        public static float AspectRatio
-        {
-            get { return aspectRatio; }
-            set { aspectRatio = value; }
-        }
+        //private static float aspectRatio;
+        //public static float AspectRatio
+        //{
+        //    get { return aspectRatio; }
+        //    set { aspectRatio = value; }
+        //}
 
         private static int level;
         public static int Level

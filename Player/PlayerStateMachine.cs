@@ -18,11 +18,11 @@ namespace Assets.Scripts.Player
         private static float hold = 0;
         private static AnimationHandler animHandler;
 
-        public PlayerStateMachine()
+        public PlayerStateMachine(float frameRate)
         {
             currState = State.Idle;
-            animHandler = new AnimationHandler(1, 4, 5, 4, 6, 6, 2, 1, 1, 2, 1);
-            animHandler.frameRate = 10;
+            animHandler = new AnimationHandler(2, 9, 5, 4, 11, 3, 2, 1, 1, 2, 1);
+            animHandler.frameRate = frameRate;
             getNextState = new machine[] { Idle, 
             Attacking, MovingAttack, InAirAttack, Move,
             Dashing, Jumping, InAirNow, OnWall, WallJump, Hit };
