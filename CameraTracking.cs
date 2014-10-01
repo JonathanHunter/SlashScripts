@@ -5,7 +5,7 @@ namespace Assets.Scripts
 {
     class CameraTracking : MonoBehaviour
     {
-        public Transform player;
+        private Transform player;
         public Transform leftBound;
         public Transform rightBound;
         public Transform upperBound;
@@ -16,6 +16,7 @@ namespace Assets.Scripts
             //camera.aspect = Data.AspectRatio;
             //if (Data.AspectRatio == 0)
             //    camera.ResetAspect();
+            player = FindObjectOfType<Player.Player>().transform;
         }
 
         void Update()
