@@ -77,6 +77,11 @@ namespace Assets.Scripts.Player
                     else
                         hitFromLeft = false;
                 }
+                if (coll.collider.tag == "Pit")
+                {
+                    health = 0;
+                    hit = true;
+                }
             }
         }
 
@@ -85,7 +90,7 @@ namespace Assets.Scripts.Player
             if (!Data.Paused)
             {
                 rigidbody2D.velocity = new Vector2();
-                bool inAir=false, nextToClimableWall=false;
+                bool inAir = false, nextToClimableWall = false;
                 TouchingSomething(ref inAir, ref nextToClimableWall);
                 if (invulerability > 0)
                 {
@@ -136,13 +141,23 @@ namespace Assets.Scripts.Player
         private void TouchingSomething(ref bool inAir, ref bool nextToClimableWall)
         {
             inAir = !(Physics2D.Raycast(backFoot.position, -Vector2.up, 0.05f) || Physics2D.Raycast(frontFoot.position, -Vector2.up, 0.05f));
+            RaycastHit2D temp = Physics2D.Raycast(backFoot.position, -Vector2.up, 0.05f);
+            RaycastHit2D temp2 = Physics2D.Raycast(frontFoot.position, -Vector2.up, 0.05f);
+            if (temp != null && temp.collider != null && temp2 != null && temp2.collider != null)
+            {
+                if (temp.collider.tag == "Pit" || temp2.collider.tag == "Pit")
+                {
+                    hit = true;
+                    health = 0;
+                }
+            }
             RaycastHit2D ray;
             if (FacingLeft)
                 ray = Physics2D.Raycast(right.position, -Vector2.right, 0.05f);
             else
                 ray = Physics2D.Raycast(right.position, Vector2.right, 0.05f);
             if (ray == null || ray.collider == null)
-                nextToClimableWall=false;
+                nextToClimableWall = false;
             else
             {
                 if (ray.collider.tag == "Enemy")
@@ -200,12 +215,12 @@ namespace Assets.Scripts.Player
             if (CustomInput.Left)
             {
                 FacingLeft = true;
-                transform.localScale = new UnityEngine.Vector3(-2f, 2f, 1f);
+                transform.localScale = new UnityEngine.Vector3(-1f, 1f, 1f);
             }
             else if (CustomInput.Right)
             {
                 FacingLeft = false;
-                transform.localScale = new UnityEngine.Vector3(2f, 2f, 1f);
+                transform.localScale = new UnityEngine.Vector3(1f, 1f, 1f);
             }
         }
 
@@ -232,6 +247,7 @@ namespace Assets.Scripts.Player
                 attack = ((GameObject)Instantiate(attackPrefab));
                 attack.GetComponent<Attack>().setReference(pos);
             }
+            Move();
         }
         private static void InAirAttack()
         {

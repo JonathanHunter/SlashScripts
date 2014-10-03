@@ -17,16 +17,17 @@ namespace Assets.Scripts
 
         public void Transition(int index, Transform entry)
         {
+            Debug.Log(index);
             if (index >= sections.Length)
                 Application.LoadLevel(nextLevel);
             else
             {
                 if (section != null)
                     Destroy(section);
-                section = (GameObject)Instantiate(sections[index]);
                 GameObject temp = FindObjectOfType<Player.Player>().gameObject;
                 if(entry!=null)
-                    temp.transform.position = new Vector3(entry.position.x, temp.transform.position.y, temp.transform.position.z);
+                    temp.transform.position = new Vector3(entry.position.x, entry.transform.position.y, temp.transform.position.z);
+                section = (GameObject)Instantiate(sections[index]);
             }
         }
 

@@ -33,6 +33,9 @@ namespace Assets.Scripts
 
         public double stepAnimation(int currState, UnityEngine.Animator anim)
         {
+            anim.speed = frameRate * UnityEngine.Time.deltaTime;
+            if (Data.Paused)
+                anim.speed = 0;
             checkFrameOverFlow(currState);
             setAnimationFrame(anim, currState);
             incrementFrame();

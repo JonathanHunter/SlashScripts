@@ -21,7 +21,7 @@ namespace Assets.Scripts.Player
         public PlayerStateMachine(float frameRate)
         {
             currState = State.Idle;
-            animHandler = new AnimationHandler(2, 9, 5, 4, 11, 3, 2, 1, 1, 2, 1);
+            animHandler = new AnimationHandler(15, 6, 7, 7, 13, 9, 3, 9, 1, 2, 1);
             animHandler.frameRate = frameRate;
             getNextState = new machine[] { Idle, 
             Attacking, MovingAttack, InAirAttack, Move,
@@ -76,6 +76,8 @@ namespace Assets.Scripts.Player
         {
             if (hit)
                 return State.Hit;
+            if (!(CustomInput.Left || CustomInput.Right))
+                return State.Idle;
             if (isDone(State.MovingAttack))
             {
                 if (CustomInput.Left || CustomInput.Right)
@@ -92,12 +94,12 @@ namespace Assets.Scripts.Player
         {
             if (hit)
                 return State.Hit;
+            if (!inAir)
+                return State.Idle;
             if (isDone(State.InAirAttack))
             {
                 if (nextToWall && (CustomInput.Left || CustomInput.Right))
                     return State.OnWall;
-                if (!inAir)
-                    return State.Idle;
                 return State.InAir;
             }
             return State.InAirAttack;
@@ -148,12 +150,12 @@ namespace Assets.Scripts.Player
         {
             if (hit)
                 return State.Hit;
+            if (CustomInput.AttackFreshPress)
+                return State.InAirAttack;
             if (isDone(State.Jump) || !CustomInput.Jump)
             {
                 if (nextToWall && (CustomInput.Left || CustomInput.Right))
                     return State.OnWall;
-                if (CustomInput.AttackFreshPress)
-                    return State.InAirAttack;
                 return State.InAir;
             }
             return State.Jump;

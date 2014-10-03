@@ -17,19 +17,18 @@ namespace Assets.Scripts
             //if (Data.AspectRatio == 0)
             //    camera.ResetAspect();
             player = FindObjectOfType<Player.Player>().transform;
+            //transform.position = new Vector3(player.position.x, player.position.y, transform.position.z);
         }
 
         void Update()
         {
-            float speed = Time.deltaTime * ((Mathf.Ceil(Mathf.Abs(this.transform.position.x - player.position.x))) + 3);
+            float speed = Time.deltaTime * ((Mathf.Ceil(Mathf.Abs(this.transform.position.x - player.position.x))) + 5);
             if (player.position.x > leftBound.transform.position.x && player.position.x < rightBound.position.x)
                 this.transform.position = Vector3.MoveTowards(this.transform.position,
                     new Vector3(player.position.x, this.transform.position.y, this.transform.position.z), speed);
-
             else if (player.position.x < leftBound.transform.position.x)
                 this.transform.position = Vector3.MoveTowards(this.transform.position,
                     new Vector3(leftBound.position.x, this.transform.position.y, this.transform.position.z), speed);
-
             else
                 this.transform.position = Vector3.MoveTowards(this.transform.position,
                     new Vector3(rightBound.position.x, this.transform.position.y, this.transform.position.z), speed);
