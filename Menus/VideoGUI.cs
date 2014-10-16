@@ -15,11 +15,25 @@ namespace Assets.Scripts.Menus
         private VideoStateMachine machine;
         private delegate void state();
         internal static string VideoKey = "SlashVideo";
+        private Resolution[] res;
         void Start()
         {
             machine = new VideoStateMachine();
             resIndex = PlayerPrefs.GetInt(VideoKey + 0);
-            if (resIndex > Screen.resolutions.Length)
+            List<Resolution> temp = new List<Resolution>();
+            double num = 0;
+            foreach (Resolution r in Screen.resolutions)
+            {
+                num = r.width / 16.0;
+                if ((double)(r.height) / num - 9 < 1 && (double)(r.height) / num - 9 > -1)
+                {
+                    temp.Add(r);
+                }
+            }
+            if (temp.Count == 0)
+                temp.Add(Screen.resolutions[0]);
+            res = temp.ToArray();
+            if (resIndex >= res.Length)
             {
                 resIndex = 0;
                 PlayerPrefs.SetInt(VideoKey + 0, resIndex);
@@ -36,14 +50,14 @@ namespace Assets.Scripts.Menus
                 if (CustomInput.RightUp)
                 {
                     resIndex++;
-                    if (resIndex >= Screen.resolutions.Length)
+                    if (resIndex >= res.Length)
                         resIndex = 0;
                 }
                 else if (CustomInput.LeftUp)
                 {
                     resIndex--;
                     if (resIndex < 0)
-                        resIndex = Screen.resolutions.Length - 1;
+                        resIndex = res.Length - 1;
                 }
                 if (CustomInput.AcceptUp)
                     Accept();
@@ -74,8 +88,8 @@ namespace Assets.Scripts.Menus
         private void Accept()
         {
             Screen.SetResolution(
-                    Screen.resolutions[resIndex].width,
-                    Screen.resolutions[resIndex].height,
+                    res[resIndex].width,
+                    res[resIndex].height,
                     fullscreen);
             FindObjectOfType<Camera>().ResetAspect();
             QualitySettings.SetQualityLevel(quality);
@@ -99,10 +113,10 @@ namespace Assets.Scripts.Menus
         {
             //left, top, width, height
             if (GUI.Button(new Rect(Screen.width * (10f / 19f), Screen.height * (4.5f / 12f), Screen.width * (3f / 19f), Screen.height * (1f / 12f)),
-                Screen.resolutions[resIndex].width + "x" + Screen.resolutions[resIndex].height, LabelStyle))
+                res[resIndex].width + "x" + res[resIndex].height, LabelStyle))
             {
                 resIndex++;
-                if (resIndex >= Screen.resolutions.Length)
+                if (resIndex >= res.Length)
                     resIndex = 0;
             }
             fullscreen = GUI.Toggle(new Rect(Screen.width * (11f / 19f), Screen.height * (6f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), fullscreen,

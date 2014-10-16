@@ -29,7 +29,7 @@ namespace Assets.Scripts.Enemies
                 case (int)State.GetClose: currState = (int)GetClose(flags[0], flags[2]); break;
                 case (int)State.Punch: currState = (int)Punch(flags[2]); break;
                 case (int)State.JumpToWall: currState = (int)JumpToWall(flags[1]); break;
-                case (int)State.OnWall: currState = (int)OnWall(); break;
+                case (int)State.OnWall: currState = (int)OnWall(flags[1]); break;
                 case (int)State.WallAttack: currState = (int)WallAttack(); break;
                 case (int)State.InAir: currState = (int)InAir(flags[2]); break;
             }
@@ -78,8 +78,10 @@ namespace Assets.Scripts.Enemies
                 return State.OnWall;
             return State.JumpToWall;
         }
-        private State OnWall()
+        private State OnWall(bool onWall)
         {
+            if (!onWall)
+                return State.InAir;
             int rand = UnityEngine.Random.Range(0, 3);
             if (rand == 0)
                 return State.JumpToWall;

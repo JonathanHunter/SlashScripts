@@ -27,12 +27,13 @@ namespace Assets.Scripts.Enemies
                 if (shotCount == 3)
                     Destroy(this.gameObject);
                 shotTime += Time.deltaTime * frameRate;
-                if ((int)shotTime > shotCount )
+                if ((int)shotTime > shotCount)
                 {
                     GameObject b = ((GameObject)Instantiate(Bullet));
                     b.transform.position = bulletPos[shotCount].position;
                     b.transform.rotation = bulletPos[shotCount].rotation;
                     b.GetComponent<Bullet>().dir = dir;
+                    b.GetComponent<Bullet>().speed = 10;
                     shotCount++;
                 }
             }

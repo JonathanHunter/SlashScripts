@@ -25,7 +25,8 @@ namespace Assets.Scripts.Menus
                 if (cursor == (int)GameOverStateMachine.State.Continue)
                 {
                     Data.Paused = false;
-                    Application.LoadLevel(Data.Level);
+                    FindObjectOfType<Player.Player>().transform.position = Spawn.spawn.transform.position;
+                    Destroy(this.gameObject);
                 }
                 if (cursor == (int)GameOverStateMachine.State.Exit)
                 {

@@ -82,6 +82,13 @@ namespace Assets.Scripts.Player
                     health = 0;
                     hit = true;
                 }
+                if(coll.collider.tag == "Health")
+                {
+                    health += 2;
+                    if (health > MAX_HEALTH)
+                        health = MAX_HEALTH;
+                    Destroy(coll.gameObject);
+                }
             }
         }
 
@@ -117,6 +124,8 @@ namespace Assets.Scripts.Player
                         Data.Paused = true;
                         GetComponent<SoundPlayer>().PlaySong(1);
                         Instantiate(GameOverScreen);
+                        health = MAX_HEALTH;
+                        Data.PlayerDead = true;
                     }
                     else
                         GetComponent<SoundPlayer>().PlaySong(0);
@@ -140,17 +149,28 @@ namespace Assets.Scripts.Player
         }
         private void TouchingSomething(ref bool inAir, ref bool nextToClimableWall)
         {
-            inAir = !(Physics2D.Raycast(backFoot.position, -Vector2.up, 0.05f) || Physics2D.Raycast(frontFoot.position, -Vector2.up, 0.05f));
             RaycastHit2D temp = Physics2D.Raycast(backFoot.position, -Vector2.up, 0.05f);
             RaycastHit2D temp2 = Physics2D.Raycast(frontFoot.position, -Vector2.up, 0.05f);
-            if (temp != null && temp.collider != null && temp2 != null && temp2.collider != null)
+            if (temp != null && temp.collider != null)
             {
-                if (temp.collider.tag == "Pit" || temp2.collider.tag == "Pit")
+                inAir = temp.collider.tag == "Untagged" ;
+                if (temp.collider.tag == "Pit")
                 {
                     hit = true;
                     health = 0;
                 }
             }
+            else if (temp2 != null && temp2.collider != null)
+            {
+                inAir = temp2.collider.tag == "Untagged";
+                if (temp2.collider.tag == "Pit")
+                {
+                    hit = true;
+                    health = 0;
+                }
+            }
+            else
+                inAir = true;
             RaycastHit2D ray;
             if (FacingLeft)
                 ray = Physics2D.Raycast(right.position, -Vector2.right, 0.05f);

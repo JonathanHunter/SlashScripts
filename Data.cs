@@ -31,6 +31,13 @@ namespace Assets.Scripts
             set { paused = value; }
         }
 
+        private static bool playerDead;
+        public static bool PlayerDead
+        {
+            get { return playerDead; }
+            set { playerDead = value; }
+        }
+
         //private static float aspectRatio;
         //public static float AspectRatio
         //{

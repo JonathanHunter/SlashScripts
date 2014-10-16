@@ -2,5 +2,6 @@
 {
     class Spawn : UnityEngine.MonoBehaviour
     {
+        public static Spawn spawn;
     }
 }

@@ -239,7 +239,7 @@ namespace Assets.Scripts
         private static string gamePadCancel;
         private static string gamePadPause;
 
-        private static string KeyHash = "SlashKeys";
+        private static string KeyHash = "ZeroKeys";
 
         private static bool usePad = false;
 

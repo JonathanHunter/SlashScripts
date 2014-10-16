@@ -5,12 +5,14 @@ namespace Assets.Scripts.Enemies
 {
     abstract class Enemy : MonoBehaviour
     {
+        public GameObject HealthPickUp;
         public GameObject explosion;
         public Transform backFoot;
         public Transform frontFoot;
         public Transform right;
         public int maxHealth = 10;
         public int frameRate = 9;
+        public int playerDamage = 1;
 
         protected int damage = 0;
         protected bool beingHit;
@@ -19,6 +21,10 @@ namespace Assets.Scripts.Enemies
         private Animator anim;
         private int health;
 
+        public int Health
+        {
+            get { return health; }
+        }
 
         void Start()
         {
@@ -37,6 +43,8 @@ namespace Assets.Scripts.Enemies
         {
             if (!Data.Paused)
             {
+                if (coll.gameObject.tag == "Enemy" || coll.gameObject.tag == "Health")
+                    Physics2D.IgnoreCollision(this.gameObject.collider2D, coll.gameObject.collider2D);
                 if (coll.gameObject.tag == "PlayerAttack")
                     beingHit = true;
             }
@@ -55,6 +63,8 @@ namespace Assets.Scripts.Enemies
                 if (health <= 0)
                 {
                     ((GameObject)Instantiate(explosion)).GetComponent<Explosion>().MoveToPosition(this.transform);
+                    if (Random.Range(0f, 1f) < .25f)
+                        ((GameObject)Instantiate(HealthPickUp)).transform.position = this.gameObject.transform.position;
                     Destroy(this.gameObject);
                 }
             }
@@ -75,7 +85,7 @@ namespace Assets.Scripts.Enemies
             if (ray == null || ray.collider == null)
                 blocked = false;
             else
-                blocked = ray.collider.tag.Equals("Ground");
+                blocked = ray.collider.tag.Equals("Ground") || ray.collider.tag.Equals("Untagged");
         }
 
         protected void faceLeft()

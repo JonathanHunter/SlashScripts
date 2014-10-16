@@ -43,5 +43,12 @@ namespace Assets.Scripts
                 this.transform.position = Vector3.MoveTowards(this.transform.position,
                     new Vector3(this.transform.position.x, upperBound.position.y + 1.5f, this.transform.position.z), speed);
         }
+        public void setBounds(Transform leftBound, Transform rightBound, Transform upperBound, Transform lowerBound)
+        {
+            this.leftBound = leftBound;
+            this.rightBound = rightBound;
+            this.upperBound = upperBound;
+            this.lowerBound = lowerBound;
+        }
     }
 }
