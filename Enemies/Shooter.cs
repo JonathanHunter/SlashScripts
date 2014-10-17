@@ -23,6 +23,20 @@ namespace Assets.Scripts.Enemies
             return new ShooterStateMachine(frameRate);
         }
 
+        protected void TouchingSomething(ref bool inAir, ref bool blocked)
+        {
+            inAir = !(Physics2D.Raycast(backFoot.position, -Vector2.up, 0.1f) || Physics2D.Raycast(frontFoot.position, -Vector2.up, 0.1f));
+            RaycastHit2D ray;
+            if (this.transform.localScale.x > 0)
+                ray = Physics2D.Raycast(right.position, -Vector2.right, 0.5f);
+            else
+                ray = Physics2D.Raycast(right.position, Vector2.right, 0.5f);
+            if (ray == null || ray.collider == null)
+                blocked = false;
+            else
+                blocked = ray.collider.tag.Equals("Ground");
+        }
+
         protected override void Initialize()
         {
             Player.Player temp = FindObjectOfType<Player.Player>();
@@ -84,7 +98,8 @@ namespace Assets.Scripts.Enemies
         }
         private void Jump()
         {
-            transform.Translate(new Vector3(getForward().x * Time.deltaTime, 10 * Time.deltaTime, 0));
+            transform.Translate(new Vector3(0, 20 * Time.deltaTime, 0));
+            transform.Translate(new Vector3(getForward().x * 4 * Time.deltaTime, 0, 0));
         }
         private void InAir()
         {

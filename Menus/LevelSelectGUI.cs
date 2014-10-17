@@ -42,11 +42,11 @@ namespace Assets.Scripts.Menus
         }
         private void drawButtons()
         {
-            if (GUI.Button(new Rect(Screen.width * (9.5f / 19f), Screen.height * (5f / 12f), Screen.width * (3f / 19f), Screen.height * (1f / 12f)), "Level 1", LabelStyle))
+            if (GUI.Button(new Rect(Screen.width * (8f / 19f), Screen.height * (5f / 12f), Screen.width * (3f / 19f), Screen.height * (1f / 12f)), "Level 1", LabelStyle))
                Application.LoadLevel("Level 1");
-            if (GUI.Button(new Rect(Screen.width * (9.5f / 19f), Screen.height * (7f / 12f), Screen.width * (3f / 19f), Screen.height * (1f / 12f)), "Level 2", LabelStyle))
+            if (GUI.Button(new Rect(Screen.width * (8f / 19f), Screen.height * (7f / 12f), Screen.width * (3f / 19f), Screen.height * (1f / 12f)), "Level 2", LabelStyle))
                Application.LoadLevel("Level 2");
-            if (GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (9f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Exit", LabelStyle))
+            if (GUI.Button(new Rect(Screen.width * (8f / 19f), Screen.height * (9f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Exit", LabelStyle))
                 Destroy(this.gameObject);
         }
         private void drawCursor()
