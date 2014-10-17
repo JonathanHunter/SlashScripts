@@ -21,7 +21,7 @@ namespace Assets.Scripts.Player
         public PlayerStateMachine(float frameRate)
         {
             currState = State.Idle;
-            animHandler = new AnimationHandler(15, 6, 7, 7, 13, 9, 3, 9, 1, 2, 1);
+            animHandler = new AnimationHandler(15, 6, 7, 7, 13, 9, 3, 9, 1, 4, 4);
             animHandler.frameRate = frameRate;
             getNextState = new machine[] { Idle, 
             Attacking, MovingAttack, InAirAttack, Move,
@@ -223,7 +223,7 @@ namespace Assets.Scripts.Player
         private static State Hit(bool inAir, bool nextToWall, bool hit)
         {
             hold += UnityEngine.Time.deltaTime;
-            if (hold > .2f)
+            if (hold > .4f)
             {
                 hold = 0;
                 return State.Idle;

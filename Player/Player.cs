@@ -10,7 +10,7 @@ namespace Assets.Scripts.Player
         public float frameRate = 10;
         public const int MOVE_SPEED = 4;
         public const int JUMP_SPEED = 4;
-        public const float MAX_JUMP_SPEED = 7f;
+        public const float MAX_JUMP_SPEED = 12f;
         public const float MAX_FALL_SPEED = -9f;
         public const float MAX_RUN_SPEED = 5f;
         public const float MAX_DASH_SPEED = 10f;

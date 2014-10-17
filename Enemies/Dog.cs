@@ -3,14 +3,14 @@ using System.Collections;
 
 namespace Assets.Scripts.Enemies
 {
-    class Minion : Enemy
+    class Dog : Enemy
     {
         private bool doOnce = false, goingRight = true;
         private int prevState = 0;
 
         protected override EnemyStateMachine getStateMachine(int frameRate)
         {
-            return new MinionStateMachine(frameRate);
+            return new DogStateMachine(frameRate);
         }
 
         protected override void Initialize()
@@ -34,11 +34,11 @@ namespace Assets.Scripts.Enemies
             }
             switch (state)
             {
-                case (int)MinionStateMachine.State.Jump: Jump(); break;
-                case (int)MinionStateMachine.State.inAir: InAir(); break;
-                case (int)MinionStateMachine.State.Hit: Hit(); break;
-                case (int)MinionStateMachine.State.Walk: Walk(); break;
-                case (int)MinionStateMachine.State.Turn: Turn(); break;
+                case (int)DogStateMachine.State.Jump: Jump(); break;
+                case (int)DogStateMachine.State.inAir: InAir(); break;
+                case (int)DogStateMachine.State.Hit: Hit(); break;
+                case (int)DogStateMachine.State.Walk: Walk(); break;
+                case (int)DogStateMachine.State.Turn: Turn(); break;
             }
         }
 

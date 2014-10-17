@@ -9,7 +9,7 @@ namespace Assets.Scripts.Enemies
     {
         public enum State
         {
-            Intro = 0, Taunt, Walk, Attack, Summon
+            Intro = 0, Taunt, Walk, Attack, Summon, Turn
         };
         private double hold;
 
@@ -17,7 +17,7 @@ namespace Assets.Scripts.Enemies
 
         protected override int[] Initialize()
         {
-            return new int[] { 5, 6, 2, 2, 1 };
+            return new int[] { 5, 6, 2, 2, 1, 1 };
         }
 
         protected override int StateMachine(int currState, bool beingHit, bool[] flags)
@@ -29,6 +29,7 @@ namespace Assets.Scripts.Enemies
                 case (int)State.Walk: currState = (int)Walk(flags[0], flags[1]); break;
                 case (int)State.Attack: currState = (int)Attack(); break;
                 case (int)State.Summon: currState = (int)Summon(flags[2]); break;
+                case (int)State.Turn: currState = (int)Turn(); break;
             }
             return currState;
         }
@@ -63,7 +64,7 @@ namespace Assets.Scripts.Enemies
         private State Attack()
         {
             if (animHandler.isDone((int)State.Attack))
-                return State.Walk;
+                return State.Turn;
             return State.Attack;
         }
         private State Summon(bool isDone)
@@ -71,6 +72,10 @@ namespace Assets.Scripts.Enemies
             if (isDone)
                 return State.Walk;
             return State.Summon;
+        }
+        private State Turn()
+        {
+            return State.Walk;
         }
     }
 }

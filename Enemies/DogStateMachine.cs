@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Assets.Scripts.Enemies
 {
-    class MinionStateMachine : EnemyStateMachine
+    class DogStateMachine : EnemyStateMachine
     {
         public enum State
         {
@@ -13,7 +13,7 @@ namespace Assets.Scripts.Enemies
         };
         private double hold;
 
-        public MinionStateMachine(int frameRate) : base(frameRate) { }
+        public DogStateMachine(int frameRate) : base(frameRate) { }
 
         protected override int[] Initialize()
         {

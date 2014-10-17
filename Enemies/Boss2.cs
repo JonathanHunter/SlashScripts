@@ -5,7 +5,8 @@ namespace Assets.Scripts.Enemies
 {
     class Boss2 : Enemy
     {
-        public GameObject Minion;
+        public GameObject Dog;
+        public GameObject Bird;
         public GameObject Punch;
         public float close;
         public float invulerabilityTime;
@@ -64,6 +65,7 @@ namespace Assets.Scripts.Enemies
                 case (int)Boss2StateMachine.State.Walk: Walk(); break;
                 case (int)Boss2StateMachine.State.Attack: Attack(); break;
                 case (int)Boss2StateMachine.State.Summon: Summon(); break;
+                case (int)Boss2StateMachine.State.Turn: Turn(); break;
             }
             if (turn)
                 base.turn();
@@ -116,14 +118,27 @@ namespace Assets.Scripts.Enemies
                 if (minionCount < maxHealth - Health + 1)
                 {
                     minionCount++;
-                    GameObject temp = (GameObject)Instantiate(Minion);
-                    temp.transform.position = this.transform.position;
-                    temp.transform.localScale = new Vector3(temp.transform.localScale.x * (Mathf.Sign(temp.transform.localScale.x) * Mathf.Sign(this.transform.localScale.x)),
-                    temp.transform.localScale.y, temp.transform.localScale.z);
+                    if (player.position.y < 3)
+                    {
+                        GameObject temp = (GameObject)Instantiate(Dog);
+                        temp.transform.position = this.transform.position;
+                        temp.transform.localScale = new Vector3(temp.transform.localScale.x * (Mathf.Sign(temp.transform.localScale.x) * Mathf.Sign(this.transform.localScale.x)),
+                        temp.transform.localScale.y, temp.transform.localScale.z);
+                    }
+                    else
+                    {
+                        GameObject temp = (GameObject)Instantiate(Bird);
+                        temp.transform.position = new Vector3(player.position.x, player.position.y + 4, this.transform.position.z);
+                    }
+
                 }
                 else
                     isDone = true;
             }
+        }
+        private void Turn()
+        {
+            base.turn();
         }
     }
 }
