@@ -6,6 +6,7 @@ namespace Assets.Scripts.Menus
     class GameOverGui : MonoBehaviour
     {
         public Texture CursorPic;
+        public Texture Background;
         public GUIStyle LabelStyle;
 
         private int cursor;
@@ -38,6 +39,7 @@ namespace Assets.Scripts.Menus
 
         void OnGUI()
         {
+            GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), Background);
             GUI.Label(new Rect(Screen.width * (6f / 19f), Screen.height * (1f / 12f), Screen.width * (7f / 19f), Screen.height * (2f / 12f)), "Game Over", LabelStyle);
             if (GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (3f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Continue", LabelStyle))
                 Application.LoadLevel(Data.Level);
