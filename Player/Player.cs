@@ -50,6 +50,7 @@ namespace Assets.Scripts.Player
         private bool hit;
         private bool render = true;
         private float invulerability = 0;
+        private int damage = 0;
 
 
         void Start()
@@ -76,6 +77,11 @@ namespace Assets.Scripts.Player
                         hitFromLeft = true;
                     else
                         hitFromLeft = false;
+                    CustomDamage customDamage = coll.gameObject.GetComponent<CustomDamage>();
+                    if (customDamage == null)
+                        damage = 1;
+                    else
+                        damage = customDamage.damage;
                 }
                 if (coll.collider.tag == "Pit")
                 {
@@ -117,7 +123,7 @@ namespace Assets.Scripts.Player
                 doState[state]();
                 if (hit)
                 {
-                    health--;
+                    health-=damage;
                     if (health < 1)
                     {
                         renderer.enabled = true;
