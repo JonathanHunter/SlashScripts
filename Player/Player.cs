@@ -43,14 +43,15 @@ namespace Assets.Scripts.Player
         }
 
         private int health;
+        private int damage = 0;
+        private float invulerability = 0;
         private Animator anim;
         private PlayerStateMachine machine;
         private delegate void state();
         private state[] doState;
         private bool hit;
         private bool render = true;
-        private float invulerability = 0;
-        private int damage = 0;
+        private bool paused = false;
 
 
         void Start()
@@ -102,6 +103,11 @@ namespace Assets.Scripts.Player
         {
             if (!Data.Paused)
             {
+                if (paused)
+                {
+                    anim.speed = frameRate;
+                    paused = false;
+                }
                 rigidbody2D.velocity = new Vector2();
                 bool inAir = false, nextToClimableWall = false;
                 TouchingSomething(ref inAir, ref nextToClimableWall);
@@ -152,6 +158,12 @@ namespace Assets.Scripts.Player
                 if (state != (int)PlayerStateMachine.State.InAir && state != (int)PlayerStateMachine.State.Jump)
                     held = false;
             }
+            else if (!paused)
+            {
+                anim.speed = 0;
+                paused = true;
+            }
+
         }
         private void TouchingSomething(ref bool inAir, ref bool nextToClimableWall)
         {
