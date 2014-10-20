@@ -29,37 +29,41 @@ namespace Assets.Scripts
         {
             bool a;
             if (yDir)
-                a = (Mathf.Abs(target.position.y - this.transform.position.y) < .5 && Mathf.Abs(target.position.x - this.transform.position.x) < 10);
+                a = (Mathf.Abs(target.position.y - this.transform.position.y) < .5 && Mathf.Abs(target.position.x - this.transform.position.x) < 5);
             else
-                a = (Mathf.Abs(target.position.x - this.transform.position.x) < .5 && Mathf.Abs(target.position.y - this.transform.position.y) < 10);
+                a = (Mathf.Abs(target.position.x - this.transform.position.x) < .5 && Mathf.Abs(target.position.y - this.transform.position.y) < 5);
             if (a)
             {
                 if (!wait)
                 {
                     if (yDir)
                     {
-                        if (target.position.y - this.transform.position.y > .01 && Mathf.Abs(target.position.x - this.transform.position.x) < 10)
+                        if (target.position.y - this.transform.position.y > .01 && Mathf.Abs(target.position.x - this.transform.position.x) < 5)
                         {
                             FindObjectOfType<CameraTracking>().setBounds(AleftBound, ArightBound, AupperBound, AlowerBound);
                             Spawn.spawn = Aspawn;
+                            wait = true;
                         }
                         else
                         {
                             FindObjectOfType<CameraTracking>().setBounds(BleftBound, BrightBound, BupperBound, BlowerBound);
                             Spawn.spawn = Bspawn;
+                            wait = true;
                         }
                     }
                     else
                     {
-                        if (target.position.x - this.transform.position.x > .01 && Mathf.Abs(target.position.y - this.transform.position.y) < 10)
-                        {
-                            FindObjectOfType<CameraTracking>().setBounds(BleftBound, BrightBound, BupperBound, BlowerBound);
-                            Spawn.spawn = Bspawn;
-                        }
-                        else
+                        if (target.position.x - this.transform.position.x > .01 && Mathf.Abs(target.position.y - this.transform.position.y) < 5)
                         {
                             FindObjectOfType<CameraTracking>().setBounds(AleftBound, ArightBound, AupperBound, AlowerBound);
                             Spawn.spawn = Aspawn;
+                            wait = true;
+                        }
+                        else
+                        {
+                            FindObjectOfType<CameraTracking>().setBounds(BleftBound, BrightBound, BupperBound, BlowerBound);
+                            Spawn.spawn = Bspawn;
+                            wait = true;
                         }
                     }
                 }

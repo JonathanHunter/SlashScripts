@@ -11,7 +11,6 @@ namespace Assets.Scripts.Enemies
         {
             Intro = 0, Taunt, Walk, Attack, Summon, Turn
         };
-        private double hold;
 
         public Boss2StateMachine(int frameRate) : base(frameRate) { }
 
