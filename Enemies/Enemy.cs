@@ -12,7 +12,6 @@ namespace Assets.Scripts.Enemies
         public Transform right;
         public int maxHealth = 10;
         public int frameRate = 9;
-        public int playerDamage = 1;
 
         protected int damage = 0;
         protected bool beingHit;

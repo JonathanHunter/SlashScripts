@@ -7,7 +7,6 @@ namespace Assets.Scripts.Enemies
     {
         public Vector2 dir;
         public float speed;
-        public int playerDamage = 1;
 
         void OnCollisionEnter2D(Collision2D coll)
         {
