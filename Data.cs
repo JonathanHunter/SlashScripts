@@ -51,5 +51,12 @@ namespace Assets.Scripts
             get { return level; }
             set { level = value; }
         }
+
+        private static Enemies.Enemy enemy;
+        public static Enemies.Enemy Enemy
+        {
+            get { return enemy; }
+            set { enemy = value; }
+        }
     }
 }
