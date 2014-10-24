@@ -201,6 +201,11 @@ namespace Assets.Scripts.Player
                 if (ray.collider.tag == "Enemy")
                 {
                     hit = true;
+                    CustomDamage customDamage = ray.collider.gameObject.GetComponent<CustomDamage>();
+                    if (customDamage == null)
+                        damage = 1;
+                    else
+                        damage = customDamage.damage;
                     hitFromLeft = FacingLeft;
                 }
                 WallOnleft = ray.collider.gameObject.transform.position.x < this.gameObject.transform.position.x;

@@ -17,20 +17,21 @@ namespace Assets.Scripts.Enemies
 
         protected override int[] Initialize()
         {
-            return new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            return new int[] { 5, 4, 1, 2, 1, 1, 1, 3, 1 };
         }
 
         protected override int StateMachine(int currState, bool beingHit, bool[] flags)
         {
+            UnityEngine.Debug.Log(currState);
             switch (currState)
             {
                 case (int)State.Intro: currState = (int)Intro(); break;
-                case (int)State.BackFlip: currState = (int)BackFlip(); break;
+                case (int)State.BackFlip: currState = (int)BackFlip(flags[1]); break;
                 case (int)State.Transition: currState = (int)Transition(flags[0], flags[1]); break;
                 case (int)State.WallJump: currState = (int)WallJump(flags[1], flags[2], flags[3]); break;
                 case (int)State.DownSlash: currState = (int)DownSlash(flags[0]); break;
                 case (int)State.DownSlashWait: currState = (int)DownSlashWait(); break;
-                case (int)State.Dash: currState = (int)Dash(flags[4]); break;
+                case (int)State.Dash: currState = (int)Dash(flags[4]||flags[1]); break;
                 case (int)State.Slash: currState = (int)Slash(); break;
                 case (int)State.SlashWait: currState = (int)SlashWait(); break;
             }
@@ -43,9 +44,9 @@ namespace Assets.Scripts.Enemies
                 return State.BackFlip;
             return State.Intro;
         }
-        private State BackFlip()
+        private State BackFlip(bool onWall)
         {
-            if (animHandler.isDone((int)State.BackFlip))
+            if (animHandler.isDone((int)State.BackFlip)||onWall)
                 return State.Transition;
             return State.BackFlip;
         }

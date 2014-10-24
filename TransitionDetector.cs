@@ -38,7 +38,7 @@ namespace Assets.Scripts
                 {
                     if (yDir)
                     {
-                        if (target.position.y - this.transform.position.y > .01 && Mathf.Abs(target.position.x - this.transform.position.x) < 5)
+                        if (target.position.y - this.transform.position.y < .01 && Mathf.Abs(target.position.x - this.transform.position.x) < 5)
                         {
                             FindObjectOfType<CameraTracking>().setBounds(AleftBound, ArightBound, AupperBound, AlowerBound);
                             Spawn.spawn = Aspawn;

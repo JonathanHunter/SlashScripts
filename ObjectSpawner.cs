@@ -27,8 +27,13 @@ namespace Assets.Scripts
         {
             if (delay)
             {
-                Data.PlayerDead = false;
-                delay = false;
+                if (!Data.PlayerDead)
+                {
+                    reference = (GameObject)Instantiate(prefab);
+                    if (spawnAtLocation)
+                        reference.transform.position = this.transform.position;
+                    delay = false;
+                }
             }
             if (spawnOnce && spawned)
                 wait = true;
@@ -64,13 +69,9 @@ namespace Assets.Scripts
             }
             else
                 wait = false;
-            if (Data.PlayerDead)
+            if (Data.PlayerDead&&spawned)
             {
-                if (spawned)
-                {
-                    Destroy(reference);
-                    reference = (GameObject)Instantiate(prefab);
-                }
+                Destroy(reference);
                 delay = true;
             }
         }

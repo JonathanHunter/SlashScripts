@@ -18,6 +18,7 @@ namespace Assets.Scripts.Enemies
         private Transform player;
         private static GameObject attack;
         private int prevState = 0;
+        private float gravity;
         private float invulerability = 0;
         private bool doOnce = false;
         private bool render = true;
@@ -32,6 +33,7 @@ namespace Assets.Scripts.Enemies
         protected override void Initialize()
         {
             player = FindObjectOfType<Player.Player>().gameObject.transform;
+            gravity = rigidbody2D.gravityScale;
         }
 
         void OnCollisionEnter2D(Collision2D coll)
@@ -41,7 +43,10 @@ namespace Assets.Scripts.Enemies
                 if (coll.gameObject.tag == "Enemy" || coll.gameObject.tag == "Health")
                     Physics2D.IgnoreCollision(this.gameObject.collider2D, coll.gameObject.collider2D);
                 if (coll.gameObject.tag == "PlayerAttack")
+                {
                     beingHit = true;
+                    Data.Enemy = this;
+                }
                 if (coll.gameObject.tag == "Player")
                     hitPlayer = true;
             }
@@ -103,6 +108,8 @@ namespace Assets.Scripts.Enemies
                 prevState = state;
                 if (attack != null)
                     Destroy(attack);
+                if (rigidbody2D.gravityScale != gravity)
+                    rigidbody2D.gravityScale = gravity;
             }
             if (hitPlayer)
                 hitPlayer = false;
@@ -141,10 +148,11 @@ namespace Assets.Scripts.Enemies
         private void BackFlip()
         {
             transform.Translate(-getForward().x * speed * Time.deltaTime, Vector2.up.y * speed * Time.deltaTime, 0f);
+            rigidbody2D.gravityScale = 0;
         }
         private void Transition()
         {
-            transform.Translate(-getForward() * speed * Time.deltaTime);
+            transform.Translate(-getForward() * speed * Time.deltaTime);         
         }
         private void WallJump()
         {
