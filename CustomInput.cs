@@ -243,6 +243,11 @@ namespace Assets.Scripts
 
         private static bool usePad = false;
 
+        public static bool UsePad
+        {
+            get { return usePad; }
+        }
+
         public static KeyCode KeyBoardAttack
         {
             get { return keyBoardAttack; }
