@@ -5,7 +5,7 @@ namespace Assets.Scripts.Menus
 {
     class KeyboardControlsGUI : MonoBehaviour
     {
-        public Texture Title, CursorPic;
+        public Texture Title, CursorPic, Background;
         public GUIStyle LabelStyle;
 
         private int cursor;
@@ -13,6 +13,7 @@ namespace Assets.Scripts.Menus
         private delegate void state();
         void Start()
         {
+            LabelStyle.fontSize = (int)(Screen.width * .04f);
             machine = new ControlBinderStateMachine();
         }
 
@@ -32,6 +33,9 @@ namespace Assets.Scripts.Menus
 
         private void GetNewKey()
         {
+            GUI.DrawTexture(new Rect(Screen.width * (7f / 19f),
+                Screen.height * (6f / 12f), Screen.width * (6f / 19f),
+                Screen.height * (3f / 12f)), Background);
             GUI.Label(new Rect(Screen.width * (7f / 19f),
                 Screen.height * (6f / 12f), Screen.width * (6f / 19f),
                 Screen.height * (3f / 12f)),
@@ -93,16 +97,16 @@ namespace Assets.Scripts.Menus
             if(GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (9f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
                 CustomInput.KeyBoardCancel + "/Escape", LabelStyle))
                 machine.CancelClicked();
-            if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+            if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (4f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)),
                 CustomInput.KeyBoardUp + "/Up arrow", LabelStyle))
                 machine.UpClicked();
-            if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (5f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+            if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (5f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)),
                 CustomInput.KeyBoardDown + "/Down arrow", LabelStyle))
                 machine.DownClicked();
-            if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (6f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+            if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (6f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)),
                 CustomInput.KeyBoardLeft + "/Left arrow", LabelStyle))
                 machine.LeftClicked();
-            if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (7f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+            if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (7f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)),
                 CustomInput.KeyBoardRight + "/Right arrow", LabelStyle))
                 machine.RightClicked();
             if(GUI.Button(new Rect(Screen.width * (9f / 19f), Screen.height * (10f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Defaults", LabelStyle))

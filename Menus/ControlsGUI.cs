@@ -21,6 +21,7 @@ namespace Assets.Scripts.Menus
 
         void Update()
         {
+            LabelStyle.fontSize = (int)(Screen.width * .05f);
             if (menu == null)
             {
                 cursor = (int)machine.update();

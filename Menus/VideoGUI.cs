@@ -18,6 +18,7 @@ namespace Assets.Scripts.Menus
         private Resolution[] res;
         void Start()
         {
+            LabelStyle.fontSize = (int)(Screen.width * .05f);
             machine = new VideoStateMachine();
             resIndex = PlayerPrefs.GetInt(VideoKey + 0);
             List<Resolution> temp = new List<Resolution>();

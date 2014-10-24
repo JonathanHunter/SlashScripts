@@ -5,9 +5,8 @@ namespace Assets.Scripts.Menus
 {
     class LevelSelectGUI:MonoBehaviour
     {
-        public Texture Title, CursorPic;
+        public Texture Title, CursorPic, level1,level2,level3;
         public GUIStyle LabelStyle;
-
         private int cursor;
         private LevelSelectStateMachine machine;
         private delegate void state();
@@ -21,6 +20,7 @@ namespace Assets.Scripts.Menus
 
         void Update()
         {
+            LabelStyle.fontSize = (int)(Screen.width * .05f);
             cursor = (int)machine.update();
             if (cursor == (int)(LevelSelectStateMachine.State.Level1)&&CustomInput.AcceptUp)
             {
@@ -29,6 +29,10 @@ namespace Assets.Scripts.Menus
             if (cursor == (int)(LevelSelectStateMachine.State.Level2)&&(CustomInput.AcceptUp/*&&PlayerPrefs.GetInt(LevelKey)>=1*/))
             {
                 Application.LoadLevel("Level 2");
+            }
+            if (cursor == (int)(LevelSelectStateMachine.State.Level3) && (CustomInput.AcceptUp/*&&PlayerPrefs.GetInt(LevelKey)>=1*/))
+            {
+                Application.LoadLevel("Level 4");
             }
             if ((cursor == (int)(LevelSelectStateMachine.State.Exit) && CustomInput.AcceptUp) || CustomInput.CancelUp)
                 Destroy(this.gameObject);
@@ -42,19 +46,26 @@ namespace Assets.Scripts.Menus
         }
         private void drawButtons()
         {
-            if (GUI.Button(new Rect(Screen.width * (8f / 19f), Screen.height * (5f / 12f), Screen.width * (3f / 19f), Screen.height * (1f / 12f)), "Level 1", LabelStyle))
-               Application.LoadLevel("Level 1");
-            if (GUI.Button(new Rect(Screen.width * (8f / 19f), Screen.height * (7f / 12f), Screen.width * (3f / 19f), Screen.height * (1f / 12f)), "Level 2", LabelStyle))
-               Application.LoadLevel("Level 2");
+            if (GUI.Button(new Rect(Screen.width * .4f, Screen.height * .3f, Screen.width * .1f, Screen.height * .1f), ""))
+                Application.LoadLevel("Level 1");
+            if (GUI.Button(new Rect(Screen.width * .4f, Screen.height * .45f, Screen.width * .1f, Screen.height * .1f), ""))
+                Application.LoadLevel("Level 2");
+            if (GUI.Button(new Rect(Screen.width * .4f, Screen.height * .60f, Screen.width * .1f, Screen.height * .1f), ""))
+                Application.LoadLevel("Level 4");
             if (GUI.Button(new Rect(Screen.width * (8f / 19f), Screen.height * (9f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Exit", LabelStyle))
                 Destroy(this.gameObject);
+            GUI.DrawTexture(new Rect(Screen.width * .4f, Screen.height * .3f, Screen.width * .1f, Screen.height * .1f), level1);
+            GUI.DrawTexture(new Rect(Screen.width * .4f, Screen.height * .45f, Screen.width * .1f, Screen.height * .1f), level2);
+            GUI.DrawTexture(new Rect(Screen.width * .4f, Screen.height * .60f, Screen.width * .1f, Screen.height * .1f), level3);
         }
         private void drawCursor()
         {
             if (cursor == (int)LevelSelectStateMachine.State.Level1)
-                GUI.DrawTexture(new Rect(Screen.width * (5f / 19f), Screen.height * (5f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+                GUI.DrawTexture(new Rect(Screen.width * .3f, Screen.height * .3f, Screen.width * .05f, Screen.height * .08f), CursorPic);
             else if (cursor == (int)LevelSelectStateMachine.State.Level2)
-                GUI.DrawTexture(new Rect(Screen.width * (5f / 19f), Screen.height * (7f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
+                GUI.DrawTexture(new Rect(Screen.width * .3f, Screen.height * .45f, Screen.width * .05f, Screen.height * .08f), CursorPic);
+            else if (cursor == (int)LevelSelectStateMachine.State.Level3)
+                GUI.DrawTexture(new Rect(Screen.width * .3f, Screen.height * .6f, Screen.width * .05f, Screen.height * .08f), CursorPic);
             else
                 GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (9f / 12f), Screen.width * (1f / 19f), Screen.height * (1f / 12f)), CursorPic);
         }

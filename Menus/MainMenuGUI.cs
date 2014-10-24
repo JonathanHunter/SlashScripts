@@ -16,6 +16,7 @@ namespace Assets.Scripts.Menus
         private delegate void state();
         void Start()
         {
+            ButtonStyle.fontSize = (int)(Screen.width * .05f);
             machine = new MainMenuStateMachine();
             CustomInput[] arr=FindObjectsOfType<CustomInput>();
             if (arr.Length > 1)

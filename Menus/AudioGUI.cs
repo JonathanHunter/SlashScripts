@@ -15,6 +15,7 @@ namespace Assets.Scripts.Menus
         private float musicVol, sfxVol, oMusicVol, oSfxVol;
         void Start()
         {
+            LabelStyle.fontSize = (int)(Screen.width * .05f);
             machine = new AudioStateMachine();
             cursor = (int)AudioStateMachine.State.Music;
             if (PlayerPrefs.HasKey(AudioKey + 0))
