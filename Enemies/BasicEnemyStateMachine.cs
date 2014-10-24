@@ -17,7 +17,7 @@ namespace Assets.Scripts.Enemies
 
         protected override int[] Initialize()
         {
-            return new int[] { 1, 1, 2, 1 };
+            return new int[] { 1, 3, 5, 1 };
         }
 
         protected override int StateMachine(int currState, bool beingHit, bool[] flags)
@@ -42,10 +42,8 @@ namespace Assets.Scripts.Enemies
         }
         private State Hit(bool beingHit, bool shouldTurn)
         {
-            hold += UnityEngine.Time.deltaTime;
-            if (hold > .2f)
+            if (animHandler.isDone((int)State.Hit))
             {
-                hold = 0;
                 return State.Idle;
             }
             return State.Hit;
