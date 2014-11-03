@@ -22,16 +22,15 @@ namespace Assets.Scripts.Enemies
 
         protected override int StateMachine(int currState, bool beingHit, bool[] flags)
         {
-            UnityEngine.Debug.Log(currState);
             switch (currState)
             {
                 case (int)State.Intro: currState = (int)Intro(); break;
                 case (int)State.BackFlip: currState = (int)BackFlip(flags[1]); break;
                 case (int)State.Transition: currState = (int)Transition(flags[0], flags[1]); break;
-                case (int)State.WallJump: currState = (int)WallJump(flags[1], flags[2], flags[3]); break;
+                case (int)State.WallJump: currState = (int)WallJump(flags[3]); break;
                 case (int)State.DownSlash: currState = (int)DownSlash(flags[0]); break;
                 case (int)State.DownSlashWait: currState = (int)DownSlashWait(); break;
-                case (int)State.Dash: currState = (int)Dash(flags[4]||flags[1]); break;
+                case (int)State.Dash: currState = (int)Dash(flags[2], flags[1]); break;
                 case (int)State.Slash: currState = (int)Slash(); break;
                 case (int)State.SlashWait: currState = (int)SlashWait(); break;
             }
@@ -56,15 +55,15 @@ namespace Assets.Scripts.Enemies
                 return State.WallJump;
             if (!inAir)
             {
-                if (UnityEngine.Random.Range(0, 2) == 1)
+                if (UnityEngine.Random.Range(0, 1f) > .45)
                     return State.Dash;
                 return State.BackFlip;
             }
             return State.Transition;
         }
-        private State WallJump(bool OnWall, bool overPlayer, bool hitPlayer)
+        private State WallJump(bool done)
         {
-            if (OnWall || overPlayer || hitPlayer)
+            if (done)
                 return State.DownSlash;
             return State.WallJump; 
         }
@@ -84,10 +83,12 @@ namespace Assets.Scripts.Enemies
             }
             return State.DownSlashWait;
         }
-        private State Dash(bool atDestination)
+        private State Dash(bool nearPlayer, bool hitWall)
         {
-            if (atDestination)
+            if (nearPlayer)
                 return State.Slash;
+            if (hitWall)
+                return State.WallJump;
             return State.Dash;
         }
         private State Slash()

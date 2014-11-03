@@ -6,23 +6,29 @@ namespace Assets.Scripts.Enemies
     class Boss3 : Enemy
     {
         public Transform left;
+        public Transform middle;
+        public Transform[] leftJumpPoints;
+        public Transform[] rightJumpPoints;
         public GameObject DownSlashAttack;
-        public GameObject Wave;
-        public Transform LeftSpawn;
-        public Transform RightSpawn;
         public GameObject SlashAttack;
+        public GameObject Dagger;
         public float close;
         public float invulerabilityTime;
         public float speed;
+        public int maxJumps;
 
         private Transform player;
+        private Transform target;
+        private Vector3 pos;
         private static GameObject attack;
         private int prevState = 0;
+        private int numOfJumps = 0;
         private float gravity;
         private float invulerability = 0;
+        private float hold = 0;
         private bool doOnce = false;
         private bool render = true;
-        private bool hitPlayer = false;
+        private bool OnWall = false;
 
 
         protected override EnemyStateMachine getStateMachine(int frameRate)
@@ -32,24 +38,9 @@ namespace Assets.Scripts.Enemies
 
         protected override void Initialize()
         {
+            Random.seed=System.DateTime.UtcNow.Millisecond;
             player = FindObjectOfType<Player.Player>().gameObject.transform;
             gravity = rigidbody2D.gravityScale;
-        }
-
-        void OnCollisionEnter2D(Collision2D coll)
-        {
-            if (!Data.Paused)
-            {
-                if (coll.gameObject.tag == "Enemy" || coll.gameObject.tag == "Health")
-                    Physics2D.IgnoreCollision(this.gameObject.collider2D, coll.gameObject.collider2D);
-                if (coll.gameObject.tag == "PlayerAttack")
-                {
-                    beingHit = true;
-                    Data.Enemy = this;
-                }
-                if (coll.gameObject.tag == "Player")
-                    hitPlayer = true;
-            }
         }
 
         protected override bool[] getFlags()
@@ -58,9 +49,11 @@ namespace Assets.Scripts.Enemies
             float disty = Mathf.Abs(player.position.y - this.gameObject.transform.position.y);
             bool playerClose = distx < close && disty < 1;
             bool inAir = false;
-            bool OnWall = false;
             TouchingSomething(ref inAir, ref OnWall);
-            return new bool[] { inAir, OnWall,  playerClose, hitPlayer, playerClose};
+            bool done = false;
+            if (numOfJumps > maxJumps)
+                done = true;
+            return new bool[] { inAir, OnWall, playerClose, done };
         }
 
         private void TouchingSomething(ref bool inAir, ref bool nextToClimableWall)
@@ -110,9 +103,16 @@ namespace Assets.Scripts.Enemies
                     Destroy(attack);
                 if (rigidbody2D.gravityScale != gravity)
                     rigidbody2D.gravityScale = gravity;
+                if (prevState == (int)Boss3StateMachine.State.BackFlip)
+                {
+
+                    if (player.transform.position.x < this.transform.position.x)
+                        faceLeft();
+                    else
+                        faceRight();
+                }
+                numOfJumps = 0;
             }
-            if (hitPlayer)
-                hitPlayer = false;
             switch (state)
             {
                 case (int)Boss3StateMachine.State.Intro: Intro(); break;
@@ -152,11 +152,40 @@ namespace Assets.Scripts.Enemies
         }
         private void Transition()
         {
-            transform.Translate(-getForward() * speed * Time.deltaTime);         
         }
         private void WallJump()
         {
-            transform.Translate(getForward() * speed * Time.deltaTime);
+            rigidbody2D.gravityScale = 0;
+            if (OnWall)
+            {
+                doOnce = false;
+                numOfJumps++;
+            }
+
+            if (!doOnce)
+            {
+                if(numOfJumps==maxJumps)
+                {
+                    target = middle;
+                }
+                else if (Mathf.Abs(leftJumpPoints[0].position.x - transform.position.x) < 1)
+                    target = rightJumpPoints[Random.Range(0, rightJumpPoints.Length)];
+                else
+                    target = leftJumpPoints[Random.Range(0, leftJumpPoints.Length)];
+                if (target.position.x > this.transform.position.x)
+                    faceRight();
+                else
+                    faceLeft();
+                doOnce = true;
+            }
+            transform.position = Vector3.MoveTowards(transform.position, target.position, 5 * speed * Time.deltaTime);
+            hold += Time.deltaTime;
+            if(hold>.5f)
+            {
+                GameObject dagger = (GameObject)Instantiate(Dagger);
+                dagger.transform.position = this.transform.position;
+                hold = 0;
+            }
         }
         private void DownSlash()
         {
@@ -164,19 +193,25 @@ namespace Assets.Scripts.Enemies
             {
                 attack = ((GameObject)Instantiate(DownSlashAttack));
                 attack.GetComponent<Player.Attack>().setReference(this.gameObject.transform);
+                if (player.localScale.x < 0)
+                    pos = new Vector3(player.position.x + 1, transform.position.y);
+                else
+                    pos = new Vector3(player.position.x - 1, transform.position.y);
                 doOnce = true;
             }
+            if (transform.position.x < pos.x)
+                transform.Translate(new Vector3(speed * Time.deltaTime, 0));
+            else
+                transform.Translate(new Vector3(speed * -Time.deltaTime, 0));
         }
         private void DownSlashWait()
         {
-            if (!doOnce)
+            if(!doOnce)
             {
-                GameObject temp = (GameObject)Instantiate(Wave);
-                temp.transform.position = LeftSpawn.position;
-                temp.transform.localScale = new Vector3(Mathf.Sign(LeftSpawn.transform.localScale.x) * temp.transform.localScale.x, temp.transform.localScale.y, temp.transform.localScale.z); 
-                temp = (GameObject)Instantiate(Wave);
-                temp.transform.position = RightSpawn.position;
-                temp.transform.localScale = new Vector3(Mathf.Sign(RightSpawn.transform.localScale.x) * temp.transform.localScale.x, temp.transform.localScale.y, temp.transform.localScale.z);
+                if (player.position.x < transform.position.x)
+                    faceLeft();
+                else
+                    faceRight();
                 doOnce = true;
             }
         }
