@@ -8,9 +8,11 @@ namespace Assets.Scripts
         public TextAsset[] pages;
         public Texture[] backgrounds;
         public int[] whichBackgroundForWhichPage;
+        public float[] fontsize;
         public float textSpeed;
         public string tagToLookFor;
         public GUIStyle style;
+        public GUIStyle style2;
 
         enum State { waiting, displaying, paused };
 
@@ -35,6 +37,7 @@ namespace Assets.Scripts
 
         void Start()
         {
+            audio.volume = Data.SfxVol%.75f;
             state = State.waiting;
             currentText = new System.Text.StringBuilder();
             currentPage = 0;
@@ -44,7 +47,6 @@ namespace Assets.Scripts
             {
                 pageStrings[i] = pages[i].text;
             }
-            style.fontSize = (int)(Screen.width * .03f);
         }
 
         void Update()
@@ -56,6 +58,8 @@ namespace Assets.Scripts
                     Data.Paused = true;
                     state = State.displaying;
                     pageChars=pageStrings[currentPage].ToCharArray();
+                    style.fontSize = (int)(Screen.width * fontsize[currentPage]);
+                    style2.fontSize = (int)(Screen.width * fontsize[currentPage]);
                 }
             }
             else if (state == State.displaying)
@@ -65,18 +69,25 @@ namespace Assets.Scripts
                     currentText = new System.Text.StringBuilder(pageStrings[currentPage]);
                     state = State.paused;
                 }
-                if (currentLetter == 0)
-                    currentText.Append(pageChars[(int)currentLetter]);
-                int a = (int)(currentLetter);
-                float temp = textSpeed;
-                if (CustomInput.AcceptHeld)
-                    temp *= 2;
-                currentLetter += temp * Time.deltaTime;
-                if (a < (int)currentLetter && currentLetter < pageChars.Length)
-                    currentText.Append(pageChars[(int)currentLetter]);
-                if (currentLetter >= pageChars.Length)
+                else
                 {
-                    state = State.paused;
+                    if (currentLetter == 0)
+                        currentText.Append(pageChars[(int)currentLetter]);
+                    int a = (int)(currentLetter);
+                    float temp = textSpeed;
+                    if (CustomInput.AcceptHeld)
+                        temp *= 2;
+                    currentLetter += temp * Time.deltaTime;
+                    if (a < (int)currentLetter && currentLetter < pageChars.Length)
+                    {
+                        currentText.Append(pageChars[(int)currentLetter]);
+                        audio.PlayOneShot(audio.clip);
+                    }
+                    if (currentLetter >= pageChars.Length)
+                    {
+                        //currentText = new System.Text.StringBuilder(pageStrings[currentPage]);
+                        state = State.paused;
+                    }
                 }
             }
             else
@@ -95,6 +106,8 @@ namespace Assets.Scripts
                         pageChars = pageStrings[currentPage].ToCharArray();
                         currentText = new System.Text.StringBuilder();
                         state = State.displaying;
+                        style.fontSize = (int)(Screen.width * fontsize[currentPage]);
+                        style2.fontSize = (int)(Screen.width * fontsize[currentPage]);
                     }
                 }
             }
@@ -105,7 +118,11 @@ namespace Assets.Scripts
             if (state != State.waiting)
             {
                 GUI.DrawTexture(new Rect(Screen.width * .3f, Screen.height * .3f, Screen.width * .5f, Screen.height * .6f), backgrounds[whichBackgroundForWhichPage[currentPage]]);
-                GUI.TextArea(new Rect(Screen.width * .3f, Screen.height * .3f, Screen.width * .5f, Screen.height * .6f), currentText.ToString(), style);
+                if (whichBackgroundForWhichPage[currentPage] == 0)
+                    GUI.Label(new Rect(Screen.width * .3f, Screen.height * .3f, Screen.width * .5f, Screen.height * .6f), currentText.ToString(), style);
+                else
+                    GUI.Label(new Rect(Screen.width * .3f, Screen.height * .3f, Screen.width * .5f, Screen.height * .6f), currentText.ToString(), style2);
+
             }
         }
     }

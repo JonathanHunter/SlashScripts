@@ -9,7 +9,7 @@ namespace Assets.Scripts.Menus
     {
         public enum State
         {
-            Level1, Level2, Level3, Exit
+            Level1, Level2, Level3, Level4, Exit
         };
         private delegate State machine();
         private machine[] getNextState;
@@ -18,7 +18,7 @@ namespace Assets.Scripts.Menus
         public LevelSelectStateMachine()
         {
             currState = State.Level1;
-            getNextState = new machine[] { Level1, Level2, Level3, Exit };
+            getNextState = new machine[] { Level1, Level2, Level3, Level4, Exit };
         }
 
         public State update()
@@ -31,6 +31,10 @@ namespace Assets.Scripts.Menus
             if (CustomInput.UpUp)
                 return State.Exit;
             if (CustomInput.DownUp)
+                return State.Level3;
+            if (CustomInput.LeftUp)
+                return State.Level2;
+            if (CustomInput.RightUp)
                 return State.Level2;
             return State.Level1;
         }
@@ -38,19 +42,40 @@ namespace Assets.Scripts.Menus
         public static State Level2()
         {
             if (CustomInput.UpUp)
-                return State.Level1;
+                return State.Exit;
             if (CustomInput.DownUp)
-                return State.Level3;
+                return State.Level4;
+            if (CustomInput.LeftUp)
+                return State.Level1;
+            if (CustomInput.RightUp)
+                return State.Level1;
             return State.Level2;
         }
 
         public static State Level3()
         {
             if (CustomInput.UpUp)
+                return State.Level1;
+            if (CustomInput.DownUp)
+                return State.Exit;
+            if (CustomInput.LeftUp)
+                return State.Level4;
+            if (CustomInput.RightUp)
+                return State.Level4;
+            return State.Level3;
+        }
+
+        public static State Level4()
+        {
+            if (CustomInput.UpUp)
                 return State.Level2;
             if (CustomInput.DownUp)
                 return State.Exit;
-            return State.Level3;
+            if (CustomInput.LeftUp)
+                return State.Level3;
+            if (CustomInput.RightUp)
+                return State.Level3;
+            return State.Level4;
         }
 
         public static State Exit()
@@ -75,6 +100,11 @@ namespace Assets.Scripts.Menus
         public void Level3Clicked()
         {
             currState = State.Level3;
+        }
+
+        public void Level4Clicked()
+        {
+            currState = State.Level4;
         }
 
         public void ExitClicked()

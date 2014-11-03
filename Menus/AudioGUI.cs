@@ -90,7 +90,7 @@ namespace Assets.Scripts.Menus
         {
             //left, top, width, height
             //title pic
-            GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (1f / 12f), Screen.width * (7f / 19f), Screen.height * (2f / 12f)), Title);
+            GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (1f / 12f), Screen.width * (6f / 19f), Screen.height * (4f / 12f)), Title);
             drawButtons();
             drawLabels();
             drawCursor();
@@ -104,7 +104,7 @@ namespace Assets.Scripts.Menus
         }
         private void drawLabels()
         {
-            GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (3f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Audio", LabelStyle);
+            //GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (3f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Audio", LabelStyle);
             GUI.Label(new Rect(Screen.width * (6f / 19f), Screen.height * (5f / 12f),Screen.width * (3f / 19f), Screen.height * (1f / 12f)), "Music", LabelStyle);
             GUI.Label(new Rect(Screen.width * (6f / 19f), Screen.height * (7f / 12f), Screen.width * (3f / 19f), Screen.height * (1f / 12f)), "sfx", LabelStyle);
         }

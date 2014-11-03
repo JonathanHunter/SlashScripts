@@ -23,7 +23,7 @@ namespace Assets.Scripts.Enemies
                 if (coll.gameObject.tag == "Enemy" || coll.gameObject.tag == "Health")
                     Physics2D.IgnoreCollision(this.gameObject.collider2D, coll.gameObject.collider2D);
                 if (coll.gameObject.tag == "PlayerAttack")
-                    Destroy(this.gameObject);
+                    damage = 1000;
                 collision = true;
             }
         }

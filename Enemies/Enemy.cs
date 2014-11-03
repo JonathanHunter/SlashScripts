@@ -19,6 +19,8 @@ namespace Assets.Scripts.Enemies
         private EnemyStateMachine machine;
         private Animator anim;
         private int health;
+        private float g;
+        private bool paused=false;
 
         public int Health
         {
@@ -42,6 +44,12 @@ namespace Assets.Scripts.Enemies
         {
             if (!Data.Paused)
             {
+                if(paused)
+                {
+                    anim.speed = frameRate;
+                    rigidbody2D.gravityScale = g;
+                    paused = false;
+                }
                 if (coll.gameObject.tag == "Enemy" || coll.gameObject.tag == "Health")
                     Physics2D.IgnoreCollision(this.gameObject.collider2D, coll.gameObject.collider2D);
                 if (coll.gameObject.tag == "PlayerAttack")
@@ -49,6 +57,13 @@ namespace Assets.Scripts.Enemies
                     beingHit = true;
                     Data.Enemy = this;
                 }
+            }
+            else
+            {
+                anim.speed = 0;
+                g = rigidbody2D.gravityScale;
+                rigidbody2D.gravityScale = 0;
+                paused = true;
             }
         }
 

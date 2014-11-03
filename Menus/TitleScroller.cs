@@ -9,7 +9,7 @@ namespace Assets.Scripts.Menus
         {
             if (this.transform.position.x < -16)
             {
-                this.transform.position = new Vector3(16,0,0);
+                this.transform.position = new Vector3(this.transform.position.x+32,0,0);
             }
             this.transform.Translate(-Vector2.right * Time.deltaTime);
         }

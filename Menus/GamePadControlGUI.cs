@@ -6,7 +6,7 @@ namespace Assets.Scripts.Menus
     class GamePadControlGUI : MonoBehaviour
     {
         public Texture Title, CursorPic, Background;
-        public GUIStyle LabelStyle;
+        public GUIStyle LabelStyle, keyFont;
 
         private int cursor;
         private ControlBinderStateMachine machine;
@@ -14,6 +14,7 @@ namespace Assets.Scripts.Menus
         void Start()
         {
             LabelStyle.fontSize = (int)(Screen.width * .04f);
+            keyFont.fontSize = (int)(Screen.width * .03f);
             machine = new ControlBinderStateMachine();
         }
 
@@ -111,7 +112,7 @@ namespace Assets.Scripts.Menus
 
         void OnGUI()
         {
-            GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (1f / 12f), Screen.width * (7f / 19f), Screen.height * (2f / 12f)), Title);
+            GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (1f / 12f), Screen.width * (6f / 19f), Screen.height * (4f / 12f)), Title);
             drawButtons();
             drawLabels();
             drawCursor();
@@ -125,35 +126,35 @@ namespace Assets.Scripts.Menus
         }
         private void drawButtons()
         {
-            if(GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), 
-                CustomInput.GamePadAttack, LabelStyle))
+            if(GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
+                CustomInput.GamePadAttack.ToString().ToLower(), keyFont))
                 machine.AttackClicked();
             if(GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (5f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.GamePadJump, LabelStyle))
+                CustomInput.GamePadJump.ToString().ToLower(), keyFont))
                 machine.JumpClicked();
             if(GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (6f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.GamePadDash, LabelStyle))
+                CustomInput.GamePadDash.ToString().ToLower(), keyFont))
                 machine.DashClicked();
             if(GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (7f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.GamePadPause, LabelStyle))
+                CustomInput.GamePadPause.ToString().ToLower(), keyFont))
                 machine.PauseClicked();
             if(GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (8f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.GamePadAccept, LabelStyle))
+                CustomInput.GamePadAccept.ToString().ToLower(), keyFont))
                 machine.AcceptClicked();
             if(GUI.Button(new Rect(Screen.width * (7f / 19f), Screen.height * (9f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.GamePadCancel, LabelStyle))
+                CustomInput.GamePadCancel.ToString().ToLower(), keyFont))
                 machine.CancelClicked();
             if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (4f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.GamePadUp, LabelStyle))
+                CustomInput.GamePadUp.ToString().ToLower(), keyFont))
                 machine.UpClicked();
             if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (5f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.GamePadDown, LabelStyle))
+                CustomInput.GamePadDown.ToString().ToLower(), keyFont))
                 machine.DownClicked();
             if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (6f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.GamePadLeft, LabelStyle))
+                CustomInput.GamePadLeft.ToString().ToLower(), keyFont))
                 machine.LeftClicked();
             if(GUI.Button(new Rect(Screen.width * (12f / 19f), Screen.height * (7f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)),
-                CustomInput.GamePadRight, LabelStyle))
+                CustomInput.GamePadRight.ToString().ToLower(), keyFont))
                 machine.RightClicked();
             if(GUI.Button(new Rect(Screen.width * (9f / 19f), Screen.height * (10f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Defaults", LabelStyle))
                 CustomInput.DefaultPad();
@@ -162,7 +163,7 @@ namespace Assets.Scripts.Menus
         }
         private void drawLabels()
         {
-            GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (3f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Game Pad", LabelStyle);
+            //GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (3f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Game Pad", LabelStyle);
             GUI.Label(new Rect(Screen.width * (4f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Attack", LabelStyle);
             GUI.Label(new Rect(Screen.width * (4f / 19f), Screen.height * (5f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Jump", LabelStyle);
             GUI.Label(new Rect(Screen.width * (4f / 19f), Screen.height * (6f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Dash", LabelStyle);

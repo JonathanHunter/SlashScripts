@@ -73,7 +73,7 @@ namespace Assets.Scripts.Menus
             {
                 //left, top, width, height
                 //title pic
-                GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (1f / 12f), Screen.width * (7f / 19f), Screen.height * (2f / 12f)), Title);
+                GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (1f / 12f), Screen.width * (6f / 19f), Screen.height * (4f / 12f)), Title);
                 drawButtons();
                 drawCursor();
             }

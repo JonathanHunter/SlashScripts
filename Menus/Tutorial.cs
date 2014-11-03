@@ -5,13 +5,14 @@ namespace Assets.Scripts.Menus
 {
     class Tutorial : MonoBehaviour
     {
-        public GUIStyle LabelStyle;
+        public GUIStyle LabelStyle, keyFont;
 
         private bool show = false;
 
         void Start()
         {
             LabelStyle.fontSize = (int)(Screen.width * .04f);
+            keyFont.fontSize = (int)(Screen.width * .03f);
         }
 
         void OnTriggerEnter2D(Collider2D coll)
@@ -39,29 +40,29 @@ namespace Assets.Scripts.Menus
                 GUI.Label(new Rect(Screen.width * (9f / 19f), Screen.height * (5f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Right", LabelStyle);
                 if (CustomInput.UsePad)
                 {
-                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (2f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadAttack, LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (3f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadJump, LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadDash, LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (5f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadPause, LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (6f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadAccept, LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (7f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadCancel, LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (2f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadUp, LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (3f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadDown, LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (4f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadLeft, LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (5f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadRight, LabelStyle);
+                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (2f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadAttack.ToString().ToLower(), keyFont);
+                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (3f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadJump.ToString().ToLower(), keyFont);
+                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadDash.ToString().ToLower(), keyFont);
+                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (5f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadPause.ToString().ToLower(), keyFont);
+                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (6f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadAccept.ToString().ToLower(), keyFont);
+                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (7f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadCancel.ToString().ToLower(), keyFont);
+                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (2f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadUp.ToString().ToLower(), keyFont);
+                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (3f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadDown.ToString().ToLower(), keyFont);
+                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (4f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadLeft.ToString().ToLower(), keyFont);
+                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (5f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.GamePadRight.ToString().ToLower(), keyFont);
                 }
                 else
                 {
-                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (2f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardAttack.ToString(), LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (3f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardJump.ToString(), LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardDash.ToString(), LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (5f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardPause.ToString(), LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (6f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardAccept + "/Enter", LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (7f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardCancel + "/Escape", LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (2f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardUp + "/Up arrow", LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (3f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardDown + "/Down arrow", LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (4f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardLeft + "/Left arrow", LabelStyle);
-                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (5f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardRight + "/Right arrow", LabelStyle);
+                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (2f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardAttack.ToString().ToLower(), keyFont);
+                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (3f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardJump.ToString().ToLower(), keyFont);
+                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardDash.ToString().ToLower(), keyFont);
+                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (5f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardPause.ToString().ToLower(), keyFont);
+                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (6f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardAccept.ToString().ToLower() + "/Enter", keyFont);
+                    GUI.Label(new Rect(Screen.width * (7f / 19f), Screen.height * (7f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardCancel.ToString().ToLower() + "/Escape", keyFont);
+                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (2f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardUp.ToString().ToLower() + "/Up arrow", keyFont);
+                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (3f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardDown.ToString().ToLower() + "/Down arrow", keyFont);
+                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (4f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardLeft.ToString().ToLower() + "/Left arrow", keyFont);
+                    GUI.Label(new Rect(Screen.width * (12f / 19f), Screen.height * (5f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), CustomInput.KeyBoardRight.ToString().ToLower() + "/Right arrow", keyFont);
                 }
             }
         }
