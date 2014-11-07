@@ -180,7 +180,7 @@ namespace Assets.Scripts.Enemies
             }
             transform.position = Vector3.MoveTowards(transform.position, target.position, 5 * speed * Time.deltaTime);
             hold += Time.deltaTime;
-            if(hold>.5f)
+            if(hold>.8f)
             {
                 GameObject dagger = (GameObject)Instantiate(Dagger);
                 dagger.transform.position = this.transform.position;
@@ -221,12 +221,14 @@ namespace Assets.Scripts.Enemies
         }
         private void Slash()
         {
-            if (!doOnce)
+            if (!doOnce && GetComponent<Animator>().GetInteger("frame") > 41)
             {
                 attack = ((GameObject)Instantiate(SlashAttack));
                 attack.GetComponent<Player.Attack>().setReference(this.gameObject.transform);
                 doOnce = true;
             }
+            if (GetComponent<Animator>().GetInteger("frame") > 43)
+                Destroy(attack);
         }
         private void SlashWait()
         {
