@@ -5,7 +5,7 @@ namespace Assets.Scripts.Menus
 {
     class MainMenuGUI : MonoBehaviour
     {
-        public GameObject LevelSelect, Options, Credits;
+        public GameObject LevelSelect, Options;
         public Texture Title, CursorPic;
         public GUIStyle ButtonStyle;
 
@@ -60,7 +60,7 @@ namespace Assets.Scripts.Menus
                     if (cursor == (int)(MainMenuStateMachine.State.Options))
                         menu = (GameObject)Instantiate(Options);
                     if (cursor == (int)(MainMenuStateMachine.State.Credits))
-                        menu = (GameObject)Instantiate(Credits);
+                        Application.LoadLevel("Credits Level");
                 }
                 if (Input.GetKeyUp(KeyCode.Escape))
                     Application.Quit();
@@ -93,7 +93,7 @@ namespace Assets.Scripts.Menus
             }
             if (GUI.Button(new Rect(Screen.width * (8f / 19f), Screen.height * (9f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Credits", ButtonStyle))
             {
-                menu = (GameObject)Instantiate(Credits);
+                Application.LoadLevel("Credits Level");
                 machine.CreditsClicked();
             }
         }
