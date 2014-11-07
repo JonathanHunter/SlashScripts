@@ -26,6 +26,7 @@ namespace Assets.Scripts.Menus
                 if (currState == (int)PauseMenuStateMachine.State.Exit)
                 {
                     Data.Paused = false;
+                    Destroy(FindObjectOfType<SoundPlayer>().gameObject);
                     Application.LoadLevel("Main Menu");
                 }
             }

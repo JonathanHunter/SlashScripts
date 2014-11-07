@@ -27,7 +27,7 @@ namespace Assets.Scripts.Menus
         }
         private static State Wait()
         {
-            if (CustomInput.PauseUp && !Data.Paused)
+            if (CustomInput.PauseFreshPress && !Data.Paused)
             {
                 Data.Paused = true;
                 return State.Resume;
