@@ -103,12 +103,14 @@ namespace Assets.Scripts.Enemies
         }
         private void Punch()
         {
-            if (!doOnce)
+            if (!doOnce && GetComponent<Animator>().GetInteger("frame") > 20)
             {
                 attack = ((GameObject)Instantiate(punch));
                 attack.GetComponent<Player.Attack>().setReference(this.gameObject.transform);
                 doOnce = true;
             }
+            if (GetComponent<Animator>().GetInteger("frame") > 26)
+                Destroy(attack);
         }
         private void JumpToWall()
         {

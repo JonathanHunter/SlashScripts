@@ -17,7 +17,7 @@ namespace Assets.Scripts.Enemies
 
         protected override int[] Initialize()
         {
-            return new int[] { 5, 1, 2, 2, 1, 1, 3, 1 };
+            return new int[] { 18, 1, 2, 14, 3, 1, 11, 1 };
         }
 
         protected override int StateMachine(int currState, bool beingHit, bool[] flags)
@@ -87,7 +87,7 @@ namespace Assets.Scripts.Enemies
                 return State.JumpToWall;
             if (rand == 1)
                 return State.WallAttack;
-            return State.InAir;
+            return State.OnWall;
         }
         private State WallAttack()
         {
