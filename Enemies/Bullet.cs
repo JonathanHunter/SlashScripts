@@ -8,6 +8,8 @@ namespace Assets.Scripts.Enemies
         public Vector2 dir;
         public float speed;
 
+        private float timer = 5f;
+
         void OnCollisionEnter2D(Collision2D coll)
         {
             if (!Data.Paused)
@@ -26,6 +28,9 @@ namespace Assets.Scripts.Enemies
             if (!Data.Paused)
             {
                 transform.Translate(dir * speed * Time.deltaTime);
+                timer -= Time.deltaTime;
+                if (timer < 0)
+                    Destroy(this.gameObject);
             }
         }
     }
