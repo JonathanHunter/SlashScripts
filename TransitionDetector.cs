@@ -20,6 +20,7 @@ namespace Assets.Scripts
         public Transform BlowerBound;
         public Spawn Bspawn;
         public bool yDir;
+        public bool bossTrans;
 
         void Start()
         {
@@ -34,42 +35,72 @@ namespace Assets.Scripts
                 a = (Mathf.Abs(target.position.x - this.transform.position.x) < .5 && Mathf.Abs(target.position.y - this.transform.position.y) < 5);
             if (a)
             {
-                if (!wait)
+                wait = true;
+            }
+            else
+            {
+                if (wait)
                 {
                     if (yDir)
                     {
-                        if (target.position.y - this.transform.position.y < .01 && Mathf.Abs(target.position.x - this.transform.position.x) < 5)
+                        if (target.position.y - this.transform.position.y > .01 && Mathf.Abs(target.position.x - this.transform.position.x) < 5)
                         {
                             FindObjectOfType<CameraTracking>().setBounds(AleftBound, ArightBound, AupperBound, AlowerBound);
                             Spawn.spawn = Aspawn;
-                            wait = true;
+                            wait = false;
+                            if (bossTrans)
+                            {
+                                foreach (Enemies.Enemy e in FindObjectsOfType<Enemies.Enemy>() as Enemies.Enemy[])
+                                {
+                                    Destroy(e.gameObject);
+                                }
+                            }
                         }
                         else
                         {
                             FindObjectOfType<CameraTracking>().setBounds(BleftBound, BrightBound, BupperBound, BlowerBound);
                             Spawn.spawn = Bspawn;
-                            wait = true;
+                            wait = false;
+                            if (bossTrans)
+                            {
+                                foreach (Enemies.Enemy e in FindObjectsOfType<Enemies.Enemy>() as Enemies.Enemy[])
+                                {
+                                    Destroy(e.gameObject);
+                                }
+                            }
                         }
                     }
                     else
                     {
-                        if (target.position.x - this.transform.position.x > .01 && Mathf.Abs(target.position.y - this.transform.position.y) < 5)
+                        if (target.position.x - this.transform.position.x < .01 && Mathf.Abs(target.position.y - this.transform.position.y) < 5)
                         {
                             FindObjectOfType<CameraTracking>().setBounds(AleftBound, ArightBound, AupperBound, AlowerBound);
                             Spawn.spawn = Aspawn;
-                            wait = true;
+                            wait = false;
+                            if (bossTrans)
+                            {
+                                foreach (Enemies.Enemy e in FindObjectsOfType<Enemies.Enemy>() as Enemies.Enemy[])
+                                {
+                                    Destroy(e.gameObject);
+                                }
+                            }
                         }
                         else
                         {
                             FindObjectOfType<CameraTracking>().setBounds(BleftBound, BrightBound, BupperBound, BlowerBound);
                             Spawn.spawn = Bspawn;
-                            wait = true;
+                            wait = false;
+                            if (bossTrans)
+                            {
+                                foreach (Enemies.Enemy e in FindObjectsOfType<Enemies.Enemy>() as Enemies.Enemy[])
+                                {
+                                    Destroy(e.gameObject);
+                                }
+                            }
                         }
                     }
                 }
             }
-            else
-                wait = false;
         }
     }
 }

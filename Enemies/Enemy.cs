@@ -15,6 +15,7 @@ namespace Assets.Scripts.Enemies
 
         protected int damage = 0;
         protected bool beingHit;
+        protected bool hitPlayer;
 
         private EnemyStateMachine machine;
         private Animator anim;
@@ -44,12 +45,6 @@ namespace Assets.Scripts.Enemies
         {
             if (!Data.Paused)
             {
-                if(paused)
-                {
-                    anim.speed = frameRate;
-                    rigidbody2D.gravityScale = g;
-                    paused = false;
-                }
                 if (coll.gameObject.tag == "Enemy" || coll.gameObject.tag == "Health")
                     Physics2D.IgnoreCollision(this.gameObject.collider2D, coll.gameObject.collider2D);
                 if (coll.gameObject.tag == "PlayerAttack")
@@ -57,13 +52,8 @@ namespace Assets.Scripts.Enemies
                     beingHit = true;
                     Data.Enemy = this;
                 }
-            }
-            else
-            {
-                anim.speed = 0;
-                g = rigidbody2D.gravityScale;
-                rigidbody2D.gravityScale = 0;
-                paused = true;
+                if (coll.gameObject.tag == "Player")
+                    hitPlayer = true;
             }
         }
 
@@ -71,9 +61,17 @@ namespace Assets.Scripts.Enemies
         {
             if (!Data.Paused)
             {
+                if (paused)
+                {
+                    anim.speed = frameRate;
+                    rigidbody2D.gravityScale = g;
+                    paused = false;
+                }
                 RunBehavior(machine.update(anim, beingHit, getFlags()));
                 if (beingHit)
                     beingHit = false;
+                if (hitPlayer)
+                    hitPlayer = false;
                 health -= damage;
                 if (damage > 0)
                     damage = 0;
@@ -84,6 +82,13 @@ namespace Assets.Scripts.Enemies
                         ((GameObject)Instantiate(HealthPickUp)).transform.position = this.gameObject.transform.position;
                     Destroy(this.gameObject);
                 }
+            }
+            else
+            {
+                anim.speed = 0;
+                g = rigidbody2D.gravityScale;
+                rigidbody2D.gravityScale = 0;
+                paused = true;
             }
         }
 

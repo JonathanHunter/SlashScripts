@@ -39,18 +39,19 @@ namespace Assets.Scripts
                 wait = true;
             bool a;
             if (aY)
-                a = (Mathf.Abs(target.position.y - A.position.y) < .5 && Mathf.Abs(target.position.x - A.position.x) < 5);
+                a = (Mathf.Abs(target.position.y - A.position.y) < 1 && Mathf.Abs(target.position.x - A.position.x) < 5);
             else
-                a = (Mathf.Abs(target.position.x - A.position.x) < .5 && Mathf.Abs(target.position.y - A.position.y) < 5);
+                a = (Mathf.Abs(target.position.x - A.position.x) < 1 && Mathf.Abs(target.position.y - A.position.y) < 5);
             bool b;
             if (bY)
-                b = (Mathf.Abs(target.position.y - B.position.y) < .5 && Mathf.Abs(target.position.x - B.position.x) < 5);
+                b = (Mathf.Abs(target.position.y - B.position.y) < 1 && Mathf.Abs(target.position.x - B.position.x) < 5);
             else
-                b = (Mathf.Abs(target.position.x - B.position.x) < .5 && Mathf.Abs(target.position.y - B.position.y) < 5);
+                b = (Mathf.Abs(target.position.x - B.position.x) < 1 && Mathf.Abs(target.position.y - B.position.y) < 5);
             if (a || b)
             {
                 if (!wait)
                 {
+                    //check within bounds instead
                     if (spawned)
                     {
                         Destroy(reference);
@@ -71,7 +72,8 @@ namespace Assets.Scripts
                 wait = false;
             if (Data.PlayerDead&&spawned)
             {
-                Destroy(reference);
+                if(reference!=null)
+                    Destroy(reference);
                 delay = true;
             }
         }
