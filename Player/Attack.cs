@@ -15,9 +15,12 @@ namespace Assets.Scripts.Player
         {
             if (reference == null)
                 Destroy(this.gameObject);
-            this.transform.position = reference.position;
-            this.transform.rotation = reference.rotation;
-            this.transform.localScale = reference.localScale;
+            else
+            {
+                this.transform.position = reference.position;
+                this.transform.rotation = reference.rotation;
+                this.transform.localScale = reference.localScale;
+            }
         }
 
         public void setReference(Transform pos)
