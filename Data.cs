@@ -31,11 +31,25 @@ namespace Assets.Scripts
             set { paused = value; }
         }
 
-        private static bool playerDead;
+        private static bool playerDead = false;
         public static bool PlayerDead
         {
             get { return playerDead; }
             set { playerDead = value; }
+        }
+
+        private static bool deSpawn;
+        public static bool DeSpawn
+        {
+            get { return deSpawn; }
+            set { deSpawn = value; }
+        }
+
+        private static bool pauseEnabled = true;
+        public static bool PauseEnabled
+        {
+            get { return pauseEnabled; }
+            set { pauseEnabled = value; }
         }
 
         //private static float aspectRatio;
