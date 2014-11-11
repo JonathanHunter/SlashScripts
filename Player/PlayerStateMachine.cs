@@ -10,22 +10,23 @@ namespace Assets.Scripts.Player
         public enum State
         {
             Idle = 0, Attack, MovingAttack, InAirAttack,
-            Move, Dash, Jump, InAir, OnWall, WallJump, Hit
+            Move, Dash, Jump, InAir, OnWall, WallJump, Hit, Dead
         }
         private delegate State machine(bool inAir, bool nextToWall, bool hit);
         private machine[] getNextState;
         private State currState;
         private static float hold = 0;
         private static AnimationHandler animHandler;
+        private static bool die = false;
 
         public PlayerStateMachine(float frameRate)
         {
             currState = State.Idle;
-            animHandler = new AnimationHandler(15, 6, 7, 7, 13, 9, 3, 9, 1, 4, 4);
+            animHandler = new AnimationHandler(15, 6, 7, 7, 13, 9, 3, 9, 1, 4, 4, 1);
             animHandler.frameRate = frameRate;
             getNextState = new machine[] { Idle, 
             Attacking, MovingAttack, InAirAttack, Move,
-            Dashing, Jumping, InAirNow, OnWall, WallJump, Hit };
+            Dashing, Jumping, InAirNow, OnWall, WallJump, Hit, Dead };
         }
 
         public State update(bool inAir, bool nextToWall, bool hit, UnityEngine.Animator anim)
@@ -226,9 +227,27 @@ namespace Assets.Scripts.Player
             if (hold > .4f)
             {
                 hold = 0;
+                if (die)
+                    return State.Dead;
                 return State.Idle;
             }
             return State.Hit;
+        }
+
+        private static State Dead(bool inAir, bool nextToWall, bool hit)
+        {
+            return State.Dead;
+        }
+
+        internal void Die()
+        {
+            die = true;
+        }
+
+        internal void Revive()
+        {
+            currState = State.Idle;
+            die = false;
         }
     }
 }

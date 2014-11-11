@@ -19,6 +19,7 @@ namespace Assets.Scripts.Player
 
         public GameObject AttackPrefab;
         public GameObject GameOverScreen;
+        public GameObject Explosion;
         public Transform backFoot;
         public Transform frontFoot;
         public Transform head;
@@ -36,6 +37,7 @@ namespace Assets.Scripts.Player
         private static Transform pos;
         private static float fallSpeed = MAX_FALL_SPEED;
         private static bool hitFromLeft = false;
+        private static bool explode = false;
 
         public int Health
         {
@@ -44,6 +46,7 @@ namespace Assets.Scripts.Player
 
         private int health;
         private int damage = 0;
+        private float hold = 0;
         private float invulerability = 0;
         private Animator anim;
         private PlayerStateMachine machine;
@@ -52,6 +55,7 @@ namespace Assets.Scripts.Player
         private bool hit;
         private bool render = true;
         private bool paused = false;
+        private bool done = false;
 
 
         void Start()
@@ -63,7 +67,7 @@ namespace Assets.Scripts.Player
             pos = this.gameObject.transform;
             doState = new state[] { Idle, 
             Attacking, MovingAttack, InAirAttack, Move, 
-            Dashing, Jumping, InAirNow, OnWall, WallJump, Hit };
+            Dashing, Jumping, InAirNow, OnWall, WallJump, Hit, Dead };
             attackPrefab = AttackPrefab;
         }
 
@@ -101,7 +105,7 @@ namespace Assets.Scripts.Player
 
         void Update()
         {
-            if (!Data.Paused)
+            if (!Data.Paused&&!done)
             {
                 if (paused)
                 {
@@ -133,11 +137,10 @@ namespace Assets.Scripts.Player
                     if (health < 1)
                     {
                         renderer.enabled = true;
-                        Data.Paused = true;
                         GetComponent<SoundPlayer>().PlaySong(1);
                         Instantiate(GameOverScreen);
-                        health = MAX_HEALTH;
                         Data.PlayerDead = true;
+                        machine.Die();
                     }
                     else
                         GetComponent<SoundPlayer>().PlaySong(0);
@@ -157,8 +160,15 @@ namespace Assets.Scripts.Player
                 }
                 if (state != (int)PlayerStateMachine.State.InAir && state != (int)PlayerStateMachine.State.Jump)
                     held = false;
+                if (!done&&explode)
+                {
+                    ((GameObject)Instantiate(Explosion)).GetComponent<Enemies.Explosion>().MoveToPosition(this.transform);
+                    renderer.enabled = false;
+                    this.collider2D.enabled = false;
+                    done = true;
+                }
             }
-            else if (!paused)
+            else if (Data.Paused&&!paused)
             {
                 anim.speed = 0;
                 paused = true;
@@ -177,6 +187,10 @@ namespace Assets.Scripts.Player
                     hit = true;
                     health = 0;
                 }
+                if (temp.collider.tag == "Enemy")
+                {
+                    hit = true;
+                }
             }
             else if (temp2 != null && temp2.collider != null)
             {
@@ -185,6 +199,10 @@ namespace Assets.Scripts.Player
                 {
                     hit = true;
                     health = 0;
+                }
+                if (temp2.collider.tag == "Enemy")
+                {
+                    hit = true;
                 }
             }
             else
@@ -379,6 +397,22 @@ namespace Assets.Scripts.Player
                 xVel += MOVE_SPEED;
             else
                 xVel -= MOVE_SPEED;
+        }
+        private static void Dead()
+        {
+            explode = true;
+            xVel = 0;
+            yVel = 0;
+        }
+
+        public void Revive()
+        {
+            machine.Revive();
+            health = MAX_HEALTH;
+            Data.PlayerDead = false;
+            done = false;
+            this.collider2D.enabled = true;
+            explode = false;
         }
     }
 }
