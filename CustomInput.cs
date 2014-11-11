@@ -654,5 +654,12 @@ namespace Assets.Scripts
                 return true;
             return false;
         }
+        public static void voidPause()
+        {
+            bools = bools & ~PAUSE;
+            boolsHeld = boolsHeld & ~PAUSE;
+            boolsUp = boolsUp & ~PAUSE;
+            boolsFreshPress = boolsFreshPress & ~PAUSE;
+        }
     }
 }
