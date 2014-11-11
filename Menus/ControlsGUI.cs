@@ -25,7 +25,7 @@ namespace Assets.Scripts.Menus
             if (menu == null)
             {
                 cursor = (int)machine.update();
-                if (CustomInput.AcceptUp)
+                if (CustomInput.AcceptFreshPress)
                 {
                     if (cursor == (int)(ControlsStateMachine.State.Keyboard))
                         menu = (GameObject)Instantiate(Keyboard);
@@ -34,7 +34,7 @@ namespace Assets.Scripts.Menus
                     if (cursor == (int)(ControlsStateMachine.State.Back))
                         Destroy(this.gameObject);
                 }
-                if (CustomInput.CancelUp)
+                if (CustomInput.CancelFreshPress)
                     Destroy(this.gameObject);
             }
         }

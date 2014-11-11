@@ -28,36 +28,36 @@ namespace Assets.Scripts.Menus
 
         public static State Video()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Exit;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Audio;
             return State.Video;
         }
 
         public static State Audio()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Video;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Controls;
             return State.Audio;
         }
 
         public static State Controls()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Audio;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Exit;
             return State.Controls;
         }
 
         public static State Exit()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Controls;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Video;
             return State.Exit;
         }

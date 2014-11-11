@@ -27,7 +27,7 @@ namespace Assets.Scripts.Menus
         }
         private static State Wait()
         {
-            if (CustomInput.PauseFreshPress && !Data.Paused)
+            if (CustomInput.PauseFreshPress && Data.PauseEnabled)
             {
                 Data.Paused = true;
                 return State.Resume;
@@ -36,13 +36,23 @@ namespace Assets.Scripts.Menus
         }
         private static State Resume()
         {
-            if (CustomInput.UpUp || CustomInput.DownUp)
+            if (CustomInput.PauseFreshPress)
+            {
+                Data.Paused = false;
+                return State.Wait;
+            }
+            if (CustomInput.UpFreshPress || CustomInput.DownFreshPress)
                 return State.Exit;
             return State.Resume;
         }
         private static State Exit()
         {
-            if (CustomInput.UpUp || CustomInput.DownUp)
+            if (CustomInput.PauseFreshPress)
+            {
+                Data.Paused = false;
+                return State.Wait;
+            }
+            if (CustomInput.UpFreshPress || CustomInput.DownFreshPress)
                 return State.Resume;
             return State.Exit;
         }

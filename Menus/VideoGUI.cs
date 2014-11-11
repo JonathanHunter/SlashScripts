@@ -48,41 +48,41 @@ namespace Assets.Scripts.Menus
             cursor = (int)machine.update();
             if (cursor == (int)(VideoStateMachine.State.Resolution))
             {
-                if (CustomInput.RightUp)
+                if (CustomInput.RightFreshPress)
                 {
                     resIndex++;
                     if (resIndex >= res.Length)
                         resIndex = 0;
                 }
-                else if (CustomInput.LeftUp)
+                else if (CustomInput.LeftFreshPress)
                 {
                     resIndex--;
                     if (resIndex < 0)
                         resIndex = res.Length - 1;
                 }
-                if (CustomInput.AcceptUp)
+                if (CustomInput.AcceptFreshPress)
                     Accept();
             }
-            if (cursor == (int)(VideoStateMachine.State.FullScreen) && CustomInput.AcceptUp)
+            if (cursor == (int)(VideoStateMachine.State.FullScreen) && CustomInput.AcceptFreshPress)
                 fullscreen = !fullscreen;
             if (cursor == (int)(VideoStateMachine.State.Quality))
             {
-                if (CustomInput.AcceptUp || CustomInput.RightUp)
+                if (CustomInput.AcceptFreshPress || CustomInput.RightFreshPress)
                 {
                     quality++;
                     if (quality >= QualitySettings.names.Length)
                         quality = 0;
                 }
-                else if (CustomInput.LeftUp)
+                else if (CustomInput.LeftFreshPress)
                 {
                     quality--;
                     if (quality < 0)
                         quality = QualitySettings.names.Length - 1;
                 }
             }
-            if (cursor == (int)(VideoStateMachine.State.Accept) && CustomInput.AcceptUp)
+            if (cursor == (int)(VideoStateMachine.State.Accept) && CustomInput.AcceptFreshPress)
                 Accept();
-            if ((cursor == (int)(VideoStateMachine.State.Exit) && CustomInput.AcceptUp) || CustomInput.CancelUp)
+            if ((cursor == (int)(VideoStateMachine.State.Exit) && CustomInput.AcceptFreshPress) || CustomInput.CancelFreshPress)
                 Destroy(this.gameObject);
         }
 

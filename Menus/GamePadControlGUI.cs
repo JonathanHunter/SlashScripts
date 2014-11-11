@@ -21,7 +21,7 @@ namespace Assets.Scripts.Menus
         void Update()
         {
             cursor = (int)machine.update();
-            if(CustomInput.AcceptUp)
+            if(CustomInput.AcceptFreshPress)
             {
                 if (cursor == (int)(ControlBinderStateMachine.State.Default))
                     CustomInput.DefaultPad();

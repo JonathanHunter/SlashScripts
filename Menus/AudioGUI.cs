@@ -37,14 +37,14 @@ namespace Assets.Scripts.Menus
             cursor = (int)machine.update();
             if (cursor == (int)(AudioStateMachine.State.Music))
             {
-                if (CustomInput.RightUp)
+                if (CustomInput.RightFreshPress)
                 {
                     musicVol += .2f;
                     if (musicVol > 1)
                         musicVol = 1;
                     Change();
                 }
-                else if (CustomInput.LeftUp)
+                else if (CustomInput.LeftFreshPress)
                 {
                     musicVol -= .2f;
                     if (musicVol < 0)
@@ -54,14 +54,14 @@ namespace Assets.Scripts.Menus
             }
             if (cursor == (int)(AudioStateMachine.State.SFX))
             {
-                if (CustomInput.LeftUp)
+                if (CustomInput.LeftFreshPress)
                 {
                     sfxVol -= .2f;
                     if (sfxVol < 0)
                         sfxVol = 0;
                     Change();
                 }
-                if (CustomInput.RightUp)
+                if (CustomInput.RightFreshPress)
                 {
                     sfxVol += .2f;
                     if (sfxVol > 1)

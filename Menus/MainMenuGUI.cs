@@ -53,7 +53,7 @@ namespace Assets.Scripts.Menus
             if (menu == null)
             {
                 cursor = (int)machine.update();
-                if (CustomInput.AcceptUp)
+                if (CustomInput.AcceptFreshPress)
                 {
                     if (cursor == (int)(MainMenuStateMachine.State.LevelSelect))
                         menu = (GameObject)Instantiate(LevelSelect);

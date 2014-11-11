@@ -25,7 +25,7 @@ namespace Assets.Scripts.Menus
             if (menu == null)
             {
                 cursor = (int)machine.update();
-                if (CustomInput.AcceptUp)
+                if (CustomInput.AcceptFreshPress)
                 {
                     if (cursor == (int)(OptionsMenuStateMachine.State.Video))
                         menu = (GameObject)Instantiate(Video);
@@ -36,7 +36,7 @@ namespace Assets.Scripts.Menus
                     if (cursor == (int)(OptionsMenuStateMachine.State.Exit))
                         Destroy(this.gameObject);
                 }
-                if (CustomInput.CancelUp)
+                if (CustomInput.CancelFreshPress)
                         Destroy(this.gameObject);
             }
         }

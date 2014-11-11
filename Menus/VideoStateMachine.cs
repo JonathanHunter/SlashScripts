@@ -28,45 +28,45 @@ namespace Assets.Scripts.Menus
 
         public static State Resolution()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Exit;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.FullScreen;
             return State.Resolution;
         }
 
         public static State FullScreen()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Resolution;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Quality;
             return State.FullScreen;
         }
 
         public static State Quality()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.FullScreen;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Accept;
             return State.Quality;
         }
 
         public static State Accept()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Quality;
-            if (CustomInput.DownUp || CustomInput.LeftUp || CustomInput.RightUp)
+            if (CustomInput.DownFreshPress || CustomInput.LeftFreshPress || CustomInput.RightFreshPress)
                 return State.Exit;
             return State.Accept;
         }
 
         public static State Exit()
         {
-            if (CustomInput.UpUp || CustomInput.RightUp || CustomInput.LeftUp)
+            if (CustomInput.UpFreshPress || CustomInput.RightFreshPress || CustomInput.LeftFreshPress)
                 return State.Accept;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Resolution;
             return State.Exit;
         }

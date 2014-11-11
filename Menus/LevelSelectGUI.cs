@@ -22,23 +22,23 @@ namespace Assets.Scripts.Menus
         {
             LabelStyle.fontSize = (int)(Screen.width * .05f);
             cursor = (int)machine.update();
-            if (cursor == (int)(LevelSelectStateMachine.State.Level1)&&CustomInput.AcceptUp)
+            if (cursor == (int)(LevelSelectStateMachine.State.Level1)&&CustomInput.AcceptFreshPress)
             {
                Application.LoadLevel("Level 1");
             }
-            if (cursor == (int)(LevelSelectStateMachine.State.Level2)&&(CustomInput.AcceptUp/*&&PlayerPrefs.GetInt(LevelKey)>=1*/))
+            if (cursor == (int)(LevelSelectStateMachine.State.Level2)&&(CustomInput.AcceptFreshPress/*&&PlayerPrefs.GetInt(LevelKey)>=1*/))
             {
                 Application.LoadLevel("Level 2");
             }
-            if (cursor == (int)(LevelSelectStateMachine.State.Level3) && (CustomInput.AcceptUp/*&&PlayerPrefs.GetInt(LevelKey)>=1*/))
+            if (cursor == (int)(LevelSelectStateMachine.State.Level3) && (CustomInput.AcceptFreshPress/*&&PlayerPrefs.GetInt(LevelKey)>=1*/))
             {
                 Application.LoadLevel("Level 4");
             }
-            if (cursor == (int)(LevelSelectStateMachine.State.Level4) && (CustomInput.AcceptUp/*&&PlayerPrefs.GetInt(LevelKey)>=1*/))
+            if (cursor == (int)(LevelSelectStateMachine.State.Level4) && (CustomInput.AcceptFreshPress/*&&PlayerPrefs.GetInt(LevelKey)>=1*/))
             {
                 Application.LoadLevel("Level 3");
             }
-            if ((cursor == (int)(LevelSelectStateMachine.State.Exit) && CustomInput.AcceptUp) || CustomInput.CancelUp)
+            if ((cursor == (int)(LevelSelectStateMachine.State.Exit) && CustomInput.AcceptFreshPress) || CustomInput.CancelFreshPress)
                 Destroy(this.gameObject);
         }
 

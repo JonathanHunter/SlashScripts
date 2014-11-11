@@ -28,27 +28,27 @@ namespace Assets.Scripts.Menus
 
         public static State LevelSelect()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Credits;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Options;
             return State.LevelSelect;
         }
 
         public static State Options()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.LevelSelect;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Credits;
             return State.Options;
         }
 
         public static State Credits()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Options;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.LevelSelect;
             return State.Credits;
         }

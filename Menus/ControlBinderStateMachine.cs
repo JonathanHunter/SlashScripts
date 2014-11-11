@@ -54,195 +54,195 @@ namespace Assets.Scripts.Menus
 
         private static State Attack()
         {
-            if (CustomInput.AcceptUp)
+            if (CustomInput.AcceptFreshPress)
             {
                 prevState = State.Attack;
                 return State.Prep;
             }
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Default;
-            if (CustomInput.LeftUp)
+            if (CustomInput.LeftFreshPress)
                 return State.Up;
-            if (CustomInput.RightUp)
+            if (CustomInput.RightFreshPress)
                 return State.Up;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Jump;
             return State.Attack;
         }
         private static State Jump()
         {
-            if (CustomInput.AcceptUp)
+            if (CustomInput.AcceptFreshPress)
             {
                 prevState = State.Jump;
                 return State.Prep;
             }
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Attack;
-            if (CustomInput.LeftUp)
+            if (CustomInput.LeftFreshPress)
                 return State.Down;
-            if (CustomInput.RightUp)
+            if (CustomInput.RightFreshPress)
                 return State.Down;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Dash;
             return State.Jump;
         }
         private static State Dash()
         {
-            if (CustomInput.AcceptUp)
+            if (CustomInput.AcceptFreshPress)
             {
                 prevState = State.Dash;
                 return State.Prep;
             }
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Jump;
-            if (CustomInput.LeftUp)
+            if (CustomInput.LeftFreshPress)
                 return State.Left;
-            if (CustomInput.RightUp)
+            if (CustomInput.RightFreshPress)
                 return State.Left;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Pause;
             return State.Dash;
         }
         private static State Pause()
         {
-            if (CustomInput.AcceptUp)
+            if (CustomInput.AcceptFreshPress)
             {
                 prevState = State.Pause;
                 return State.Prep;
             }
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Dash;
-            if (CustomInput.LeftUp)
+            if (CustomInput.LeftFreshPress)
                 return State.Right;
-            if (CustomInput.RightUp)
+            if (CustomInput.RightFreshPress)
                 return State.Right;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Accept;
             return State.Pause;
         }
         private static State Accept()
         {
-            if (CustomInput.AcceptUp)
+            if (CustomInput.AcceptFreshPress)
             {
                 prevState = State.Accept;
                 return State.Prep;
             }
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Pause;
-            if (CustomInput.LeftUp)
+            if (CustomInput.LeftFreshPress)
                 return State.Attack;
-            if (CustomInput.RightUp)
+            if (CustomInput.RightFreshPress)
                 return State.Up;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Cancel;
             return State.Accept;
         }
         private static State Cancel()
         {
-            if (CustomInput.AcceptUp)
+            if (CustomInput.AcceptFreshPress)
             {
                 prevState = State.Accept;
                 return State.Prep;
             }
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Accept;
-            if (CustomInput.LeftUp)
+            if (CustomInput.LeftFreshPress)
                 return State.Attack;
-            if (CustomInput.RightUp)
+            if (CustomInput.RightFreshPress)
                 return State.Up;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Default;
             return State.Cancel;
         }
         private static State Up()
         {
-            if (CustomInput.AcceptUp)
+            if (CustomInput.AcceptFreshPress)
             {
                 prevState = State.Up;
                 return State.Prep;
             }
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Exit;
-            if (CustomInput.LeftUp)
+            if (CustomInput.LeftFreshPress)
                 return State.Attack;
-            if (CustomInput.RightUp)
+            if (CustomInput.RightFreshPress)
                 return State.Attack;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Down;
             return State.Up;
         }
         private static State Down()
         {
-            if (CustomInput.AcceptUp)
+            if (CustomInput.AcceptFreshPress)
             {
                 prevState = State.Down;
                 return State.Prep;
             }
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Up;
-            if (CustomInput.LeftUp)
+            if (CustomInput.LeftFreshPress)
                 return State.Jump;
-            if (CustomInput.RightUp)
+            if (CustomInput.RightFreshPress)
                 return State.Jump;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Left;
             return State.Down;
         }
         private static State Left()
         {
-            if (CustomInput.AcceptUp)
+            if (CustomInput.AcceptFreshPress)
             {
                 prevState = State.Left;
                 return State.Prep;
             }
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Down;
-            if (CustomInput.LeftUp)
+            if (CustomInput.LeftFreshPress)
                 return State.Dash;
-            if (CustomInput.RightUp)
+            if (CustomInput.RightFreshPress)
                 return State.Dash;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Right;
             return State.Left;
         }
         private static State Right()
         {
-            if (CustomInput.AcceptUp)
+            if (CustomInput.AcceptFreshPress)
             {
                 prevState = State.Right;
                 return State.Prep;
             }
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Default;
-            if (CustomInput.LeftUp)
+            if (CustomInput.LeftFreshPress)
                 return State.Pause;
-            if (CustomInput.RightUp)
+            if (CustomInput.RightFreshPress)
                 return State.Pause;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Exit;
             return State.Right;
         }
         private static State Default()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Cancel;
-            if (CustomInput.LeftUp)
+            if (CustomInput.LeftFreshPress)
                 return State.Exit;
-            if (CustomInput.RightUp)
+            if (CustomInput.RightFreshPress)
                 return State.Exit;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Attack;
             return State.Default;
         }
         private static State Exit()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Right;
-            if (CustomInput.LeftUp)
+            if (CustomInput.LeftFreshPress)
                 return State.Default;
-            if (CustomInput.RightUp)
+            if (CustomInput.RightFreshPress)
                 return State.Default;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Up;
             return State.Exit;
         }

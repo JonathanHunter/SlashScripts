@@ -28,13 +28,13 @@ namespace Assets.Scripts.Menus
 
         private static State Continue()
         {
-            if (CustomInput.UpUp || CustomInput.DownUp)
+            if (CustomInput.UpFreshPress || CustomInput.DownFreshPress)
                 return State.Exit;
             return State.Continue;
         }
         private static State Exit()
         {
-            if (CustomInput.UpUp || CustomInput.DownUp)
+            if (CustomInput.UpFreshPress || CustomInput.DownFreshPress)
                 return State.Continue;
             return State.Exit;
         }

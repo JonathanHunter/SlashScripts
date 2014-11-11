@@ -28,6 +28,7 @@ namespace Assets.Scripts.Menus
         {
             if (show)
             {
+                GUI.Label(new Rect(Screen.width * (4f / 19f), Screen.height * (1f / 12f), Screen.width * (6f / 19f), Screen.height * (1f / 12f)), "You can change the controls in the options menu", LabelStyle);
                 GUI.Label(new Rect(Screen.width * (4f / 19f), Screen.height * (2f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Attack", LabelStyle);
                 GUI.Label(new Rect(Screen.width * (4f / 19f), Screen.height * (3f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Jump", LabelStyle);
                 GUI.Label(new Rect(Screen.width * (4f / 19f), Screen.height * (4f / 12f), Screen.width * (2f / 19f), Screen.height * (1f / 12f)), "Dash", LabelStyle);

@@ -28,27 +28,27 @@ namespace Assets.Scripts.Menus
 
         public static State Music()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Exit;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.SFX;
             return State.Music;
         }
 
         public static State SFX()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Music;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Exit;
             return State.SFX;
         }
 
         public static State Exit()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.SFX;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Music;
             return State.Exit;
         }

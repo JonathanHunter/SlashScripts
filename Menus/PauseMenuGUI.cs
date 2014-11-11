@@ -19,7 +19,7 @@ namespace Assets.Scripts.Menus
         void Update()
         {
             currState = (int)machine.update();
-            if (CustomInput.AcceptUp)
+            if (CustomInput.AcceptFreshPress)
             {
                 if (currState == (int)PauseMenuStateMachine.State.Resume)
                     machine.UnPause();
@@ -30,7 +30,7 @@ namespace Assets.Scripts.Menus
                     Application.LoadLevel("Main Menu");
                 }
             }
-            if (CustomInput.CancelUp && currState != (int)PauseMenuStateMachine.State.Wait) 
+            if (CustomInput.CancelFreshPress && currState != (int)PauseMenuStateMachine.State.Wait) 
                 machine.UnPause();
         }
 

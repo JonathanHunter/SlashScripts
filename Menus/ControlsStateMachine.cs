@@ -28,27 +28,27 @@ namespace Assets.Scripts.Menus
 
         public static State Keyboard()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Back;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Gamepad;
             return State.Keyboard;
         }
 
         public static State Gamepad()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Keyboard;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Back;
             return State.Gamepad;
         }
 
         public static State Back()
         {
-            if (CustomInput.UpUp)
+            if (CustomInput.UpFreshPress)
                 return State.Gamepad;
-            if (CustomInput.DownUp)
+            if (CustomInput.DownFreshPress)
                 return State.Keyboard;
             return State.Back;
         }
