@@ -6,9 +6,11 @@ namespace Assets.Scripts
     class BossRoomChecker : MonoBehaviour
     {
         public bool Anim = true;
+        public bool done = false;
+
         void Update()
         {
-            if (FindObjectOfType<Enemies.Enemy>() == null)
+            if (done)
             {
                 this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
                 if(Anim)

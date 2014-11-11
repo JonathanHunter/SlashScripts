@@ -23,7 +23,7 @@ namespace Assets.Scripts.Enemies
             return new ShooterStateMachine(frameRate);
         }
 
-        protected void TouchingSomething(ref bool inAir, ref bool blocked)
+        protected new void TouchingSomething(ref bool inAir, ref bool blocked)
         {
             inAir = !(Physics2D.Raycast(backFoot.position, -Vector2.up, 0.1f) || Physics2D.Raycast(frontFoot.position, -Vector2.up, 0.1f));
             RaycastHit2D ray;

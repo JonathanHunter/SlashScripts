@@ -56,7 +56,7 @@ namespace Assets.Scripts.Enemies
             return new bool[] { inAir, OnWall, playerClose, done };
         }
 
-        private void TouchingSomething(ref bool inAir, ref bool nextToClimableWall)
+        private new void TouchingSomething(ref bool inAir, ref bool nextToClimableWall)
         {
             inAir = !(Physics2D.Raycast(backFoot.position, -Vector2.up, 0.05f) || Physics2D.Raycast(frontFoot.position, -Vector2.up, 0.05f));
             RaycastHit2D ray1, ray2;

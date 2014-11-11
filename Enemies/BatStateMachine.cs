@@ -23,9 +23,9 @@ namespace Assets.Scripts.Enemies
         {
             switch(currState)
             {
-                case (int)State.Intro: return Intro(); break;
-                case (int)State.FlyOnCircuit: return FLY(); break;
-                case (int)State.FlyToPlayer: return ATTACK(beingHit, flags[0]); break;
+                case (int)State.Intro: return Intro();
+                case (int)State.FlyOnCircuit: return FLY();
+                case (int)State.FlyToPlayer: return ATTACK(beingHit, flags[0]);
             }
             return 0;
         }

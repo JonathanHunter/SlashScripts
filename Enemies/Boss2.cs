@@ -21,7 +21,7 @@ namespace Assets.Scripts.Enemies
         private bool doOnce = false;
         private bool render = true;
         private bool isDone = false;
-        private bool turn = false;
+        private bool shouldTurn = false;
 
 
         protected override EnemyStateMachine getStateMachine(int frameRate)
@@ -40,8 +40,8 @@ namespace Assets.Scripts.Enemies
             float disty = Mathf.Abs(player.position.y - this.gameObject.transform.position.y);
             bool playerClose = distx < close && disty < 1;
             bool inAir = false;
-            TouchingSomething(ref inAir, ref turn);
-            return new bool[] { playerClose, turn, isDone };
+            TouchingSomething(ref inAir, ref shouldTurn);
+            return new bool[] { playerClose, shouldTurn, isDone };
         }
 
         protected override void RunBehavior(int state)
@@ -67,7 +67,7 @@ namespace Assets.Scripts.Enemies
                 case (int)Boss2StateMachine.State.Summon: Summon(); break;
                 case (int)Boss2StateMachine.State.Turn: Turn(); break;
             }
-            if (turn)
+            if (shouldTurn)
                 base.turn();
             if (invulerability > 0)
             {
