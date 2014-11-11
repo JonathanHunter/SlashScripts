@@ -56,6 +56,7 @@ namespace Assets.Scripts
                 if (start)
                 {
                     Data.Paused = true;
+                    Data.PauseEnabled = false;
                     state = State.displaying;
                     pageChars=pageStrings[currentPage].ToCharArray();
                     style.fontSize = (int)(Screen.width * fontsize[currentPage]);
@@ -66,7 +67,8 @@ namespace Assets.Scripts
             {
                 if (CustomInput.PauseFreshPress)
                 {
-                    currentText = new System.Text.StringBuilder(pageStrings[currentPage]);
+                    for (int i = Mathf.RoundToInt(currentLetter); i < pageChars.Length;i++ )
+                        currentText.Append(pageChars[i]);
                     state = State.paused;
                 }
                 else
@@ -99,6 +101,8 @@ namespace Assets.Scripts
                     if (currentPage >= pages.Length)
                     {
                         Data.Paused = false;
+                        Data.PauseEnabled = true;
+                        CustomInput.voidPause();
                         Destroy(this.gameObject);
                     }
                     else
