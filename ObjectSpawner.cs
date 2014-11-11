@@ -5,76 +5,145 @@ namespace Assets.Scripts
 {
     class ObjectSpawner : MonoBehaviour
     {
-        private bool spawned;
-        private bool wait;
-        private bool delay;
+        private GameObject player;
         private GameObject reference;
+        private bool respawn;
+        private bool respawnable;
 
-        public Transform target;
-        public Transform A, B;
         public GameObject prefab;
+        public Transform A, B;
+        public bool aRight;
         public bool aY;
+        public bool aUp;
+        public bool bRight;
         public bool bY;
+        public bool bUp;
         public bool spawnOnce;
         public bool spawnAtLocation;
 
         void Start()
         {
-            spawned = false;
-            wait = false;
+            player = FindObjectOfType<Player.Player>().gameObject;
+            reference = null;
+            respawn = false;
+            respawnable = false;
         }
         void Update()
         {
-            if (delay)
+            if (player == null)
+                player = FindObjectOfType<Player.Player>().gameObject;
+            else
             {
-                if (!Data.PlayerDead)
+                if (respawn && !Data.PlayerDead)
                 {
                     reference = (GameObject)Instantiate(prefab);
                     if (spawnAtLocation)
                         reference.transform.position = this.transform.position;
-                    delay = false;
+                    respawn = false;
                 }
-            }
-            if (spawnOnce && spawned)
-                wait = true;
-            bool a;
-            if (aY)
-                a = (Mathf.Abs(target.position.y - A.position.y) < 1 && Mathf.Abs(target.position.x - A.position.x) < 5);
-            else
-                a = (Mathf.Abs(target.position.x - A.position.x) < 1 && Mathf.Abs(target.position.y - A.position.y) < 5);
-            bool b;
-            if (bY)
-                b = (Mathf.Abs(target.position.y - B.position.y) < 1 && Mathf.Abs(target.position.x - B.position.x) < 5);
-            else
-                b = (Mathf.Abs(target.position.x - B.position.x) < 1 && Mathf.Abs(target.position.y - B.position.y) < 5);
-            if (a || b)
-            {
-                if (!wait)
+                if (Data.DeSpawn)
                 {
-                    //check within bounds instead
-                    if (spawned)
-                    {
+                    if (reference != null)
                         Destroy(reference);
-                        spawned = false;
-                        wait = true;
-                    }
+                }
+                bool a;
+                bool b;
+                if (spawnOnce && reference != null)
+                {
+                    a = false;
+                    b = false;
+                }
+                else
+                {
+                    if (aY)
+                        a = (Mathf.Abs(player.transform.position.y - A.position.y) < .5 && Mathf.Abs(player.transform.position.x - A.position.x) < 5);
                     else
+                        a = (Mathf.Abs(player.transform.position.x - A.position.x) < .5 && Mathf.Abs(player.transform.position.y - A.position.y) < 5);
+                    if (bY)
+                        b = (Mathf.Abs(player.transform.position.y - B.position.y) < .5 && Mathf.Abs(player.transform.position.x - B.position.x) < 5);
+                    else
+                        b = (Mathf.Abs(player.transform.position.x - B.position.x) < .5 && Mathf.Abs(player.transform.position.y - B.position.y) < 5);
+                }
+                if (a)
+                    logic(A, aY, aRight, aUp);
+                else if (b)
+                    logic(B, bY, bRight, bUp);
+                if (Data.PlayerDead && respawnable)
+                    respawn = true;
+            }
+        }
+
+        private void logic(Transform obj, bool y, bool right, bool up)
+        {
+            if (y)
+            {
+                if (up)
+                {
+                    if (player.transform.position.y > obj.position.y && reference == null)
                     {
                         reference = (GameObject)Instantiate(prefab);
                         if (spawnAtLocation)
                             reference.transform.position = this.transform.position;
-                        spawned = true;
-                        wait = true;
+                        respawnable = true;
+                    }
+                    else if (player.transform.position.y < obj.position.y)
+                    {
+                        if (reference != null)
+                            Destroy(reference);
+                        respawnable = false;
+                    }
+                }
+                else
+                {
+                    if (player.transform.position.y < obj.position.y && reference == null)
+                    {
+                        reference = (GameObject)Instantiate(prefab);
+                        if (spawnAtLocation)
+                            reference.transform.position = this.transform.position;
+                        respawnable = true;
+                    }
+                    else if (player.transform.position.y > obj.position.y)
+                    {
+                        if (reference != null)
+                            Destroy(reference);
+                        respawnable = false;
                     }
                 }
             }
             else
-                wait = false;
-            if (Data.PlayerDead&&spawned)
             {
-                if(reference!=null)
-                    Destroy(reference);
-                delay = true;
+                if (right)
+                {
+                    if (player.transform.position.x > obj.position.x && reference == null)
+                    {
+                        reference = (GameObject)Instantiate(prefab);
+                        if (spawnAtLocation)
+                            reference.transform.position = this.transform.position;
+                        respawnable = true;
+                    }
+                    else if (player.transform.position.x < obj.position.x)
+                    {
+                        if (reference != null)
+                            Destroy(reference);
+                        respawnable = false;
+                    }
+                }
+                else
+                {
+                    if (player.transform.position.x < obj.position.x && reference == null)
+                    {
+                        reference = (GameObject)Instantiate(prefab);
+                        if (spawnAtLocation)
+                            reference.transform.position = this.transform.position;
+                        respawnable = true;
+                    }
+                    else if(player.transform.position.x > obj.position.x)
+                    {
+                        if (reference != null)
+                            Destroy(reference);
+                        respawnable = false;
+                    }
+                }
             }
         }
     }
