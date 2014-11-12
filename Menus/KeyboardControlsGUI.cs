@@ -11,6 +11,8 @@ namespace Assets.Scripts.Menus
         private int cursor;
         private ControlBinderStateMachine machine;
         private delegate void state();
+        private bool duplicate;
+
         void Start()
         {
             LabelStyle.fontSize = (int)(Screen.width * .04f);
@@ -28,7 +30,7 @@ namespace Assets.Scripts.Menus
                 if (cursor == (int)(ControlBinderStateMachine.State.Exit))
                     Destroy(this.gameObject);
             }
-            if ((cursor != (int)(ControlBinderStateMachine.State.Holding))&&CustomInput.CancelUp)
+            if ((cursor != (int)(ControlBinderStateMachine.State.Holding)&&cursor!=(int)(ControlBinderStateMachine.State.GettingKey))&&CustomInput.CancelFreshPress)
                 Destroy(this.gameObject);
         }
 
@@ -36,31 +38,178 @@ namespace Assets.Scripts.Menus
         {
             GUI.DrawTexture(new Rect(Screen.width * (7f / 19f),
                 Screen.height * (6f / 12f), Screen.width * (6f / 19f),
-                Screen.height * (3f / 12f)), Background);
-            GUI.Label(new Rect(Screen.width * (7f / 19f),
-                Screen.height * (6f / 12f), Screen.width * (6f / 19f),
-                Screen.height * (3f / 12f)),
-                "Press the new key you want to use, Escape to cancel."
-                , LabelStyle);
+                Screen.height * (4f / 12f)), Background);
+            if (!duplicate)
+            {
+                GUI.Label(new Rect(Screen.width * (7f / 19f),
+                    Screen.height * (6f / 12f), Screen.width * (6f / 19f),
+                    Screen.height * (4f / 12f)),
+                    "Press the new key you want to use, Escape to cancel."
+                    , LabelStyle);
+            }
+            else
+            {
+
+                GUI.Label(new Rect(Screen.width * (7f / 19f),
+                    Screen.height * (6f / 12f), Screen.width * (6f / 19f),
+                    Screen.height * (4f / 12f)),
+                    "Press the new key you want to use, Escape to cancel.\nError duplicate Key"
+                    , LabelStyle);
+            }
             Event e = Event.current;
             if (e.isKey && e.keyCode != KeyCode.None)
             {
 
                 KeyCode temp = e.keyCode;
-                switch (machine.getPrieviousState())
+                if (temp == KeyCode.Escape ||
+                    temp == KeyCode.Return ||
+                    temp == KeyCode.RightArrow ||
+                    temp == KeyCode.LeftArrow ||
+                    temp == KeyCode.UpArrow ||
+                    temp == KeyCode.DownArrow)
+                    duplicate = true;
+                else if (machine.getPrieviousState() == ControlBinderStateMachine.State.Accept)
                 {
-                    case ControlBinderStateMachine.State.Attack:CustomInput.KeyBoardAttack = temp;break;
-                    case ControlBinderStateMachine.State.Jump:CustomInput.KeyBoardJump = temp;break;
-                    case ControlBinderStateMachine.State.Dash:CustomInput.KeyBoardDash = temp;break;
-                    case ControlBinderStateMachine.State.Up:CustomInput.KeyBoardUp = temp;break;
-                    case ControlBinderStateMachine.State.Down:CustomInput.KeyBoardDown = temp;break;
-                    case ControlBinderStateMachine.State.Left:CustomInput.KeyBoardLeft = temp;break;
-                    case ControlBinderStateMachine.State.Right:CustomInput.KeyBoardRight = temp;break;
-                    case ControlBinderStateMachine.State.Accept:CustomInput.KeyBoardAccept = temp;break;
-                    case ControlBinderStateMachine.State.Cancel:CustomInput.KeyBoardCancel = temp;break;
-                    default:CustomInput.KeyBoardPause = temp;break;
+                    if (temp == CustomInput.KeyBoardCancel)
+                        duplicate = true;
+                    else
+                        duplicate = false;
                 }
-                machine.Hold();
+                else if (machine.getPrieviousState() == ControlBinderStateMachine.State.Cancel)
+                {
+                    if (temp == CustomInput.KeyBoardAccept)
+                        duplicate = true;
+                    else
+                        duplicate = false;
+                }
+                else
+                {
+                    switch (machine.getPrieviousState())
+                    {
+                        case ControlBinderStateMachine.State.Attack:
+                            {
+                                if (temp == CustomInput.KeyBoardJump ||
+                                    temp == CustomInput.KeyBoardDash ||
+                                    temp == CustomInput.KeyBoardUp ||
+                                    temp == CustomInput.KeyBoardDown ||
+                                    temp == CustomInput.KeyBoardLeft ||
+                                    temp == CustomInput.KeyBoardRight ||
+                                    temp == CustomInput.KeyBoardPause)
+                                    duplicate = true;
+                                else
+                                    duplicate = false;
+                            }; break;
+                        case ControlBinderStateMachine.State.Jump:
+                            {
+                                if (temp == CustomInput.KeyBoardAttack ||
+                                    temp == CustomInput.KeyBoardDash ||
+                                    temp == CustomInput.KeyBoardUp ||
+                                    temp == CustomInput.KeyBoardDown ||
+                                    temp == CustomInput.KeyBoardLeft ||
+                                    temp == CustomInput.KeyBoardRight ||
+                                    temp == CustomInput.KeyBoardPause)
+                                    duplicate = true;
+                                else
+                                    duplicate = false;
+                            }; break;
+                        case ControlBinderStateMachine.State.Dash:
+                            {
+                                if (temp == CustomInput.KeyBoardJump ||
+                                    temp == CustomInput.KeyBoardAttack ||
+                                    temp == CustomInput.KeyBoardUp ||
+                                    temp == CustomInput.KeyBoardDown ||
+                                    temp == CustomInput.KeyBoardLeft ||
+                                    temp == CustomInput.KeyBoardRight ||
+                                    temp == CustomInput.KeyBoardPause)
+                                    duplicate = true;
+                                else
+                                    duplicate = false;
+                            }; break;
+                        case ControlBinderStateMachine.State.Up:
+                            {
+                                if (temp == CustomInput.KeyBoardJump ||
+                                    temp == CustomInput.KeyBoardDash ||
+                                    temp == CustomInput.KeyBoardAttack ||
+                                    temp == CustomInput.KeyBoardDown ||
+                                    temp == CustomInput.KeyBoardLeft ||
+                                    temp == CustomInput.KeyBoardRight ||
+                                    temp == CustomInput.KeyBoardPause)
+                                    duplicate = true;
+                                else
+                                    duplicate = false;
+                            }; break;
+                        case ControlBinderStateMachine.State.Down:
+                            {
+                                if (temp == CustomInput.KeyBoardJump ||
+                                    temp == CustomInput.KeyBoardDash ||
+                                    temp == CustomInput.KeyBoardUp ||
+                                    temp == CustomInput.KeyBoardAttack ||
+                                    temp == CustomInput.KeyBoardLeft ||
+                                    temp == CustomInput.KeyBoardRight ||
+                                    temp == CustomInput.KeyBoardPause)
+                                    duplicate = true;
+                                else
+                                    duplicate = false;
+                            }; break;
+                        case ControlBinderStateMachine.State.Left:
+                            {
+                                if (temp == CustomInput.KeyBoardJump ||
+                                    temp == CustomInput.KeyBoardDash ||
+                                    temp == CustomInput.KeyBoardUp ||
+                                    temp == CustomInput.KeyBoardDown ||
+                                    temp == CustomInput.KeyBoardAttack ||
+                                    temp == CustomInput.KeyBoardRight ||
+                                    temp == CustomInput.KeyBoardPause)
+                                    duplicate = true;
+                                else
+                                    duplicate = false;
+                            }; break;
+                        case ControlBinderStateMachine.State.Right:
+                            {
+                                if (temp == CustomInput.KeyBoardJump ||
+                                    temp == CustomInput.KeyBoardDash ||
+                                    temp == CustomInput.KeyBoardUp ||
+                                    temp == CustomInput.KeyBoardDown ||
+                                    temp == CustomInput.KeyBoardLeft ||
+                                    temp == CustomInput.KeyBoardAttack ||
+                                    temp == CustomInput.KeyBoardPause)
+                                    duplicate = true;
+                                else
+                                    duplicate = false;
+                            }; break;
+                        default:
+                            {
+                                if (temp == CustomInput.KeyBoardJump ||
+                                    temp == CustomInput.KeyBoardDash ||
+                                    temp == CustomInput.KeyBoardUp ||
+                                    temp == CustomInput.KeyBoardDown ||
+                                    temp == CustomInput.KeyBoardLeft ||
+                                    temp == CustomInput.KeyBoardRight ||
+                                    temp == CustomInput.KeyBoardAttack)
+                                    duplicate = true;
+                                else
+                                    duplicate = false;
+                            }; break;
+                    }
+                }
+
+                if (!duplicate)
+                {
+                    switch (machine.getPrieviousState())
+                    {
+                        case ControlBinderStateMachine.State.Attack: CustomInput.KeyBoardAttack = temp; break;
+                        case ControlBinderStateMachine.State.Jump: CustomInput.KeyBoardJump = temp; break;
+                        case ControlBinderStateMachine.State.Dash: CustomInput.KeyBoardDash = temp; break;
+                        case ControlBinderStateMachine.State.Up: CustomInput.KeyBoardUp = temp; break;
+                        case ControlBinderStateMachine.State.Down: CustomInput.KeyBoardDown = temp; break;
+                        case ControlBinderStateMachine.State.Left: CustomInput.KeyBoardLeft = temp; break;
+                        case ControlBinderStateMachine.State.Right: CustomInput.KeyBoardRight = temp; break;
+                        case ControlBinderStateMachine.State.Accept: CustomInput.KeyBoardAccept = temp; break;
+                        case ControlBinderStateMachine.State.Cancel: CustomInput.KeyBoardCancel = temp; break;
+                        default: CustomInput.KeyBoardPause = temp; break;
+                    }
+                    machine.Hold();
+                }
             }
         }
 

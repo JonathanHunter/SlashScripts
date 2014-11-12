@@ -11,6 +11,8 @@ namespace Assets.Scripts.Menus
         private int cursor;
         private ControlBinderStateMachine machine;
         private delegate void state();
+        private bool duplicate;
+
         void Start()
         {
             LabelStyle.fontSize = (int)(Screen.width * .04f);
@@ -28,7 +30,7 @@ namespace Assets.Scripts.Menus
                 if (cursor == (int)(ControlBinderStateMachine.State.Exit))
                     Destroy(this.gameObject);
             }
-            if ((cursor != (int)(ControlBinderStateMachine.State.Holding))&&CustomInput.CancelUp)
+            if ((cursor != (int)(ControlBinderStateMachine.State.Holding) && cursor != (int)(ControlBinderStateMachine.State.GettingKey)) && CustomInput.CancelFreshPress)
                 Destroy(this.gameObject);
         }
 
@@ -37,11 +39,25 @@ namespace Assets.Scripts.Menus
             GUI.DrawTexture(new Rect(Screen.width * (7f / 19f),
                 Screen.height * (6f / 12f), Screen.width * (6f / 19f),
                 Screen.height * (3f / 12f)), Background);
-            GUI.Label(new Rect(Screen.width * (7f / 19f),
-                Screen.height * (6f / 12f), Screen.width * (6f / 19f),
-                Screen.height * (3f / 12f)),
-                "Press the new button you want to use, Escape to cancel."
-                , LabelStyle);
+
+            if (!duplicate)
+            {
+                GUI.Label(new Rect(Screen.width * (7f / 19f),
+                    Screen.height * (6f / 12f), Screen.width * (6f / 19f),
+                    Screen.height * (4f / 12f)),
+                    "Press the new key you want to use, Escape to cancel."
+                    , LabelStyle);
+            }
+            else
+            {
+
+                GUI.Label(new Rect(Screen.width * (7f / 19f),
+                    Screen.height * (6f / 12f), Screen.width * (6f / 19f),
+                    Screen.height * (4f / 12f)),
+                    "Press the new key you want to use, Escape to cancel.\nError duplicate Key"
+                    , LabelStyle);
+            }
+
             if (Input.GetAxis(CustomInput.LEFT_STICK_RIGHT) > 0)
                 setButton(CustomInput.LEFT_STICK_RIGHT);
             if (Input.GetAxis(CustomInput.LEFT_STICK_LEFT) < 0)
@@ -94,20 +110,148 @@ namespace Assets.Scripts.Menus
 
         private void setButton(string button)
         {
-            switch (machine.getPrieviousState())
+            if (machine.getPrieviousState() == ControlBinderStateMachine.State.Accept)
             {
-                case ControlBinderStateMachine.State.Attack: CustomInput.GamePadAttack = button; break;
-                case ControlBinderStateMachine.State.Jump: CustomInput.GamePadJump = button; break;
-                case ControlBinderStateMachine.State.Dash: CustomInput.GamePadDash = button; break;
-                case ControlBinderStateMachine.State.Up: CustomInput.GamePadUp = button; break;
-                case ControlBinderStateMachine.State.Down: CustomInput.GamePadDown = button; break;
-                case ControlBinderStateMachine.State.Left: CustomInput.GamePadLeft = button; break;
-                case ControlBinderStateMachine.State.Right: CustomInput.GamePadRight = button; break;
-                case ControlBinderStateMachine.State.Accept: CustomInput.GamePadAccept = button; break;
-                case ControlBinderStateMachine.State.Cancel: CustomInput.GamePadCancel = button; break;
-                default: CustomInput.GamePadPause = button; break;
+                if (button == CustomInput.GamePadCancel)
+                    duplicate = true;
+                else
+                    duplicate = false;
             }
-            machine.Hold();
+            else if (machine.getPrieviousState() == ControlBinderStateMachine.State.Cancel)
+            {
+                if (button == CustomInput.GamePadAccept)
+                    duplicate = true;
+                else
+                    duplicate = false;
+            }
+            else
+            {
+                switch (machine.getPrieviousState())
+                {
+                    case ControlBinderStateMachine.State.Attack:
+                        {
+                            if (button == CustomInput.GamePadJump ||
+                                button == CustomInput.GamePadDash ||
+                                button == CustomInput.GamePadUp ||
+                                button == CustomInput.GamePadDown ||
+                                button == CustomInput.GamePadLeft ||
+                                button == CustomInput.GamePadRight ||
+                                button == CustomInput.GamePadPause)
+                                duplicate = true;
+                            else
+                                duplicate = false;
+                        }; break;
+                    case ControlBinderStateMachine.State.Jump:
+                        {
+                            if (button == CustomInput.GamePadAttack ||
+                                button == CustomInput.GamePadDash ||
+                                button == CustomInput.GamePadUp ||
+                                button == CustomInput.GamePadDown ||
+                                button == CustomInput.GamePadLeft ||
+                                button == CustomInput.GamePadRight ||
+                                button == CustomInput.GamePadPause)
+                                duplicate = true;
+                            else
+                                duplicate = false;
+                        }; break;
+                    case ControlBinderStateMachine.State.Dash:
+                        {
+                            if (button == CustomInput.GamePadJump ||
+                                button == CustomInput.GamePadAttack ||
+                                button == CustomInput.GamePadUp ||
+                                button == CustomInput.GamePadDown ||
+                                button == CustomInput.GamePadLeft ||
+                                button == CustomInput.GamePadRight ||
+                                button == CustomInput.GamePadPause)
+                                duplicate = true;
+                            else
+                                duplicate = false;
+                        }; break;
+                    case ControlBinderStateMachine.State.Up:
+                        {
+                            if (button == CustomInput.GamePadJump ||
+                                button == CustomInput.GamePadDash ||
+                                button == CustomInput.GamePadAttack ||
+                                button == CustomInput.GamePadDown ||
+                                button == CustomInput.GamePadLeft ||
+                                button == CustomInput.GamePadRight ||
+                                button == CustomInput.GamePadPause)
+                                duplicate = true;
+                            else
+                                duplicate = false;
+                        }; break;
+                    case ControlBinderStateMachine.State.Down:
+                        {
+                            if (button == CustomInput.GamePadJump ||
+                                button == CustomInput.GamePadDash ||
+                                button == CustomInput.GamePadUp ||
+                                button == CustomInput.GamePadAttack ||
+                                button == CustomInput.GamePadLeft ||
+                                button == CustomInput.GamePadRight ||
+                                button == CustomInput.GamePadPause)
+                                duplicate = true;
+                            else
+                                duplicate = false;
+                        }; break;
+                    case ControlBinderStateMachine.State.Left:
+                        {
+                            if (button == CustomInput.GamePadJump ||
+                                button == CustomInput.GamePadDash ||
+                                button == CustomInput.GamePadUp ||
+                                button == CustomInput.GamePadDown ||
+                                button == CustomInput.GamePadAttack ||
+                                button == CustomInput.GamePadRight ||
+                                button == CustomInput.GamePadPause)
+                                duplicate = true;
+                            else
+                                duplicate = false;
+                        }; break;
+                    case ControlBinderStateMachine.State.Right:
+                        {
+                            if (button == CustomInput.GamePadJump ||
+                                button == CustomInput.GamePadDash ||
+                                button == CustomInput.GamePadUp ||
+                                button == CustomInput.GamePadDown ||
+                                button == CustomInput.GamePadLeft ||
+                                button == CustomInput.GamePadAttack ||
+                                button == CustomInput.GamePadPause)
+                                duplicate = true;
+                            else
+                                duplicate = false;
+                        }; break;
+                    default:
+                        {
+                            if (button == CustomInput.GamePadJump ||
+                                button == CustomInput.GamePadDash ||
+                                button == CustomInput.GamePadUp ||
+                                button == CustomInput.GamePadDown ||
+                                button == CustomInput.GamePadLeft ||
+                                button == CustomInput.GamePadRight ||
+                                button == CustomInput.GamePadAttack)
+                                duplicate = true;
+                            else
+                                duplicate = false;
+                        }; break;
+                }
+            }
+
+            if (!duplicate)
+            {
+                switch (machine.getPrieviousState())
+                {
+                    case ControlBinderStateMachine.State.Attack: CustomInput.GamePadAttack = button; break;
+                    case ControlBinderStateMachine.State.Jump: CustomInput.GamePadJump = button; break;
+                    case ControlBinderStateMachine.State.Dash: CustomInput.GamePadDash = button; break;
+                    case ControlBinderStateMachine.State.Up: CustomInput.GamePadUp = button; break;
+                    case ControlBinderStateMachine.State.Down: CustomInput.GamePadDown = button; break;
+                    case ControlBinderStateMachine.State.Left: CustomInput.GamePadLeft = button; break;
+                    case ControlBinderStateMachine.State.Right: CustomInput.GamePadRight = button; break;
+                    case ControlBinderStateMachine.State.Accept: CustomInput.GamePadAccept = button; break;
+                    case ControlBinderStateMachine.State.Cancel: CustomInput.GamePadCancel = button; break;
+                    default: CustomInput.GamePadPause = button; break;
+                }
+                machine.Hold();
+            }
         }
 
         void OnGUI()
