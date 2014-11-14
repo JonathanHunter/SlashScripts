@@ -13,8 +13,10 @@ namespace Assets.Scripts
             if (done)
             {
                 this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-                if(Anim)
+                if (Anim)
                     this.gameObject.GetComponent<Animator>().SetBool("Go Up", true);
+                else if(renderer!=null)
+                    renderer.enabled = false;
             }
         }
     }

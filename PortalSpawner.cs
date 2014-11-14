@@ -6,12 +6,15 @@ namespace Assets.Scripts
     class PortalSpawner : MonoBehaviour
     {
         public GameObject reference;
-        private int count=0;
+        public bool done = false;
+
+        private int count = 0;
+
         void Update()
         {
             if (!Data.Paused)
             {
-                if (FindObjectOfType<Enemies.Enemy>() == null)
+                if (done)
                 {
                     GameObject temp = (GameObject)(Instantiate(reference));
                     temp.transform.position = transform.position;

@@ -79,7 +79,7 @@ namespace Assets.Scripts
             {
                 if (up)
                 {
-                    if (player.transform.position.y > obj.position.y && reference == null)
+                    if (player.transform.position.y > obj.position.y && reference == null && !respawnable)
                     {
                         reference = (GameObject)Instantiate(prefab);
                         if (spawnAtLocation)
@@ -95,7 +95,7 @@ namespace Assets.Scripts
                 }
                 else
                 {
-                    if (player.transform.position.y < obj.position.y && reference == null)
+                    if (player.transform.position.y < obj.position.y && reference == null && !respawnable)
                     {
                         reference = (GameObject)Instantiate(prefab);
                         if (spawnAtLocation)
@@ -114,7 +114,7 @@ namespace Assets.Scripts
             {
                 if (right)
                 {
-                    if (player.transform.position.x > obj.position.x && reference == null)
+                    if (player.transform.position.x > obj.position.x && reference == null && !respawnable)
                     {
                         reference = (GameObject)Instantiate(prefab);
                         if (spawnAtLocation)
@@ -130,7 +130,7 @@ namespace Assets.Scripts
                 }
                 else
                 {
-                    if (player.transform.position.x < obj.position.x && reference == null)
+                    if (player.transform.position.x < obj.position.x && reference == null && !respawnable)
                     {
                         reference = (GameObject)Instantiate(prefab);
                         if (spawnAtLocation)

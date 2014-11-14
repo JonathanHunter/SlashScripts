@@ -22,7 +22,7 @@ namespace Assets.Scripts.Enemies
         private Animator anim;
         private int health;
         private float g;
-        private bool paused=false;
+        private bool paused = false;
 
         public int Health
         {
@@ -81,12 +81,18 @@ namespace Assets.Scripts.Enemies
                     ((GameObject)Instantiate(explosion)).GetComponent<Explosion>().MoveToPosition(this.transform);
                     if (Random.Range(0f, 1f) < .25f)
                         ((GameObject)Instantiate(HealthPickUp)).transform.position = this.gameObject.transform.position;
-                    if(boss)
-                        FindObjectOfType<BossRoomChecker>().done = true;
+                    if (boss)
+                    {
+                        BossRoomChecker b = FindObjectOfType<BossRoomChecker>();
+                        if (b != null)
+                            b.done = true;
+                        else
+                            FindObjectOfType<PortalSpawner>().done = true;
+                    }
                     Destroy(this.gameObject);
                 }
             }
-            else
+            else if (!paused)
             {
                 anim.speed = 0;
                 g = rigidbody2D.gravityScale;
