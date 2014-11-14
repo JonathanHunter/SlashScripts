@@ -98,12 +98,11 @@ namespace Assets.Scripts.Enemies
         }
         private void Jump()
         {
-            transform.Translate(new Vector3(0, 20 * Time.deltaTime, 0));
+            transform.Translate(new Vector3(0, Vector2.up.y * 20 * Time.deltaTime, 0));
             transform.Translate(new Vector3(getForward().x * 4 * Time.deltaTime, 0, 0));
         }
         private void InAir()
         {
-
         }
         private void Shoot()
         {
