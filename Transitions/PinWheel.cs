@@ -16,8 +16,6 @@ namespace Assets.Scripts.Transitions
             finalScale = transform.localScale.x;
             transform.localScale = scale;
             player = FindObjectOfType<Player.Player>().gameObject;
-            if(capturePlayer)
-                    player.renderer.enabled=false;
         }
         void Update()
         {
@@ -27,15 +25,13 @@ namespace Assets.Scripts.Transitions
                 if (growing)
                 {
                     if (capturePlayer)
-                        player.transform.position = transform.position;
+                    {
+                        player.transform.position = new Vector3(transform.position.x, transform.position.y, player.transform.position.z);
+                    }
                     scale += new Vector3(Time.deltaTime, Time.deltaTime, 0);
                     transform.localScale = scale;
                     if (scale.x > finalScale)
-                    {
                         growing = false;
-                        if (capturePlayer)
-                            player.renderer.enabled = true;
-                    }
                 }
                 else if (shrink && transform.localScale.x > 0)
                 {
