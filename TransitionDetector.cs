@@ -21,6 +21,8 @@ namespace Assets.Scripts
         public Spawn Bspawn;
         public bool yDir;
         public bool bossTrans;
+        public BorderGuidesMeta Ameta;
+        public BorderGuidesMeta Bmeta;
 
         void Start()
         {
@@ -47,6 +49,7 @@ namespace Assets.Scripts
                         {
                             FindObjectOfType<CameraTracking>().setBounds(AleftBound, ArightBound, AupperBound, AlowerBound);
                             Spawn.spawn = Aspawn;
+                            FindObjectOfType<BorderGuides>().setData(Ameta);
                             wait = false;
                             if (bossTrans)
                             {
@@ -60,6 +63,7 @@ namespace Assets.Scripts
                         {
                             FindObjectOfType<CameraTracking>().setBounds(BleftBound, BrightBound, BupperBound, BlowerBound);
                             Spawn.spawn = Bspawn;
+                            FindObjectOfType<BorderGuides>().setData(Bmeta);
                             wait = false;
                             if (bossTrans)
                             {
@@ -76,6 +80,7 @@ namespace Assets.Scripts
                         {
                             FindObjectOfType<CameraTracking>().setBounds(AleftBound, ArightBound, AupperBound, AlowerBound);
                             Spawn.spawn = Aspawn;
+                            FindObjectOfType<BorderGuides>().setData(Ameta);
                             wait = false;
                             if (bossTrans)
                             {
@@ -89,6 +94,7 @@ namespace Assets.Scripts
                         {
                             FindObjectOfType<CameraTracking>().setBounds(BleftBound, BrightBound, BupperBound, BlowerBound);
                             Spawn.spawn = Bspawn;
+                            FindObjectOfType<BorderGuides>().setData(Bmeta);
                             wait = false;
                             if (bossTrans)
                             {
