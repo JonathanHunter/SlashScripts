@@ -33,7 +33,7 @@ namespace Assets.Scripts.Menus
 
                     Player.Player p = FindObjectOfType<Player.Player>();
                     p.Revive();
-                    p.transform.position = Spawn.spawn.transform.position;
+                    p.transform.position = Transitions.Spawn.spawn.transform.position;
                     Data.PauseEnabled = true;
                     Data.DeSpawn = false;
                     wait = false; 

@@ -83,11 +83,11 @@ namespace Assets.Scripts.Enemies
                         ((GameObject)Instantiate(HealthPickUp)).transform.position = this.gameObject.transform.position;
                     if (boss)
                     {
-                        BossRoomChecker b = FindObjectOfType<BossRoomChecker>();
+                        Transitions.BossRoomChecker b = FindObjectOfType<Transitions.BossRoomChecker>();
                         if (b != null)
                             b.done = true;
                         else
-                            FindObjectOfType<PortalSpawner>().done = true;
+                            FindObjectOfType<Transitions.PortalSpawner>().done = true;
                     }
                     Destroy(this.gameObject);
                 }
