@@ -178,9 +178,9 @@ namespace Assets.Scripts.Enemies
                     faceLeft();
                 doOnce = true;
             }
-            transform.position = Vector3.MoveTowards(transform.position, target.position, 5 * speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, target.position, 4 * speed * Time.deltaTime);
             hold += Time.deltaTime;
-            if(hold>.8f)
+            if(hold>1f)
             {
                 GameObject dagger = (GameObject)Instantiate(Dagger);
                 dagger.transform.position = this.transform.position;
