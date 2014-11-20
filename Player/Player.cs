@@ -92,6 +92,7 @@ namespace Assets.Scripts.Player
                 {
                     health = 0;
                     hit = true;
+                    invulerability = 0;
                 }
                 if(coll.collider.tag == "Health")
                 {

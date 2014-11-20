@@ -45,14 +45,14 @@ namespace Assets.Scripts.Transitions
                 if (isY)
                 {
                     if (isUp)
-                        rekt = new Rect(0f, 0f, Screen.width, Screen.height * .02f);
+                        rekt = new Rect(0f, 0f, Screen.width, Screen.height * .03f);
                     else
-                        rekt = new Rect(0f, Screen.height * .98f, Screen.width, Screen.height * .02f);
+                        rekt = new Rect(0f, Screen.height * .97f, Screen.width, Screen.height * .03f);
                 }
                 else if (isLeft)
-                    rekt = new Rect(0f, 0f, Screen.width * .02f, Screen.height);
+                    rekt = new Rect(0f, 0f, Screen.width * .03f, Screen.height);
                 else
-                    rekt = new Rect(Screen.width * .98f, 0f, Screen.width * .02f, Screen.height);
+                    rekt = new Rect(Screen.width * .97f, 0f, Screen.width * .03f, Screen.height);
 
                 Color c = GUI.color;
                 Color temp = c;
@@ -66,9 +66,9 @@ namespace Assets.Scripts.Transitions
                 else
                 {
                     if (isY)
-                        c.a = Mathf.Abs(player.position.y - reference.position.y) > 1 ? 1 / Mathf.Abs(player.position.y - reference.position.y) : 1f;
+                        c.a = Mathf.Abs(player.position.y - reference.position.y) > 1 ? (1 / Mathf.Abs(player.position.y - reference.position.y)) + .1f : 1f;
                     else
-                        c.a = Mathf.Abs(player.position.x - reference.position.x) > 1 ? 1 / Mathf.Abs(player.position.x - reference.position.x) : 1f;
+                        c.a = Mathf.Abs(player.position.x - reference.position.x) > 1 ? (1 / Mathf.Abs(player.position.x - reference.position.x)) + .1f : 1f;
                 }
                 GUI.color = c;
                 GUI.DrawTexture(rekt, tex);

@@ -8,6 +8,7 @@ namespace Assets.Scripts.Menus
         public GameObject LevelSelect, Options;
         public Texture Title, CursorPic;
         public GUIStyle ButtonStyle;
+        public GUIStyle labelStyle;
 
         private int cursor;
         private GameObject menu;
@@ -17,6 +18,7 @@ namespace Assets.Scripts.Menus
         void Start()
         {
             ButtonStyle.fontSize = (int)(Screen.width * .05f);
+            labelStyle.fontSize = (int)(Screen.width * .015f);
             machine = new MainMenuStateMachine();
             CustomInput[] arr=FindObjectsOfType<CustomInput>();
             if (arr.Length > 1)
@@ -45,6 +47,8 @@ namespace Assets.Scripts.Menus
             //    Data.AspectRatio=PlayerPrefs.GetFloat(VideoGUI.VideoKey + 2);
             //else
             //    Data.AspectRatio = FindObjectOfType<Camera>().aspect;
+            if (!PlayerPrefs.HasKey(LevelSelectGUI.LevelKey))
+                PlayerPrefs.SetInt(LevelSelectGUI.LevelKey, 0);
             FindObjectOfType<SoundPlayer>().PlaySong(0);
         }
 
@@ -76,6 +80,7 @@ namespace Assets.Scripts.Menus
                 GUI.DrawTexture(new Rect(Screen.width * (6f / 19f), Screen.height * (1f / 12f), Screen.width * (6f / 19f), Screen.height * (4f / 12f)), Title);
                 drawButtons();
                 drawCursor();
+                GUI.Label(new Rect(Screen.width * (5.5f / 19f), Screen.height * (11f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "In this menu you can press Escape  to close the game", labelStyle);
             }
         }
         private void drawButtons()
