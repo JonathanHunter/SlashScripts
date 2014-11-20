@@ -5,36 +5,39 @@ namespace Assets.Scripts.Menus
 {
     class LevelSelectGUI:MonoBehaviour
     {
+        public static string LevelKey = "ZeroLevel";
+
         public Texture Title, CursorPic, level1, level2, level3, level4;
         public GUIStyle LabelStyle;
+
         private int cursor;
+        private int levelNum;
         private LevelSelectStateMachine machine;
         private delegate void state();
-        public static string LevelKey = "ZeroLevel";
         void Start()
         {
-            machine = new LevelSelectStateMachine();
+            levelNum = PlayerPrefs.GetInt(LevelKey);
+            machine = new LevelSelectStateMachine(levelNum);
             cursor = (int)LevelSelectStateMachine.State.Level1;
-
         }
 
         void Update()
         {
             LabelStyle.fontSize = (int)(Screen.width * .05f);
             cursor = (int)machine.update();
-            if (cursor == (int)(LevelSelectStateMachine.State.Level1)&&CustomInput.AcceptFreshPress)
+            if (cursor == (int)(LevelSelectStateMachine.State.Level1) && CustomInput.AcceptFreshPress)
             {
-               Application.LoadLevel("Level 1");
+                Application.LoadLevel("Level 1");
             }
-            if (cursor == (int)(LevelSelectStateMachine.State.Level2)&&(CustomInput.AcceptFreshPress/*&&PlayerPrefs.GetInt(LevelKey)>=1*/))
+            if (cursor == (int)(LevelSelectStateMachine.State.Level2) && (CustomInput.AcceptFreshPress && levelNum >= 2))
             {
                 Application.LoadLevel("Level 2");
             }
-            if (cursor == (int)(LevelSelectStateMachine.State.Level3) && (CustomInput.AcceptFreshPress/*&&PlayerPrefs.GetInt(LevelKey)>=1*/))
+            if (cursor == (int)(LevelSelectStateMachine.State.Level3) && (CustomInput.AcceptFreshPress && levelNum >= 3))
             {
                 Application.LoadLevel("Level 4");
             }
-            if (cursor == (int)(LevelSelectStateMachine.State.Level4) && (CustomInput.AcceptFreshPress/*&&PlayerPrefs.GetInt(LevelKey)>=1*/))
+            if (cursor == (int)(LevelSelectStateMachine.State.Level4) && (CustomInput.AcceptFreshPress && levelNum >= 4))
             {
                 Application.LoadLevel("Level 3");
             }
@@ -52,18 +55,27 @@ namespace Assets.Scripts.Menus
         {
             if (GUI.Button(new Rect(Screen.width * .4f, Screen.height * .45f, Screen.width * .1f, Screen.height * .1f), ""))
                 Application.LoadLevel("Level 1");
-            if (GUI.Button(new Rect(Screen.width * .6f, Screen.height * .45f, Screen.width * .1f, Screen.height * .1f), ""))
-                Application.LoadLevel("Level 2");
-            if (GUI.Button(new Rect(Screen.width * .4f, Screen.height * .60f, Screen.width * .1f, Screen.height * .1f), ""))
-                Application.LoadLevel("Level 4"); 
-            if (GUI.Button(new Rect(Screen.width * .6f, Screen.height * .60f, Screen.width * .1f, Screen.height * .1f), ""))
-                Application.LoadLevel("Level 3");
+            GUI.DrawTexture(new Rect(Screen.width * .4f, Screen.height * .45f, Screen.width * .1f, Screen.height * .1f), level1);
+            if (levelNum >= 2)
+            {
+                if (GUI.Button(new Rect(Screen.width * .6f, Screen.height * .45f, Screen.width * .1f, Screen.height * .1f), ""))
+                    Application.LoadLevel("Level 2");
+                GUI.DrawTexture(new Rect(Screen.width * .6f, Screen.height * .45f, Screen.width * .1f, Screen.height * .1f), level2);
+            }
+            if (levelNum >= 3)
+            {
+                if (GUI.Button(new Rect(Screen.width * .4f, Screen.height * .60f, Screen.width * .1f, Screen.height * .1f), ""))
+                    Application.LoadLevel("Level 4");
+                GUI.DrawTexture(new Rect(Screen.width * .4f, Screen.height * .60f, Screen.width * .1f, Screen.height * .1f), level3);
+            }
+            if (levelNum >= 4)
+            {
+                if (GUI.Button(new Rect(Screen.width * .6f, Screen.height * .60f, Screen.width * .1f, Screen.height * .1f), ""))
+                    Application.LoadLevel("Level 3");
+                GUI.DrawTexture(new Rect(Screen.width * .6f, Screen.height * .60f, Screen.width * .1f, Screen.height * .1f), level4);
+            }
             if (GUI.Button(new Rect(Screen.width * (8f / 19f), Screen.height * (9f / 12f), Screen.width * (4f / 19f), Screen.height * (1f / 12f)), "Exit", LabelStyle))
                 Destroy(this.gameObject);
-            GUI.DrawTexture(new Rect(Screen.width * .4f, Screen.height * .45f, Screen.width * .1f, Screen.height * .1f), level1);
-            GUI.DrawTexture(new Rect(Screen.width * .6f, Screen.height * .45f, Screen.width * .1f, Screen.height * .1f), level2);
-            GUI.DrawTexture(new Rect(Screen.width * .4f, Screen.height * .60f, Screen.width * .1f, Screen.height * .1f), level3);
-            GUI.DrawTexture(new Rect(Screen.width * .6f, Screen.height * .60f, Screen.width * .1f, Screen.height * .1f), level4);
         }
         private void drawCursor()
         {
