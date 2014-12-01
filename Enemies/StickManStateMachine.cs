@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Assets.Scripts.Enemies
 {
-    class DadaSupernaturalistStateMachine : EnemyStateMachine
+    class StickManStateMachine : EnemyStateMachine
     {
         public enum State
         {
@@ -13,11 +13,11 @@ namespace Assets.Scripts.Enemies
         };
         private double hold;
 
-        public DadaSupernaturalistStateMachine(int frameRate) : base(frameRate) { }
+        public StickManStateMachine(int frameRate) : base(frameRate) { }
 
         protected override int[] Initialize()
         {
-            return new int[] { 1, 1, 13, 1, 1, 10 };
+            return new int[] { 1, 1, 2, 2, 1, 1 };
         }
 
         protected override int StateMachine(int currState, bool beingHit, bool[] flags)

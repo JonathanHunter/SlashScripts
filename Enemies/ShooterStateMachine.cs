@@ -17,7 +17,7 @@ namespace Assets.Scripts.Enemies
 
         protected override int[] Initialize()
         {
-            return new int[] { 1, 1, 2, 2, 1, 1 };
+            return new int[] { 1, 1, 13, 1, 1, 10 };
         }
 
         protected override int StateMachine(int currState, bool beingHit, bool[] flags)

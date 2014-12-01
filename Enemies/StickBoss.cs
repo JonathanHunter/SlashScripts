@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Assets.Scripts.Enemies
 {
-    class Boss2 : Enemy
+    class StickBoss : Enemy
     {
         public GameObject Dog;
         public GameObject Bird;
@@ -14,7 +14,7 @@ namespace Assets.Scripts.Enemies
 
         private Transform player;
         private static GameObject attack;
-        private int minionCount=0;
+        private int minionCount = 0;
         private int prevState = 0;
         private float invulerability = 0;
         private float hold = 0;
@@ -26,7 +26,7 @@ namespace Assets.Scripts.Enemies
 
         protected override EnemyStateMachine getStateMachine(int frameRate)
         {
-            return new Boss2StateMachine(frameRate);
+            return new StickBossStateMachine(frameRate);
         }
 
         protected override void Initialize()
@@ -60,12 +60,12 @@ namespace Assets.Scripts.Enemies
             }
             switch (state)
             {
-                case (int)Boss2StateMachine.State.Intro: Intro(); break;
-                case (int)Boss2StateMachine.State.Taunt:  Taunt(); break;
-                case (int)Boss2StateMachine.State.Walk: Walk(); break;
-                case (int)Boss2StateMachine.State.Attack: Attack(); break;
-                case (int)Boss2StateMachine.State.Summon: Summon(); break;
-                case (int)Boss2StateMachine.State.Turn: Turn(); break;
+                case (int)StickBossStateMachine.State.Intro: Intro(); break;
+                case (int)StickBossStateMachine.State.Taunt: Taunt(); break;
+                case (int)StickBossStateMachine.State.Walk: Walk(); break;
+                case (int)StickBossStateMachine.State.Attack: Attack(); break;
+                case (int)StickBossStateMachine.State.Summon: Summon(); break;
+                case (int)StickBossStateMachine.State.Turn: Turn(); break;
             }
             if (shouldTurn)
                 base.turn();
@@ -104,13 +104,9 @@ namespace Assets.Scripts.Enemies
                     faceRight();
                 else
                     faceLeft();
-                if (GetComponent<Animator>().GetInteger("frame") > 39)
-                {
-                    attack = ((GameObject)Instantiate(Punch));
-                    attack.transform.position = right.position;
-                    attack.GetComponent<Bullet>().dir = getForward();
-                    doOnce = true;
-                }
+                attack = ((GameObject)Instantiate(Punch));
+                attack.GetComponent<Player.Attack>().setReference(this.gameObject.transform);
+                doOnce = true;
             }
         }
         private void Summon()

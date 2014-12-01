@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Assets.Scripts.Enemies
 {
-    class Shooter : Enemy
+    class StickMan : Enemy
     {
         public GameObject Shot;
         public Transform gunPos;
@@ -20,7 +20,7 @@ namespace Assets.Scripts.Enemies
 
         protected override EnemyStateMachine getStateMachine(int frameRate)
         {
-            return new ShooterStateMachine(frameRate);
+            return new StickManStateMachine(frameRate);
         }
 
         protected new void TouchingSomething(ref bool inAir, ref bool blocked)
@@ -68,12 +68,12 @@ namespace Assets.Scripts.Enemies
             }
             switch (state)
             {
-                case (int)ShooterStateMachine.State.Idle: Idle(); break;
-                case (int)ShooterStateMachine.State.Hit: Hit(); break;
-                case (int)ShooterStateMachine.State.Walk: Walk(); break;
-                case (int)ShooterStateMachine.State.Jump: Jump(); break;
-                case (int)ShooterStateMachine.State.InAir: InAir(); break;
-                case (int)ShooterStateMachine.State.Shoot: Shoot(); break;
+                case (int)StickManStateMachine.State.Idle: Idle(); break;
+                case (int)StickManStateMachine.State.Hit: Hit(); break;
+                case (int)StickManStateMachine.State.Walk: Walk(); break;
+                case (int)StickManStateMachine.State.Jump: Jump(); break;
+                case (int)StickManStateMachine.State.InAir: InAir(); break;
+                case (int)StickManStateMachine.State.Shoot: Shoot(); break;
             }
             if (player.position.x > this.transform.position.x)
                 faceRight();
@@ -106,16 +106,15 @@ namespace Assets.Scripts.Enemies
         }
         private void Shoot()
         {
-            if (!doOnce && GetComponent<Animator>().GetInteger("frame") > 20)
+            wait += Time.deltaTime;
+            if (wait > shotTime)
             {
                 GameObject b = ((GameObject)Instantiate(Shot));
-                b.transform.position=gunPos.position;
+                b.transform.position = gunPos.position;
                 b.GetComponent<Bullet>().dir = getForward();
                 shots++;
-                doOnce = true;
+                wait = 0;
             }
-            if (doOnce && GetComponent<Animator>().GetInteger("frame") < 20)
-                doOnce = false;
         }
     }
 }

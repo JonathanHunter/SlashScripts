@@ -92,15 +92,16 @@ namespace Assets.Scripts.Enemies
 		}
 		private void Shoot()
 		{
-			wait += Time.deltaTime;
-			if (wait > shotTime)
-			{
+            if (!doOnce && GetComponent<Animator>().GetInteger("frame") > 20)
+            {
 				GameObject b = ((GameObject)Instantiate(Shot));				
 				b.transform.position=gunPos.position;
 				b.GetComponent<DadaMissile>().dir = getForward();
 				shots++;
-				wait = 0;
-			}
+                doOnce = true;
+            }
+            if (doOnce && GetComponent<Animator>().GetInteger("frame") < 20)
+                doOnce = false;
 		}
 	}
 }

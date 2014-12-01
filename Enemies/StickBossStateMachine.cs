@@ -5,18 +5,18 @@ using System.Text;
 
 namespace Assets.Scripts.Enemies
 {
-    class Boss2StateMachine : EnemyStateMachine
+    class StickBossStateMachine : EnemyStateMachine
     {
         public enum State
         {
             Intro = 0, Taunt, Walk, Attack, Summon, Turn
         };
 
-        public Boss2StateMachine(int frameRate) : base(frameRate) { }
+        public StickBossStateMachine(int frameRate) : base(frameRate) { }
 
         protected override int[] Initialize()
         {
-            return new int[] { 12, 12, 13, 10, 1, 1 };
+            return new int[] { 5, 6, 2, 2, 1, 1 };
         }
 
         protected override int StateMachine(int currState, bool beingHit, bool[] flags)
@@ -51,7 +51,7 @@ namespace Assets.Scripts.Enemies
                 return State.Attack;
             if (turn)
             {
-                int i=UnityEngine.Random.Range(0, 3);
+                int i = UnityEngine.Random.Range(0, 3);
                 if (i == 1)
                     return State.Summon;
                 else if (i == 2)
