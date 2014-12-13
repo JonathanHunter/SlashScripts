@@ -9,7 +9,8 @@ namespace Assets.Scripts.Enemies
     {
         public enum State
         {
-            Intro = 0, BackFlip, Transition, WallJump, DownSlash, DownSlashWait, Dash, Slash, SlashWait
+            Intro = 0, BackFlip, Transition, WallJump, DownSlash, DownSlashWait, 
+            Dash, Slash, SlashWait, AttackPause
         };
         private double hold;
 
@@ -17,7 +18,7 @@ namespace Assets.Scripts.Enemies
 
         protected override int[] Initialize()
         {
-            return new int[] { 10, 9, 1, 3, 4, 12, 2, 6, 12 };
+            return new int[] { 10, 9, 1, 3, 4, 12, 2, 6, 12, 1 };
         }
 
         protected override int StateMachine(int currState, bool beingHit, bool[] flags)
@@ -33,6 +34,7 @@ namespace Assets.Scripts.Enemies
                 case (int)State.Dash: currState = (int)Dash(flags[2], flags[1]); break;
                 case (int)State.Slash: currState = (int)Slash(); break;
                 case (int)State.SlashWait: currState = (int)SlashWait(); break;
+                case (int)State.AttackPause: currState = (int)AttackPause(); break;
             }
             return currState;
         }
@@ -86,7 +88,7 @@ namespace Assets.Scripts.Enemies
         private State Dash(bool nearPlayer, bool hitWall)
         {
             if (nearPlayer)
-                return State.Slash;
+                return State.AttackPause;
             if (hitWall)
                 return State.WallJump;
             return State.Dash;
@@ -106,6 +108,16 @@ namespace Assets.Scripts.Enemies
                 return State.BackFlip;
             }
             return State.SlashWait;
+        }
+        private State AttackPause()
+        {
+            hold += UnityEngine.Time.deltaTime;
+            if (hold > .2f)
+            {
+                hold = 0;
+                return State.Slash;
+            }
+            return State.AttackPause;
         }
     }
 }

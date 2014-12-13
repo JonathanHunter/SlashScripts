@@ -28,12 +28,32 @@ namespace Assets.Scripts.Enemies
         private float hold = 0;
         private bool doOnce = false;
         private bool render = true;
-        private bool OnWall = false;
+        private bool onWall = false;
+        private bool hitWall = false;
 
 
         protected override EnemyStateMachine getStateMachine(int frameRate)
         {
             return new Boss3StateMachine(frameRate);
+        }
+
+        void OnCollisionEnter2D(Collision2D coll)
+        {
+            if (!Data.Paused)
+            {
+                if (coll.gameObject.tag == "Enemy" || coll.gameObject.tag == "Health")
+                    Physics2D.IgnoreCollision(this.gameObject.collider2D, coll.gameObject.collider2D);
+                if (coll.gameObject.tag == "PlayerAttack")
+                {
+                    beingHit = true;
+                    Data.Enemy = this;
+                }
+                if (coll.gameObject.tag == "Player")
+                    hitPlayer = true;
+
+                if (coll.gameObject.tag == "Ground")
+                    hitWall = true;
+            }
         }
 
         protected override void Initialize()
@@ -49,11 +69,16 @@ namespace Assets.Scripts.Enemies
             float disty = Mathf.Abs(player.position.y - this.gameObject.transform.position.y);
             bool playerClose = distx < close && disty < 1;
             bool inAir = false;
-            TouchingSomething(ref inAir, ref OnWall);
+            TouchingSomething(ref inAir, ref onWall);
+            if (hitWall)
+            {
+                onWall = true;
+                hitWall = false;
+            }
             bool done = false;
             if (numOfJumps > maxJumps)
                 done = true;
-            return new bool[] { inAir, OnWall, playerClose, done };
+            return new bool[] { inAir, onWall, playerClose, done };
         }
 
         private new void TouchingSomething(ref bool inAir, ref bool nextToClimableWall)
@@ -124,6 +149,7 @@ namespace Assets.Scripts.Enemies
                 case (int)Boss3StateMachine.State.Dash: Dash(); break;
                 case (int)Boss3StateMachine.State.Slash: Slash(); break;
                 case (int)Boss3StateMachine.State.SlashWait: SlashWait(); break;
+                case (int)Boss3StateMachine.State.AttackPause: AttackPause(); break;
             }
             if (invulerability > 0)
             {
@@ -156,7 +182,7 @@ namespace Assets.Scripts.Enemies
         private void WallJump()
         {
             rigidbody2D.gravityScale = 0;
-            if (OnWall)
+            if (onWall)
             {
                 doOnce = false;
                 numOfJumps++;
@@ -180,7 +206,7 @@ namespace Assets.Scripts.Enemies
             }
             transform.position = Vector3.MoveTowards(transform.position, target.position, 4 * speed * Time.deltaTime);
             hold += Time.deltaTime;
-            if(hold>1f)
+            if(hold>.7f)
             {
                 GameObject dagger = (GameObject)Instantiate(Dagger);
                 dagger.transform.position = this.transform.position;
@@ -231,6 +257,9 @@ namespace Assets.Scripts.Enemies
                 Destroy(attack);
         }
         private void SlashWait()
+        {
+        }
+        private void AttackPause()
         {
         }
     }
