@@ -121,11 +121,11 @@ namespace Assets.Scripts
         {
             if (state != State.waiting)
             {
-                GUI.DrawTexture(new Rect(Screen.width * .3f, Screen.height * .3f, Screen.width * .5f, Screen.height * .6f), backgrounds[whichBackgroundForWhichPage[currentPage]]);
+                GUI.DrawTexture(new Rect(Screen.width * .3f, Screen.height * .1f, Screen.width * .5f, Screen.height * .6f), backgrounds[whichBackgroundForWhichPage[currentPage]]);
                 if (whichBackgroundForWhichPage[currentPage] == 0)
-                    GUI.Label(new Rect(Screen.width * .3f, Screen.height * .3f, Screen.width * .5f, Screen.height * .6f), currentText.ToString(), style);
+                    GUI.Label(new Rect(Screen.width * .3f, Screen.height * .1f, Screen.width * .5f, Screen.height * .6f), currentText.ToString(), style);
                 else
-                    GUI.Label(new Rect(Screen.width * .3f, Screen.height * .3f, Screen.width * .5f, Screen.height * .6f), currentText.ToString(), style2);
+                    GUI.Label(new Rect(Screen.width * .3f, Screen.height * .1f, Screen.width * .5f, Screen.height * .6f), currentText.ToString(), style2);
 
             }
         }
